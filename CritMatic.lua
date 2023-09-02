@@ -25,7 +25,15 @@ CritMatic.CreateNewMessageFrame = function()
   scaleUp:SetScale(1.5, 1.5)
   scaleUp:SetDuration(0.15)
   scaleUp:SetOrder(1)
+  local pause = f.bounce:CreateAnimation("Pause")
+  pause:SetDuration(0.12) -- Duration of the pause
+  pause:SetOrder(2) -- Second phase
 
+  -- Scale down to original size
+  local scaleDown = f.bounce:CreateAnimation("Scale")
+  scaleDown:SetScale(1 / 1.5, 1 / 1.5)
+  scaleDown:SetDuration(0.15) -- Duration of the scale-down phase
+  scaleDown:SetOrder(3) -- Third phase
   local fontPath = "Interface\\AddOns\\CritMatic\\Fonts\\8bit.ttf"
   f.text:SetFont(fontPath, 20, "THICKOUTLINE")
   f.text:SetShadowOffset(3, -3)
@@ -231,8 +239,11 @@ f:SetScript("OnEvent", function(self, event, ...)
   end
 end)
 Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0","AceTimer-3.0")
+
+local version = GetAddOnMetadata("CritMatic", "Version")
+
 local function CritMaticLoaded()
-  Critmatic:Print("|cff918d86 v|r|cffd3cfc7 0.1.61 |r|cff918d86 Loaded!|r")
+  Critmatic:Print("|cff918d86 v|r|cffd3cfc7 "..version.."|r|cff918d86 Loaded!|r")
 end
 
 function Critmatic:TimerCritMaticLoaded()
