@@ -52,6 +52,11 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 - Some spells like Killing Spree / Starfall show really low dps.
 
 ## Change Log:
+### [v0.1.6-release] - 9/01/2023
+
+#### Updated
+
+- Updated the notification animation.
 
 ### [v0.1.6-release] - 8/29/2023
 
