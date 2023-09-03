@@ -1,4 +1,4 @@
-# WOTLK Classic 3.4.2 and Classic / Hardcore
+# WotLK Classic 3.4.2 and Classic / Hardcore
 
 ## CritMatic: 0.1.641
 ### Your Personal Damage and Heal Tracker 
@@ -10,7 +10,7 @@ normal hits (both damage and heal).
 
 #### Some spells require a party to track the spell. because of wow.exe game optimization
 
-#### There is a short calibration period were you will see a lot of notifications at first but it will quickly simmer down.
+#### There is a short calibration period were you will see a lot of notifications at first, but it will quickly simmer down.
 
 ### Key Features:
 
@@ -47,9 +47,9 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 
 ## Known Issues:
 
-- Warlocks Healthstones don't display in the tooltip or message.
+- Warlocks Hearthstones don't display in the tooltip or message.
 - pets are not currently tracked in the tooltip or message.
-- Some spells like Killing Spree / Starfall show really low dps.
+- Some spells like Killing Spree / Star fall show really low dps.
 
 ## Change Log:
 ### [v0.1.6-release] - 9/01/2023
