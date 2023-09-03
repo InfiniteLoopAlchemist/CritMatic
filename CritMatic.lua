@@ -34,7 +34,7 @@ CritMatic.CreateNewMessageFrame = function()
   scaleDown:SetScale(1 / 1.5, 1 / 1.5)
   scaleDown:SetDuration(0.15) -- Duration of the scale-down phase
   scaleDown:SetOrder(3) -- Third phase
-  local fontPath = "Interface\\AddOns\\CritMatic\\Fonts\\8bit.ttf"
+  local fontPath = "Interface\\AddOns\\CritMatic\\Media\\fonts\\8bit.ttf"
   f.text:SetFont(fontPath, 20, "THICKOUTLINE")
   f.text:SetShadowOffset(3, -3)
 
@@ -202,14 +202,14 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is a heal and it's a critical heal.
               if amount > CritMaticData[baseSpellName].highestHealCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHealCrit = amount
-                PlaySound(888, "SFX")
+                PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
                 CritMatic.ShowNewHealCritMessage(baseSpellName, amount)
                 print("New highest crit heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHealCrit)
               end
             elseif not critical then
               if amount > CritMaticData[baseSpellName].highestHeal and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHeal = amount
-                PlaySoundFile("Interface\\AddOns\\CritMatic\\Sounds\\Heaven.ogg", "SFX")
+                PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heaven.ogg", "SFX")
                 CritMatic.ShowNewHealMessage(baseSpellName, amount)
                 print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHeal)
               end
@@ -219,7 +219,8 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is damage and it's a critical hit.
               if amount > CritMaticData[baseSpellName].highestCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestCrit = amount
-                PlaySound(888, "SFX")
+                --PlaySound(888, "SFX")
+                PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
                 CritMatic.ShowNewCritMessage(baseSpellName, amount)
                 print("New highest crit hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestCrit)
               end
@@ -227,7 +228,7 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is damage but it's not a critical hit.
               if amount > CritMaticData[baseSpellName].highestNormal and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestNormal = amount
-                PlaySoundFile("Interface\\AddOns\\CritMatic\\Sounds\\Heroism_Cast.ogg", "SFX")
+                PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heroism_Cast.ogg", "SFX")
                 CritMatic.ShowNewNormalMessage(baseSpellName, amount)
                 print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestNormal)
               end
