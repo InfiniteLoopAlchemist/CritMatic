@@ -192,7 +192,7 @@ f:SetScript("OnEvent", function(self, event, ...)
           highestNormal = 0,
           highestHealCrit = 0,
           highestHeal = 0,
-          spellIcon = GetSpellTexture(spellID)
+
         }
         if IsSpellInSpellbook(baseSpellName) then
           --print(CombatLogGetCurrentEventInfo())
@@ -265,7 +265,7 @@ function Critmatic:OnInitialize()
   if IsAddOnLoaded("ElvUI") then
     self:ScheduleTimer("TimerCritMaticLoaded", 5)
   else
-    CritMaticLoaded()
+    self:ScheduleTimer("TimerCritMaticLoaded", 5)
   end
 end
   -- Called when the addon is enabled
