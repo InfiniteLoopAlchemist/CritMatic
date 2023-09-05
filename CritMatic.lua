@@ -258,11 +258,21 @@ end
 function Critmatic:TimerCritMaticLoaded()
   CritMaticLoaded()
 end
+
+function Critmatic:OpenOptions()
+    LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
+end
+
+
 -- Called when the addon is loaded
 function Critmatic:OnInitialize()
+ CritMaticData = _G["CritMaticData"]
   -- Register console commands
   Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
-  CritMaticData = _G["CritMaticData"]
+  -- Register the slash commands
+  Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
+  Critmatic:RegisterChatCommand("cm", "OpenOptions")
+
 
   hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
   local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip

@@ -34,7 +34,7 @@ local options = {
                                     get = function() return CritMaticDB.profile.soundSettings.damageCrit end,
                                     set = function(_, newVal) CritMaticDB.profile.soundSettings.damageCrit = newVal end,
                                 },
-               healNormal = {
+                healNormal = {
                                    name = "Normal Heal Sound",
                                    type = "select",
                                    dialogControl = "LSM30_Sound",
@@ -51,7 +51,15 @@ local options = {
                                     width = "full",
                                     get = function() return CritMaticDB.profile.soundSettings.healCrit end,
                                     set = function(_, newVal) CritMaticDB.profile.soundSettings.healCrit = newVal end,
-                                },
+                },
+                resetSounds = {
+                                                      name = "Reset Sounds to Default",
+                                                      desc = "Reset all sounds to their default values",
+                                                      width = "full",
+                                                      type = "execute",
+                                                      func = ResetSoundsToDefault,
+                                                      order = 100, -- or any other appropriate order number
+                },
             },
         },
     },

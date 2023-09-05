@@ -1,7 +1,7 @@
 local AceDB = LibStub("AceDB-3.0")
 
 -- Default values for the database
-local defaults = {
+ defaults = {
     profile = {
         soundSettings = {
             damageNormal = "CritMatic: Heroism Cast", -- Default sound for normal damage
