@@ -7,7 +7,7 @@ git tag $1
 VERSION=$(git describe --tags --abbrev=0)
 
 # Update version in .toc files C:/Users/looot/OneDrive/Documents/WOW-Addons/CritMatic/
-sed -i "s/^## Version: .*/## Version: $VERSION/" ./CritMatic_Vanila.toc
+sed -i "s/^## Version: .*/## Version: $VERSION/" ./CritMatic_Vanilla.toc
 sed -i "s/^## Version: .*/## Version: $VERSION/" ./CritMatic_Wrath.toc
 
 # Update version in README.md
