@@ -8,7 +8,4 @@
 ## SavedVariablesPerCharacter: CritMaticData
 ## OptionalDeps: ElvUI
 
-Namespace.lua
 embeds.xml
-MessageFrame.lua
-CritMatic.lua
