@@ -8,5 +8,12 @@
     <Include file="Libs\AceConfig-3.0\AceConfig-3.0.xml"/>
     <Include file="Libs\AceDB-3.0\AceDB-3.0.xml"/>
     <Include file="Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml"/>
-
+    <Include file="Libs\LibSharedMedia-3.0\lib.xml"/>
+    <Include file="Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml"/>
+    <Script file="Modules\CritMaticDB.lua"/>
+    <Script file="Modules\CritMaticSharedMedia.lua"/>
+    <Script file="Modules\CritMaticOptions.lua"/>
+    <Script file="Namespace.lua"/>
+    <Script file="MessageFrame.lua"/>
+    <Script file="CritMatic.lua"/>
 </Ui>

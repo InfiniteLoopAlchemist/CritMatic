@@ -184,6 +184,10 @@ f:SetScript("OnEvent", function(self, event, ...)
     if baseSpellName == "Auto Attack" then
       return
     end
+    local soundCrit = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.damageCrit)
+    local soundNormal = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.damageNormal)
+    local soundHealCrit = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.healCrit)
+    local soundHealNormal = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.healNormal)
 
     if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
       if baseSpellName then
@@ -203,14 +207,16 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is a heal and it's a critical heal.
               if amount > CritMaticData[baseSpellName].highestHealCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHealCrit = amount
-                PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
+                PlaySoundFile(soundHealCrit)
+                --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
                 CritMatic.ShowNewHealCritMessage(baseSpellName, amount)
                 print("New highest crit heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHealCrit)
               end
             elseif not critical then
               if amount > CritMaticData[baseSpellName].highestHeal and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHeal = amount
-                PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heaven.ogg", "SFX")
+                PlaySoundFile(soundHealNormal)
+                --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heaven.ogg", "SFX")
                 CritMatic.ShowNewHealMessage(baseSpellName, amount)
                 print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHeal)
               end
@@ -221,7 +227,8 @@ f:SetScript("OnEvent", function(self, event, ...)
               if amount > CritMaticData[baseSpellName].highestCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestCrit = amount
                 --PlaySound(888, "SFX")
-                PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
+                PlaySoundFile(soundCrit)
+                --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
                 CritMatic.ShowNewCritMessage(baseSpellName, amount)
                 print("New highest crit hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestCrit)
               end
@@ -229,7 +236,8 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is damage but it's not a critical hit.
               if amount > CritMaticData[baseSpellName].highestNormal and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestNormal = amount
-                PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heroism_Cast.ogg", "SFX")
+                PlaySoundFile(soundNormal)
+                --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heroism_Cast.ogg", "SFX")
                 CritMatic.ShowNewNormalMessage(baseSpellName, amount)
                 print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestNormal)
               end
@@ -251,11 +259,21 @@ end
 function Critmatic:TimerCritMaticLoaded()
   CritMaticLoaded()
 end
+
+function Critmatic:OpenOptions()
+    LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
+end
+
+
 -- Called when the addon is loaded
 function Critmatic:OnInitialize()
+ CritMaticData = _G["CritMaticData"]
   -- Register console commands
   Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
-  CritMaticData = _G["CritMaticData"]
+  -- Register the slash commands
+  Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
+  Critmatic:RegisterChatCommand("cm", "OpenOptions")
+
 
   hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
   local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
