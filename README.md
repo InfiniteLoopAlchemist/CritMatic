@@ -1,7 +1,8 @@
 # WotLK Classic 3.4.2 and Classic / Hardcore
 
 ## CritMatic: 0.2.0
-### Your Personal Damage and Heal Tracker 
+
+### Your Personal Damage and Heal Tracker
 
 CritMatic is a lightweight World of Warcraft addon designed to help players keep track of their highest critical and
 normal hits (both damage and heal).
@@ -28,9 +29,9 @@ normal hits (both damage and heal).
 
 - **Persistent Data:** CritMatic saves your highest hits data between sessions, so you can log out or switch characters
   without losing your records. You can also reset the data at any time if you want to start fresh.
-
-- **Slash Command:** Use the `/cmreset` command to reset all your CritMatic saved data. This can be useful if you want
-  to start tracking from scratch.
+-
+- **Slash Command:** Use  `/critmatic` or `/cm`to open the options.
+- **Slash Command:** Use the `/cmreset` command to reset all your CritMatic saved data.
 
 With CritMatic you'll always know when you've hit a new personal best. Happy Criting!
 
@@ -39,7 +40,7 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 - Configuration options for more fonts, colors and more.
 - Chat Messages are gold for crits.
 - Crit-log by level and ability.
-- Customizing the Crit/Normal/Heal notification message and sounds.
+- Customizing the Crit/Normal/Heal notification message
 - Option to disable the Crit/Normal/Heal notification message and sounds.
 - Option to disable the CritMatic tooltip information.
 - option to move the CritMatic Crit/Normal/Heal notification message.
@@ -52,6 +53,15 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 - Some spells like Killing Spree / Star fall show really low dps.
 
 ## Change Log:
+
+### [v0.2.0-release] - 9/05/2023
+
+#### Added
+
+- New Slash Commands to open the options menu /cm and /critmatic
+- You can Change the Crit and Normal hit / heal sounds.
+  More options coming soon
+
 ### [v0.1.6-release] - 9/01/2023
 
 #### Updated
