@@ -22,7 +22,19 @@ LSM:Register("sound", "CritMatic: Thunder", "Interface\\AddOns\\CritMatic\\Media
 LSM:Register("sound", "CritMatic: Whoop", "Interface\\AddOns\\CritMatic\\Media\\Sounds\\Whoop.ogg")
 
 -- Register Fonts
-
+LSM:Register("font", "CritMatic: Anton", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\Anton.ttf")
+LSM:Register("font", "CritMatic: Architects Daughter", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\ArchitectsDaughter.ttf")
+LSM:Register("font", "CritMatic: Coming Soon", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\ComingSoon.ttf")
+LSM:Register("font", "CritMatic: Dot Gothic16", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\DotGothic16.ttf")
+LSM:Register("font", "CritMatic: Hideout 8-Bit", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\Hideout-8-Bit.ttf")
+LSM:Register("font", "CritMatic: Hideout 8-Bit-AA", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\Hideout-8-Bit-AA.ttf")
+LSM:Register("font", "CritMatic: OpenSans ExtraBold", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\OpenSans-ExtraBold.ttf")
+LSM:Register("font", "CritMatic: Oswald Bold", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\Oswald-Bold.ttf")
+LSM:Register("font", "CritMatic: Pixeloid Mono", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\PixeloidMono.ttf")
+LSM:Register("font", "CritMatic: PressStart 2P", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\PressStart2P.ttf")
+LSM:Register("font", "CritMatic: Quinque Five", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\Quinquefive.ttf")
+LSM:Register("font", "CritMatic: Rubik ExtraBold", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\Rubik-ExtraBold.ttf")
+LSM:Register("font", "CritMatic: Silk Screen", "Interface\\AddOns\\CritMatic\\Media\\Fonts\\Silkscreen.ttf")
 -- Register Animations
 
 -- Register Statusbars
