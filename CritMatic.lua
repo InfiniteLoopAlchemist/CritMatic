@@ -35,8 +35,10 @@ CritMatic.CreateNewMessageFrame = function()
   scaleDown:SetScale(1 / 1.5, 1 / 1.5)
   scaleDown:SetDuration(0.15) -- Duration of the scale-down phase
   scaleDown:SetOrder(3) -- Third phase
-  local fontPath = "Interface\\AddOns\\CritMatic\\Media\\fonts\\8bit.ttf"
-  f.text:SetFont(fontPath, 20, "THICKOUTLINE")
+
+  local fontPath = LSM:Fetch("font", CritMaticDB.profile.fontSettings.font)
+  f.text:SetFont(fontPath, CritMaticDB.profile.fontSettings.fontSize, CritMaticDB.profile.fontSettings.fontOutline)
+
   f.text:SetShadowOffset(3, -3)
 
   return f
@@ -248,12 +250,13 @@ f:SetScript("OnEvent", function(self, event, ...)
     end
   end
 end)
-Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0","AceTimer-3.0")
+
+Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0")
 
 local version = GetAddOnMetadata("CritMatic", "Version")
 
 local function CritMaticLoaded()
-  Critmatic:Print("|cff918d86 v|r|cffd3cfc7 "..version.."|r|cff918d86 Loaded!|r")
+  Critmatic:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded!|r")
 end
 
 function Critmatic:TimerCritMaticLoaded()
@@ -261,24 +264,58 @@ function Critmatic:TimerCritMaticLoaded()
 end
 
 function Critmatic:OpenOptions()
-    LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
+  LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
 end
 
 
 -- Called when the addon is loaded
 function Critmatic:OnInitialize()
- CritMaticData = _G["CritMaticData"]
+
+  CritMaticData = _G["CritMaticData"]
   -- Register console commands
   Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
   -- Register the slash commands
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
 
-
   hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
   local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
   local f = CritMatic.CreateNewMessageFrame()
+  local AceGUI = LibStub("AceGUI-3.0")
+  local function ShowDBResetPopup()
+    local frame = AceGUI:Create("Frame")
+    frame:SetTitle("CritMatic Database Reset")
+    frame:SetWidth(600)
+    frame:SetHeight(200)
+    frame:SetLayout("Flow")
+    frame:SetStatusText("CritMatic Discord: https://discord.gg/CCgxPRB4H9")
+    frame:SetCallback("OnClose", function(widget)
+      ReloadUI()
+      AceGUI:Release(widget)
+    end)
+
+    -- Add a description
+    local label = AceGUI:Create("Label")
+    label:SetText("The database has been automatically reset.")
+    label:SetWidth(700)
+    frame:AddChild(label)
+
+    local reloadButton = AceGUI:Create("Button")
+    reloadButton:SetText("Reload")
+    reloadButton:SetCallback("OnClick", function()
+      ReloadUI() -- Reload the user interface
+    end)
+    frame:AddChild(reloadButton)
+
+  end
+
+  if not CritMaticDB.dbResetDone then
+    CritMaticDB = CritMaticDB.defaults
+    ShowDBResetPopup()
+
+    CritMaticDB.dbResetDone = true
+  end
 
   if IsAddOnLoaded("ElvUI") then
     self:ScheduleTimer("TimerCritMaticLoaded", 5)
@@ -286,7 +323,7 @@ function Critmatic:OnInitialize()
     self:ScheduleTimer("TimerCritMaticLoaded", 5)
   end
 end
-  -- Called when the addon is enabled
+-- Called when the addon is enabled
 function Critmatic:OnEnable()
 
 end
@@ -297,6 +334,8 @@ function Critmatic:OnDisable()
 end
 
 function Critmatic:CritMaticReset()
+  CritMaticDB = CritMaticDB.defaults --temp
+  CritMaticDB.dbResetDone = false --temp
   CritMaticData = {}
   Critmatic:Print("|cffff0000Data Reset!|r")
 end
