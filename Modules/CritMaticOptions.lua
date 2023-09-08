@@ -1,5 +1,6 @@
 local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
+local LSM = LibStub("LibSharedMedia-3.0")
 
 function ResetSoundsToDefault()
   CritMaticDB.profile.soundSettings = defaults.profile.soundSettings
@@ -38,7 +39,7 @@ local options = {
           min = 8,
           max = 32,
           step = 1,
-          order = 2,
+          order = 4,
           width = "full",
           get = function()
             return CritMaticDB.profile.fontSettings.fontSize
@@ -51,8 +52,9 @@ local options = {
           type = "color",
           name = "Crit Font Color",
           desc = "Choose a Crit color for your font",
-          order = 1,
+          order = 2,
           hasAlpha = false,
+          width = "normal",
           get = function(info)
             local r, g, b = unpack(CritMaticDB.profile.fontSettings.fontColorCrit)
             return r, g, b
@@ -65,7 +67,8 @@ local options = {
           type = "color",
           name = "Font Color (Non-Crit)",
           desc = "Choose a (Non-Crit) color for your font",
-          order = 1,
+          order = 3,
+          width = "200",
           hasAlpha = false, -- set to true if you want an alpha slider (for transparency)
           get = function(info)
             local r, g, b = unpack(CritMaticDB.profile.fontSettings.fontColor)
@@ -84,7 +87,7 @@ local options = {
             ["THICKOUTLINE"] = "Thick Outline",
           },
           width = "full",
-          order = 3,
+          order = 4,
           get = function()
             return CritMaticDB.profile.fontSettings.fontOutline
           end,
@@ -101,7 +104,7 @@ local options = {
           func = ResetFontSettingsToDefault,
           confirm = true,
           confirmText = "Are you sure you want to reset font settings to their default values?",
-          order = 4,
+          order = 5,
         },
 
       },
