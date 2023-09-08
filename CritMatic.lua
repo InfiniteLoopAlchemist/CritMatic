@@ -35,7 +35,7 @@ CritMatic.CreateNewMessageFrame = function()
   scaleDown:SetScale(1 / 1.5, 1 / 1.5)
   scaleDown:SetDuration(0.15) -- Duration of the scale-down phase
   scaleDown:SetOrder(3) -- Third phase
-
+  local LSM = LibStub("LibSharedMedia-3.0")
   local fontPath = LSM:Fetch("font", CritMaticDB.profile.fontSettings.font)
   f.text:SetFont(fontPath, CritMaticDB.profile.fontSettings.fontSize, CritMaticDB.profile.fontSettings.fontOutline)
 
@@ -186,6 +186,7 @@ f:SetScript("OnEvent", function(self, event, ...)
     if baseSpellName == "Auto Attack" then
       return
     end
+    local LSM = LibStub("LibSharedMedia-3.0")
     local soundCrit = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.damageCrit)
     local soundNormal = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.damageNormal)
     local soundHealCrit = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.healCrit)
