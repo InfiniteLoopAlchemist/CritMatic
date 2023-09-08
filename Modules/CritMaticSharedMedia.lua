@@ -1,4 +1,5 @@
-LSM = LibStub("LibSharedMedia-3.0")
+local LSM = LibStub("LibSharedMedia-3.0")
+local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 -- Register Sounds
 LSM:Register("sound", "CritMatic: Batman Punch", "Interface\\AddOns\\CritMatic\\Media\\Sounds\\BatmanPunch.ogg")
@@ -45,4 +46,12 @@ LSM:Register("font", "CritMatic: Silk Screen", "Interface\\AddOns\\CritMatic\\Me
 
 -- Register Textures
 
+local function MediaRegistered(event, mediatype, key)
+  if mediatype == "font" then
+    -- Refresh the options UI when a new font is registered
+    AceConfigDialog:Open("CritMaticOptions")
+  end
+end
 
+-- Set up the event listener
+LSM.RegisterCallback(CritMaticDB, "LibSharedMedia_Registered", MediaRegistered)
