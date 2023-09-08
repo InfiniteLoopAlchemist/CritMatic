@@ -93,7 +93,6 @@ local options = {
           end,
           set = function(_, newVal)
             CritMaticDB.profile.fontSettings.fontOutline = newVal
-            frame:SetStatusText("test")
           end,
         },
         resetFontSettings = {

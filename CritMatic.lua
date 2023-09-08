@@ -335,8 +335,10 @@ function Critmatic:OnDisable()
 end
 
 function Critmatic:CritMaticReset()
-  CritMaticDB = CritMaticDB.defaults --temp
-  CritMaticDB.dbResetDone = false --temp
   CritMaticData = {}
   Critmatic:Print("|cffff0000Data Reset!|r")
+  CritMaticDB = CritMaticDB.defaults --temp
+  -- CritMaticDB.dbResetDone = false --temp
+
+
 end
