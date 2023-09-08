@@ -13,9 +13,10 @@ defaults = {
       font = "CritMatic: Hideout 8-Bit-AA",
       fontOutline = "THICKOUTLINE",
       fontSize = 20,
-      fontColorCrit = { 1, 0.84, 0 }, -- gold color
-      fontColor = { 0.9, 0.9, 0.9 }, -- white color
-
+      fontColorCrit = { 1, 0.84, 0 }, -- Gold color
+      fontColor = { 0.9, 0.9, 0.9 }, -- White color
+      fontShadowSize = { 3, -3 },
+      fontShadowColor = { 0.1, 0.1, 0.1 } -- Almost pure black
 
     },
     dbResetDone = false, -- Set to false to show the popup.
