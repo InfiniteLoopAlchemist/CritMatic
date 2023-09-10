@@ -1,4 +1,3 @@
-local fontPath = "Interface\\AddOns\\CritMatic\\Media\\fonts\\8bit.ttf"
 local MESSAGE_SPACING = 3
 local MAX_MESSAGES = 4
 local activeMessages = {}
