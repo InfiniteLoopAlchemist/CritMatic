@@ -1,6 +1,6 @@
 # WotLK Classic 3.4.2 and Classic / Hardcore
 
-## CritMatic: 0.2.0
+## CritMatic: 0.2.1
 
 ### Your Personal Damage and Heal Tracker
 
@@ -53,6 +53,14 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 - Some spells like Killing Spree / Star fall show really low dps.
 
 ## Change Log:
+
+### [v0.2.1-release] - 9/05/2023
+
+#### Added
+
+- Added Font Settings
+
+- More options coming soon
 
 ### [v0.2.0-release] - 9/05/2023
 
