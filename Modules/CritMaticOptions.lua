@@ -22,6 +22,7 @@ local options = {
         font = {
           name = "Font",
           type = "select",
+          desc = "You might have to select the font twice to see all the fonts.",
           dialogControl = "LSM30_Font",
           values = LSM:HashTable("font"),
           width = "full",
@@ -50,7 +51,7 @@ local options = {
         },
         fontColorCrit = {
           type = "color",
-          name = "Crit Font Color",
+          name = "Crit Color",
           desc = "Choose a Crit color for your font",
           order = 2,
           hasAlpha = false,
@@ -65,7 +66,7 @@ local options = {
         },
         fontColor = {
           type = "color",
-          name = "Font Color (Non-Crit)",
+          name = "Color (Non-Crit)",
           desc = "Choose a (Non-Crit) color for your font",
           order = 3,
           width = "200",
@@ -79,7 +80,7 @@ local options = {
           end,
         },
         fontOutline = {
-          name = "Font Outline",
+          name = "Outline",
           type = "select",
           values = {
             ["NONE"] = "None",
@@ -95,15 +96,61 @@ local options = {
             CritMaticDB.profile.fontSettings.fontOutline = newVal
           end,
         },
+        fontShadowSizeX = {
+          type = 'range',
+          name = 'Shadow Size X',
+          desc = 'Set the shadow size for the font in the horizontal direction.',
+          min = -10,
+          max = 10,
+          width = "normal",
+          step = 1,
+          order = 5,
+          get = function()
+            return CritMaticDB.profile.fontSettings.fontShadowSize[1]
+          end,
+          set = function(_, value)
+            CritMaticDB.profile.fontSettings.fontShadowSize[1] = value
+          end,
+        },
+
+        fontShadowSizeY = {
+          type = 'range',
+          name = 'Shadow Size Y',
+          desc = 'Set the shadow size for the font in the vertical direction.',
+          min = -10,
+          max = 10,
+          step = 1,
+          order = 6,
+          width = "3",
+          get = function()
+            return CritMaticDB.profile.fontSettings.fontShadowSize[2]
+          end,
+          set = function(_, value)
+            CritMaticDB.profile.fontSettings.fontShadowSize[2] = value
+          end,
+        },
+        fontShadowColor = {
+          type = 'color',
+          name = 'Shadow Color',
+          desc = 'Set the shadow color for the font.',
+          hasAlpha = false,
+          order = 7,
+          get = function()
+            return unpack(CritMaticDB.profile.fontSettings.fontShadowColor)
+          end,
+          set = function(_, r, g, b)
+            CritMaticDB.profile.fontSettings.fontShadowColor = { r, g, b }
+          end,
+        },
         resetFontSettings = {
-          name = "Reset Font Settings to Default",
+          name = "Reset Font Settings",
           desc = "Reset all Font settings to their default values",
           width = "full",
           type = "execute",
           func = ResetFontSettingsToDefault,
           confirm = true,
           confirmText = "Are you sure you want to reset font settings to their default values?",
-          order = 5,
+          order = 8,
         },
 
       },
@@ -171,7 +218,7 @@ local options = {
         },
         resetSounds = {
           name = "Reset Sounds to Default",
-          desc = "Reset all sounds to their default values",
+          desc = "Reset all sounds",
           width = "full",
           type = "execute",
           func = ResetSoundsToDefault,

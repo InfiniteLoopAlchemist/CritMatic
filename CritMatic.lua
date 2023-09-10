@@ -38,8 +38,8 @@ CritMatic.CreateNewMessageFrame = function()
   local LSM = LibStub("LibSharedMedia-3.0")
   local fontPath = LSM:Fetch("font", CritMaticDB.profile.fontSettings.font)
   f.text:SetFont(fontPath, CritMaticDB.profile.fontSettings.fontSize, CritMaticDB.profile.fontSettings.fontOutline)
-
-  f.text:SetShadowOffset(3, -3)
+  f.text:SetShadowOffset(unpack(CritMaticDB.profile.fontSettings.fontShadowSize))
+  f.text:SetShadowColor(unpack(CritMaticDB.profile.fontSettings.fontShadowColor))
 
   return f
 end
@@ -338,7 +338,7 @@ function Critmatic:CritMaticReset()
   CritMaticData = {}
   Critmatic:Print("|cffff0000Data Reset!|r")
   CritMaticDB = CritMaticDB.defaults --temp
-  -- CritMaticDB.dbResetDone = false --temp
+  CritMaticDB.dbResetDone = false --temp
 
 
 end
