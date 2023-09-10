@@ -1,5 +1,6 @@
 -- Define a table to hold the highest hits data.
 CritMaticData = CritMaticData or {}
+CritMaticDB = {}
 --CTODO: add party/raid chat messages for highest hits with the option to turn off.
 
 local MAX_HIT = 40000
@@ -36,10 +37,10 @@ CritMatic.CreateNewMessageFrame = function()
   scaleDown:SetDuration(0.15) -- Duration of the scale-down phase
   scaleDown:SetOrder(3) -- Third phase
   local LSM = LibStub("LibSharedMedia-3.0")
-  local fontPath = LSM:Fetch("font", CritMaticDB.profile.fontSettings.font)
-  f.text:SetFont(fontPath, CritMaticDB.profile.fontSettings.fontSize, CritMaticDB.profile.fontSettings.fontOutline)
-  f.text:SetShadowOffset(unpack(CritMaticDB.profile.fontSettings.fontShadowSize))
-  f.text:SetShadowColor(unpack(CritMaticDB.profile.fontSettings.fontShadowColor))
+  local fontPath = LSM:Fetch("font", CritMaticDB2.profile.fontSettings.font)
+  f.text:SetFont(fontPath, CritMaticDB2.profile.fontSettings.fontSize, CritMaticDB2.profile.fontSettings.fontOutline)
+  f.text:SetShadowOffset(unpack(CritMaticDB2.profile.fontSettings.fontShadowSize))
+  f.text:SetShadowColor(unpack(CritMaticDB2.profile.fontSettings.fontShadowColor))
 
   return f
 end
@@ -187,10 +188,10 @@ f:SetScript("OnEvent", function(self, event, ...)
       return
     end
     local LSM = LibStub("LibSharedMedia-3.0")
-    local soundCrit = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.damageCrit)
-    local soundNormal = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.damageNormal)
-    local soundHealCrit = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.healCrit)
-    local soundHealNormal = LSM:Fetch("sound", CritMaticDB.profile.soundSettings.healNormal)
+    local soundCrit = LSM:Fetch("sound", CritMaticDB2.profile.soundSettings.damageCrit)
+    local soundNormal = LSM:Fetch("sound", CritMaticDB2.profile.soundSettings.damageNormal)
+    local soundHealCrit = LSM:Fetch("sound", CritMaticDB2.profile.soundSettings.healCrit)
+    local soundHealNormal = LSM:Fetch("sound", CritMaticDB2.profile.soundSettings.healNormal)
 
     if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
       if baseSpellName then
@@ -278,45 +279,17 @@ function Critmatic:OnInitialize()
   -- Register the slash commands
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
+  if CritMaticDB and CritMaticDB.profile.soundSettings then
+    CritMaticDB2.profile.soundSettings = CritMaticDB.profile.soundSettings
+  end
+
+  CritMaticDB = {}
 
   hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
   local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
   local f = CritMatic.CreateNewMessageFrame()
   local AceGUI = LibStub("AceGUI-3.0")
-  local function ShowDBResetPopup()
-    local frame = AceGUI:Create("Frame")
-    frame:SetTitle("CritMatic Database Reset")
-    frame:SetWidth(600)
-    frame:SetHeight(200)
-    frame:SetLayout("Flow")
-    frame:SetStatusText("CritMatic Discord: https://discord.gg/CCgxPRB4H9")
-    frame:SetCallback("OnClose", function(widget)
-      ReloadUI()
-      AceGUI:Release(widget)
-    end)
-
-    -- Add a description
-    local label = AceGUI:Create("Label")
-    label:SetText("The database has been automatically reset.")
-    label:SetWidth(700)
-    frame:AddChild(label)
-
-    local reloadButton = AceGUI:Create("Button")
-    reloadButton:SetText("Reload")
-    reloadButton:SetCallback("OnClick", function()
-      ReloadUI() -- Reload the user interface
-    end)
-    frame:AddChild(reloadButton)
-
-  end
-
-  if not CritMaticDB.dbResetDone then
-    CritMaticDB = CritMaticDB.defaults
-    ShowDBResetPopup()
-
-    CritMaticDB.dbResetDone = true
-  end
 
   if IsAddOnLoaded("ElvUI") then
     self:ScheduleTimer("TimerCritMaticLoaded", 5)
@@ -337,8 +310,6 @@ end
 function Critmatic:CritMaticReset()
   CritMaticData = {}
   Critmatic:Print("|cffff0000Data Reset!|r")
-  CritMaticDB = CritMaticDB.defaults --temp
-  CritMaticDB.dbResetDone = false --temp
 
 
 end

@@ -19,10 +19,9 @@ defaults = {
       fontShadowColor = { 0.1, 0.1, 0.1 } -- Almost pure black
 
     },
-    dbResetDone = false, -- Set to false to show the popup.
 
   }
 }
 
 -- Initialize the AceDB database
-CritMaticDB = AceDB:New("CritMaticDB", defaults)
+CritMaticDB2 = AceDB:New("CritMaticDB2", defaults)
