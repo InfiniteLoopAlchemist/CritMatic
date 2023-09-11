@@ -9,8 +9,6 @@ normal hits (both damage and heal).
 
 ### NOTE:
 
-#### Some spells require a party to track the spell. because of wow.exe game optimization
-
 #### There is a short calibration period were you will see a lot of notifications at first, but it will quickly simmer down.
 
 ### Key Features:
