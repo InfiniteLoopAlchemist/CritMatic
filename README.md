@@ -49,7 +49,7 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 
 ## Change Log:
 
-### [v0.2.1-release] - 9/12/2023
+### [v0.2.15-release] - 9/12/2023
 
 #### Fixed
 
