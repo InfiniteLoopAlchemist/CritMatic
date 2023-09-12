@@ -1,6 +1,6 @@
 # WotLK Classic 3.4.2 and Classic / Hardcore
 
-## CritMatic: 0.2.1
+## CritMatic: 0.2.15
 
 ### Your Personal Damage and Heal Tracker
 
@@ -35,14 +35,11 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 
 ## Planned:
 
-- Configuration options for more fonts, colors and more.
 - Chat Messages are gold for crits.
 - Crit-log by level and ability.
-- Customizing the Crit/Normal/Heal notification message
-- Option to disable the Crit/Normal/Heal notification message and sounds.
+- Option to disable the Crit/Normal/Heal notification message.
 - Option to disable the CritMatic tooltip information.
 - option to move the CritMatic Crit/Normal/Heal notification message.
-- GUI Interface for configuration.
 
 ## Known Issues:
 
@@ -51,6 +48,12 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 - Some spells like Killing Spree / Star fall show really low dps.
 
 ## Change Log:
+
+### [v0.2.1-release] - 9/12/2023
+
+#### Fixed
+
+- Fixed Various Bugs.
 
 ### [v0.2.1-release] - 9/10/2023
 

@@ -279,7 +279,8 @@ function Critmatic:OnInitialize()
   -- Register the slash commands
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
-  if CritMaticDB and CritMaticDB.profile.soundSettings then
+
+  if CritMaticDB and CritMaticDB.profile and CritMaticDB.profile.soundSettings then
     CritMaticDB2.profile.soundSettings = CritMaticDB.profile.soundSettings
   end
 
