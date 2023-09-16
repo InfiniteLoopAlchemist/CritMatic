@@ -3,6 +3,8 @@ CritMaticData = CritMaticData or {}
 CritMaticDB = {}
 --CTODO: add party/raid chat messages for highest hits with the option to turn off.
 
+--CTODO:  make a changes pop like details  does
+
 local MAX_HIT = 40000
 
 local function GetGCD()
