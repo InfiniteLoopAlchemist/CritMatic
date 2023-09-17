@@ -18,7 +18,7 @@ end
 -- Function to create a new frame based on the template
 CritMatic.CreateNewMessageFrame = function()
   local f = CreateFrame("Frame", nil, UIParent)
-  f:SetSize(750, 30)
+  f:SetSize(1000, 30)
   f:SetPoint("CENTER", UIParent, "CENTER", 0, 350)
 
   f.text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
@@ -128,31 +128,30 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
         end
       end
 
-      if CritMaticData[baseSpellName].highestHeal > 0 or CritMaticData[baseSpellName].highestHealCrit > 0 then
-
+      if CritMaticData[baseSpellName].highestHealCrit > 0 then
         if not critMaticHealExists then
-          self:AddDoubleLine(CritMaticHealLeft, CritMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)
-          _G["GameTooltipTextLeft" .. self:NumLines()]:SetTextColor(1, 1, 1) -- left side color (white)
-          _G["GameTooltipTextRight" .. self:NumLines()]:SetTextColor(1, 0.82, 0) -- right side color (gold)
-        end
-
-        if not normalMaticHealExists then
-          self:AddDoubleLine(normalMaticHealLeft, normalMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)
-          _G["GameTooltipTextLeft" .. self:NumLines()]:SetTextColor(1, 1, 1) -- left side color (white)
-          _G["GameTooltipTextRight" .. self:NumLines()]:SetTextColor(1, 0.82, 0) -- right side color (gold)
+          self:AddDoubleLine(CritMaticHealLeft, CritMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white)  right side color (gold)
         end
       end
-      -- This is a damaging spell
-      if CritMaticData[baseSpellName].highestNormal > 0 or CritMaticData[baseSpellName].highestCrit > 0 then
-        if not critMaticExists then
-          self:AddDoubleLine(CritMaticLeft, CritMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)
-          _G["GameTooltipTextLeft" .. self:NumLines()]:SetTextColor(1, 1, 1) -- left side color (white)
-          _G["GameTooltipTextRight" .. self:NumLines()]:SetTextColor(1, 0.82, 0) -- right side color (gold)
+
+      if CritMaticData[baseSpellName].highestHeal > 0 then
+
+        if not normalMaticHealExists then
+          self:AddDoubleLine(normalMaticHealLeft, normalMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white) right side color (gold)
         end
+      end
+
+      -- This is a damaging spell
+      if CritMaticData[baseSpellName].highestCrit > 0 then
+        if not critMaticExists then
+          self:AddDoubleLine(CritMaticLeft, CritMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white) right side color (gold)
+        end
+      end
+
+      if CritMaticData[baseSpellName].highestNormal > 0 then
+
         if not normalMaticExists then
-          self:AddDoubleLine(normalMaticLeft, normalMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)
-          _G["GameTooltipTextLeft" .. self:NumLines()]:SetTextColor(1, 1, 1) -- left side color (white)
-          _G["GameTooltipTextRight" .. self:NumLines()]:SetTextColor(1, 0.82, 0) -- right side color (gold)
+          self:AddDoubleLine(normalMaticLeft, normalMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)-- left side color (white) right side color (gold)
         end
       end
 

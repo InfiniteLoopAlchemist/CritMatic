@@ -31,7 +31,7 @@ end
 CritMatic.MessageFrame = {}
 
 function CritMatic.MessageFrame:CreateMessage(text, r, g, b)
-  local delayInSeconds = 0.2
+  local delayInSeconds = 0.55
   local function delayedExecution()
     -- Replace frame creation with a call to CreateNewMessageFrame()
     local f = CritMatic.CreateNewMessageFrame()

@@ -1,6 +1,6 @@
 # WotLK Classic 3.4.2 and Classic / Hardcore
 
-## CritMatic: 0.2.15
+## CritMatic: o.2.2
 
 ### Your Personal Damage and Heal Tracker
 
@@ -49,7 +49,14 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 
 ## Change Log:
 
-### [v0.2.15-release] - 9/12/2023
+### [v0.2.2-release] - 9/17/2023
+
+#### Updated
+
+- Changed the default font size to 24
+- Delayed the notification message, by adding 0.25 seconds to it. So you have more time to notice the animation.
+
+### [v0.2.1.5-release] - 9/12/2023
 
 #### Fixed
 
@@ -89,7 +96,7 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 
 - Added A new Heal Sound SFX for Normal Heals.
 
-### [v0.1.55-release] - 8/27/2023
+### [v0.1.5.5-release] - 8/27/2023
 
 Fixed A bug where there was no sound for normal hit/heals
 

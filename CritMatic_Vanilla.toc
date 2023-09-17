@@ -2,7 +2,7 @@
 ## Title: CritMatic
 ## Author: InfiniteLøøpAlchemist
 ## X-License: GNU GPL3
-## Version: 0.2.15
+## Version: o.2.2
 ## Notes: Records and displays the highest critical hits and Normals for the player.
 ## DefaultState: enabled
 ## SavedVariablesPerCharacter: CritMaticData CritMaticDB
