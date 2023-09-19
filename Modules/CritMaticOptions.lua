@@ -3,11 +3,11 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
 function ResetSoundsToDefault()
-  CritMaticDB2.profile.soundSettings = defaults.profile.soundSettings
+  db.profile.soundSettings = defaults.profile.soundSettings
 end
 
 function ResetFontSettingsToDefault()
-  CritMaticDB2.profile.fontSettings = defaults.profile.fontSettings
+  db.profile.fontSettings = defaults.profile.fontSettings
 end
 
 local options = {
@@ -28,10 +28,10 @@ local options = {
           width = "full",
           order = 1,
           get = function()
-            return CritMaticDB2.profile.fontSettings.font
+            return db.profile.fontSettings.font
           end,
           set = function(_, newVal)
-            CritMaticDB2.profile.fontSettings.font = newVal
+            db.profile.fontSettings.font = newVal
           end,
         },
         fontSize = {
@@ -43,10 +43,10 @@ local options = {
           order = 4,
           width = "full",
           get = function()
-            return CritMaticDB2.profile.fontSettings.fontSize
+            return db.profile.fontSettings.fontSize
           end,
           set = function(_, newVal)
-            CritMaticDB2.profile.fontSettings.fontSize = newVal
+            db.profile.fontSettings.fontSize = newVal
           end,
         },
         fontColorCrit = {
@@ -57,11 +57,11 @@ local options = {
           hasAlpha = false,
           width = "normal",
           get = function(info)
-            local r, g, b = unpack(CritMaticDB2.profile.fontSettings.fontColorCrit)
+            local r, g, b = unpack(db.profile.fontSettings.fontColorCrit)
             return r, g, b
           end,
           set = function(info, r, g, b)
-            CritMaticDB2.profile.fontSettings.fontColorCrit = { r, g, b }
+            db.profile.fontSettings.fontColorCrit = { r, g, b }
           end,
         },
         fontColor = {
@@ -72,11 +72,11 @@ local options = {
           width = "200",
           hasAlpha = false, -- set to true if you want an alpha slider (for transparency)
           get = function(info)
-            local r, g, b = unpack(CritMaticDB2.profile.fontSettings.fontColor)
+            local r, g, b = unpack(db.profile.fontSettings.fontColor)
             return r, g, b
           end,
           set = function(info, r, g, b)
-            CritMaticDB2.profile.fontSettings.fontColor = { r, g, b }
+            db.profile.fontSettings.fontColor = { r, g, b }
           end,
         },
         fontOutline = {
@@ -90,10 +90,10 @@ local options = {
           width = "full",
           order = 4,
           get = function()
-            return CritMaticDB2.profile.fontSettings.fontOutline
+            return db.profile.fontSettings.fontOutline
           end,
           set = function(_, newVal)
-            CritMaticDB2.profile.fontSettings.fontOutline = newVal
+            db.profile.fontSettings.fontOutline = newVal
           end,
         },
         fontShadowSizeX = {
@@ -106,10 +106,10 @@ local options = {
           step = 1,
           order = 5,
           get = function()
-            return CritMaticDB2.profile.fontSettings.fontShadowSize[1]
+            return db.profile.fontSettings.fontShadowSize[1]
           end,
           set = function(_, value)
-            CritMaticDB2.profile.fontSettings.fontShadowSize[1] = value
+            db.profile.fontSettings.fontShadowSize[1] = value
           end,
         },
 
@@ -123,10 +123,10 @@ local options = {
           order = 6,
           width = "3",
           get = function()
-            return CritMaticDB2.profile.fontSettings.fontShadowSize[2]
+            return db.profile.fontSettings.fontShadowSize[2]
           end,
           set = function(_, value)
-            CritMaticDB2.profile.fontSettings.fontShadowSize[2] = value
+            db.profile.fontSettings.fontShadowSize[2] = value
           end,
         },
         fontShadowColor = {
@@ -136,10 +136,10 @@ local options = {
           hasAlpha = false,
           order = 7,
           get = function()
-            return unpack(CritMaticDB2.profile.fontSettings.fontShadowColor)
+            return unpack(db.profile.fontSettings.fontShadowColor)
           end,
           set = function(_, r, g, b)
-            CritMaticDB2.profile.fontSettings.fontShadowColor = { r, g, b }
+            db.profile.fontSettings.fontShadowColor = { r, g, b }
           end,
         },
         resetFontSettings = {
@@ -168,10 +168,10 @@ local options = {
           width = "full",
           order = 2,
           get = function()
-            return CritMaticDB2.profile.soundSettings.damageNormal
+            return db.profile.soundSettings.damageNormal
           end,
           set = function(_, newVal)
-            CritMaticDB2.profile.soundSettings.damageNormal = newVal
+            db.profile.soundSettings.damageNormal = newVal
           end,
         },
         damageCrit = {
@@ -182,10 +182,10 @@ local options = {
           width = "full",
           order = 1,
           get = function()
-            return CritMaticDB2.profile.soundSettings.damageCrit
+            return db.profile.soundSettings.damageCrit
           end,
           set = function(_, newVal)
-            CritMaticDB2.profile.soundSettings.damageCrit = newVal
+            db.profile.soundSettings.damageCrit = newVal
           end,
         },
         healNormal = {
@@ -196,10 +196,10 @@ local options = {
           width = "full",
           order = 4,
           get = function()
-            return CritMaticDB2.profile.soundSettings.healNormal
+            return db.profile.soundSettings.healNormal
           end,
           set = function(_, newVal)
-            CritMaticDB2.profile.soundSettings.healNormal = newVal
+            db.profile.soundSettings.healNormal = newVal
           end,
         },
         healCrit = {
@@ -210,10 +210,10 @@ local options = {
           width = "full",
           order = 3,
           get = function()
-            return CritMaticDB2.profile.soundSettings.healCrit
+            return db.profile.soundSettings.healCrit
           end,
           set = function(_, newVal)
-            CritMaticDB2.profile.soundSettings.healCrit = newVal
+            db.profile.soundSettings.healCrit = newVal
           end,
         },
         resetSounds = {

@@ -1,6 +1,5 @@
 -- Define a table to hold the highest hits data.
 CritMaticData = CritMaticData or {}
-CritMaticDB = {}
 --CTODO: add party/raid chat messages for highest hits with the option to turn off.
 
 --CTODO:  make a changes pop like details  does
@@ -39,10 +38,10 @@ CritMatic.CreateNewMessageFrame = function()
   scaleDown:SetDuration(0.15) -- Duration of the scale-down phase
   scaleDown:SetOrder(3) -- Third phase
   local LSM = LibStub("LibSharedMedia-3.0")
-  local fontPath = LSM:Fetch("font", CritMaticDB2.profile.fontSettings.font)
-  f.text:SetFont(fontPath, CritMaticDB2.profile.fontSettings.fontSize, CritMaticDB2.profile.fontSettings.fontOutline)
-  f.text:SetShadowOffset(unpack(CritMaticDB2.profile.fontSettings.fontShadowSize))
-  f.text:SetShadowColor(unpack(CritMaticDB2.profile.fontSettings.fontShadowColor))
+  local fontPath = LSM:Fetch("font", db.profile.fontSettings.font)
+  f.text:SetFont(fontPath, db.profile.fontSettings.fontSize, db.profile.fontSettings.fontOutline)
+  f.text:SetShadowOffset(unpack(db.profile.fontSettings.fontShadowSize))
+  f.text:SetShadowColor(unpack(db.profile.fontSettings.fontShadowColor))
 
   return f
 end
@@ -189,10 +188,10 @@ f:SetScript("OnEvent", function(self, event, ...)
       return
     end
     local LSM = LibStub("LibSharedMedia-3.0")
-    local soundCrit = LSM:Fetch("sound", CritMaticDB2.profile.soundSettings.damageCrit)
-    local soundNormal = LSM:Fetch("sound", CritMaticDB2.profile.soundSettings.damageNormal)
-    local soundHealCrit = LSM:Fetch("sound", CritMaticDB2.profile.soundSettings.healCrit)
-    local soundHealNormal = LSM:Fetch("sound", CritMaticDB2.profile.soundSettings.healNormal)
+    local soundCrit = LSM:Fetch("sound", db.profile.soundSettings.damageCrit)
+    local soundNormal = LSM:Fetch("sound", db.profile.soundSettings.damageNormal)
+    local soundHealCrit = LSM:Fetch("sound", db.profile.soundSettings.healCrit)
+    local soundHealNormal = LSM:Fetch("sound", db.profile.soundSettings.healNormal)
 
     if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
       if baseSpellName then
@@ -259,7 +258,7 @@ Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsol
 local version = GetAddOnMetadata("CritMatic", "Version")
 
 local function CritMaticLoaded()
-  Critmatic:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded!|r")
+  Critmatic:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700 /cm|r|cff918d86 for options|r")
 end
 
 function Critmatic:TimerCritMaticLoaded()
@@ -274,18 +273,14 @@ end
 -- Called when the addon is loaded
 function Critmatic:OnInitialize()
 
+  db = LibStub("AceDB-3.0"):New("CritMaticDB13", defaults)
   CritMaticData = _G["CritMaticData"]
   -- Register console commands
   Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
   -- Register the slash commands
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
-
-  if CritMaticDB and CritMaticDB.profile and CritMaticDB.profile.soundSettings then
-    CritMaticDB2.profile.soundSettings = CritMaticDB.profile.soundSettings
-  end
-
-  CritMaticDB = {}
+  Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
 
   hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
   local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
@@ -294,9 +289,9 @@ function Critmatic:OnInitialize()
   local AceGUI = LibStub("AceGUI-3.0")
 
   if IsAddOnLoaded("ElvUI") then
-    self:ScheduleTimer("TimerCritMaticLoaded", 5)
+    self:ScheduleTimer("TimerCritMaticLoaded", 8)
   else
-    self:ScheduleTimer("TimerCritMaticLoaded", 5)
+    self:ScheduleTimer("TimerCritMaticLoaded", 8)
   end
 end
 -- Called when the addon is enabled
@@ -312,6 +307,8 @@ end
 function Critmatic:CritMaticReset()
   CritMaticData = {}
   Critmatic:Print("|cffff0000Data Reset!|r")
+end
+function Critmatic:CritMaticDBReset()
 
-
+  Critmatic:Print("|cffff0000Database Reset!|r")
 end

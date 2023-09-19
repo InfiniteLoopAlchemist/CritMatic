@@ -1,5 +1,3 @@
-local AceDB = LibStub("AceDB-3.0")
-
 -- Default values for the database
 defaults = {
   profile = {
@@ -10,9 +8,9 @@ defaults = {
       healCrit = "Level Up"
     },
     fontSettings = {
-      font = "Hideout 8-Bit-AA",
+      font = "Anton",
       fontOutline = "THICKOUTLINE",
-      fontSize = 24,
+      fontSize = 22,
       fontColorCrit = { 1, 0.84, 0 }, -- Gold color
       fontColor = { 0.9, 0.9, 0.9 }, -- Almost pure White
       fontShadowSize = { 3, -3 },
@@ -23,5 +21,5 @@ defaults = {
   }
 }
 
--- Initialize the AceDB database
-CritMaticDB2 = AceDB:New("CritMaticDB2", defaults)
+
+
