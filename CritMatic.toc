@@ -1,8 +1,10 @@
 ## Interface: 30402
+## Interface-Classic: 11404
+## Interface-Wrath: 30402
 ## Title: CritMatic
-## Author: InfiniteLøøpAlchemist
+## Version: 0.2.5.6
 ## X-License: GNU GPL3
-## Version: 0.2.5.5
+## Version: 0.2.5.6
 ## Notes: Records and displays the highest critical hits and Normals for the player.
 ## DefaultState: enabled
 ## SavedVariablesPerCharacter: CritMaticData CritMaticDB13
