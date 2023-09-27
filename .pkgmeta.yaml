@@ -1,7 +1,5 @@
 enable-toc-creation: yes
 #changelog-title: ""
-manual-changelog: "## [v0.2.5.6-release] - 9/26/2023
-
-### Fixed:
-
-- ** Various Fixes. **"
+manual-changelog:
+  filename: /Users/john/Dropbox/CritMatic/CHANGE_LOG.md
+  markup-type: markdown
