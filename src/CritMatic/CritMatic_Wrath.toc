@@ -1,0 +1,11 @@
+## Interface: 30402
+## Title: CritMatic
+## Author: InfiniteLøøpAlchemist
+## X-License: GNU GPL3
+## Version: 0.2.5.5
+## Notes: Records and displays the highest critical hits and Normals for the player.
+## DefaultState: enabled
+## SavedVariablesPerCharacter: CritMaticData CritMaticDB13
+## OptionalDeps: ElvUI
+
+embeds.xml
