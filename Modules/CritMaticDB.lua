@@ -17,7 +17,9 @@ defaults = {
       fontShadowColor = { 0.1, 0.1, 0.1 } -- Almost pure black
 
     },
-
+    spells = {
+      autoAttacksEnabled = false
+    }
   }
 }
 

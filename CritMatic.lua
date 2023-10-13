@@ -184,7 +184,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 
     local baseSpellName = removeImproved(spellName)
 
-    if baseSpellName == "Auto Attack" then
+    if baseSpellName == "Auto Attack" and not db.profile.spells.autoAttacksEnabled then
       return
     end
     local LSM = LibStub("LibSharedMedia-3.0")
@@ -194,6 +194,7 @@ f:SetScript("OnEvent", function(self, event, ...)
     local soundHealNormal = LSM:Fetch("sound", db.profile.soundSettings.healNormal)
 
     if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
+      
       if baseSpellName then
         CritMaticData[baseSpellName] = CritMaticData[baseSpellName] or {
           highestCrit = 0,
@@ -202,9 +203,7 @@ f:SetScript("OnEvent", function(self, event, ...)
           highestHeal = 0,
 
         }
-        if IsSpellInSpellbook(baseSpellName) then
-          --print(CombatLogGetCurrentEventInfo())
-
+        if IsSpellInSpellbook(baseSpellName) or baseSpellName == "Auto Attack" then
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
             if critical then
 
@@ -226,6 +225,7 @@ f:SetScript("OnEvent", function(self, event, ...)
               end
             end
           elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
+            
             if critical then
               -- When the event is damage and it's a critical hit.
               if amount > CritMaticData[baseSpellName].highestCrit and amount <= MAX_HIT then

@@ -228,6 +228,24 @@ local options = {
         },
       },
     },
+    spells = {
+      name = "Spells",
+      type = "group",
+      args = {
+        enableAutoAttacks = {
+          name = "Enable Auto Attacks",
+          type = "toggle",
+          desc = "Track auto attacks?",
+          width = "full",
+          get = function()
+            return db.profile.spells.autoAttacksEnabled
+          end,
+          set = function(_, newVal)
+            db.profile.spells.autoAttacksEnabled = newVal
+          end,
+        },
+      },
+    },
   },
 }
 

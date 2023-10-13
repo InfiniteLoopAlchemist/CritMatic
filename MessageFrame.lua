@@ -74,10 +74,6 @@ function CritMatic.MessageFrame:CreateMessage(text, r, g, b)
 end
 
 function CritMatic.ShowNewHealCritMessage(spellName, amount)
-  if spellName == "Auto Attack" then
-    return
-  end
-
   local message = string.upper(string.format("New %s crit heal: %d!", spellName, amount))
   local r, g, b = unpack(db.profile.fontSettings.fontColorCrit)
   CritMatic.MessageFrame:CreateMessage(message, r, g, b)  -- Gold color
@@ -85,10 +81,6 @@ function CritMatic.ShowNewHealCritMessage(spellName, amount)
 end
 
 function CritMatic.ShowNewHealMessage(spellName, amount)
-  if spellName == "Auto Attack" then
-    return
-  end
-
   local message = string.upper(string.format("New %s normal heal record: %d!", spellName, amount))
   local r, g, b = unpack(db.profile.fontSettings.fontColor)
   CritMatic.MessageFrame:CreateMessage(message, r, g, b)
@@ -96,20 +88,12 @@ function CritMatic.ShowNewHealMessage(spellName, amount)
 end
 
 function CritMatic.ShowNewCritMessage(spellName, amount)
-  if spellName == "Auto Attack" then
-    return
-  end
-
   local message = string.upper(string.format("New %s crit: %d!", spellName, amount))
   local r, g, b = unpack(db.profile.fontSettings.fontColorCrit)
   CritMatic.MessageFrame:CreateMessage(message, r, g, b)
 end
 
 function CritMatic.ShowNewNormalMessage(spellName, amount)
-  if spellName == "Auto Attack" then
-    return
-  end
-
   local message = string.upper(string.format("New %s normal hit record: %d!", spellName, amount))
   local r, g, b = unpack(db.profile.fontSettings.fontColor)
   CritMatic.MessageFrame:CreateMessage(message, r, g, b)
