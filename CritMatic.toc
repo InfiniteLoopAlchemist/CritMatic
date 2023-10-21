@@ -1,12 +1,12 @@
-## Interface: 30402
+## Interface: 30403
 ## Interface-Classic: 11404
-## Interface-Wrath: 30402
+## Interface-Wrath: 30403
 ## Title: CritMatic
-## Version: 0.2.5.7
+## Version: 0.2.8
 ## X-License: GNU GPL3
 ## Notes: Records and displays the highest critical hits and Normals for the player.
 ## DefaultState: enabled
-## SavedVariablesPerCharacter: CritMaticData CritMaticDB13
+## SavedVariablesPerCharacter: CritMaticData CritMaticDB14
 ## OptionalDeps: ElvUI
 
 embeds.xml
