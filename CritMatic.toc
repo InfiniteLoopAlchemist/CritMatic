@@ -4,7 +4,6 @@
 ## Title: CritMatic
 ## Version: 0.2.5.7
 ## X-License: GNU GPL3
-## Version: 0.2.5.6
 ## Notes: Records and displays the highest critical hits and Normals for the player.
 ## DefaultState: enabled
 ## SavedVariablesPerCharacter: CritMaticData CritMaticDB13
