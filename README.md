@@ -1,6 +1,6 @@
-# WotLK Classic: v3.4.2  and Classic / Hardcore: v1.14.4
+# WotLK Classic: v3.4.3  and Classic / Hardcore: v1.14.4
 
-## CritMatic: v0.2.8
+## CritMatic: v0.2.9
 
 ### Your Personal Damage and Heal Tracker
 
