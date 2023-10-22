@@ -15,8 +15,10 @@ defaults = {
       fontColor = { 0.9, 0.9, 0.9 }, -- Almost pure White
       fontShadowSize = { 3, -3 },
       fontShadowColor = { 0.1, 0.1, 0.1 } -- Almost pure black
-
     },
+    miscellaneous = {
+      autoAttacksEnabled = true
+    }
 
   }
 }

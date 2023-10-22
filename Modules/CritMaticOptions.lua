@@ -228,6 +228,21 @@ local options = {
         },
       },
     },
+    miscellaneous = {
+      name = "Miscellaneous Settings",
+      type = "group",
+      order= 100,
+      args = {
+        autoAttacksEnabled = {
+          name = "Track Auto Attacks",
+          desc = "Track Auto Attacks?",
+          type = "toggle",
+          set = function(_, newVal) db.profile.miscellaneous.autoAttacksEnabled = newVal
+          end,
+          get = function() return db.profile.miscellaneous.autoAttacksEnabled end,
+        }
+      }
+    }
   },
 }
 

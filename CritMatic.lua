@@ -184,7 +184,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 
     local baseSpellName = removeImproved(spellName)
 
-    if baseSpellName == "Auto Attack" then
+    if baseSpellName == "Auto Attack" and not db.profile.miscellaneous.autoAttacksEnabled then
       return
     end
     local LSM = LibStub("LibSharedMedia-3.0")
@@ -202,7 +202,7 @@ f:SetScript("OnEvent", function(self, event, ...)
           highestHeal = 0,
 
         }
-        if IsSpellInSpellbook(baseSpellName) then
+        if IsSpellInSpellbook(baseSpellName) or baseSpellName == "Auto Attack" then
           --print(CombatLogGetCurrentEventInfo())
 
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
@@ -273,7 +273,7 @@ end
 -- Called when the addon is loaded
 function Critmatic:OnInitialize()
 
-  db = LibStub("AceDB-3.0"):New("CritMaticDB13", defaults)
+  db = LibStub("AceDB-3.0"):New("CritMaticDB14", defaults)
   CritMaticData = _G["CritMaticData"]
   -- Register console commands
   Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
