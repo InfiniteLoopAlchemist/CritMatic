@@ -1,3 +1,10 @@
+## [v0.2.8-release] - 10/21/2023
+
+### Added:
+
+- ** Option to track auto attacks or not. ** 
+
+
 ## [v0.2.5.7-release] - 9/27/2023
 
 ### Updated:
