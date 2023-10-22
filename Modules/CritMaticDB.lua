@@ -1,12 +1,6 @@
 -- Default values for the database
 defaults = {
   profile = {
-    soundSettings = {
-      damageNormal = "Heroism Cast",
-      damageCrit = "Level Up",
-      healNormal = "Heaven",
-      healCrit = "Level Up"
-    },
     fontSettings = {
       font = "Anton",
       fontOutline = "THICKOUTLINE",
@@ -16,10 +10,21 @@ defaults = {
       fontShadowSize = { 3, -3 },
       fontShadowColor = { 0.1, 0.1, 0.1 } -- Almost pure black
     },
+    soundSettings = {
+      damageNormal = "Heroism Cast",
+      damageCrit = "Level Up",
+      healNormal = "Heaven",
+      healCrit = "Level Up",
+      muteAllSounds = false
+    },
+
     miscellaneous = {
       autoAttacksEnabled = true
+    },
+    social = {
+      chatNotificationsEnabled = true,
+      alertNotificationsEnabled = true
     }
-
   }
 }
 

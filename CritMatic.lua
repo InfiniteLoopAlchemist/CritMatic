@@ -59,6 +59,20 @@ local function IsSpellInSpellbook(spellName)
   local name = GetSpellInfo(spellName)
   return name ~= nil
 end
+local function checkAlertNotifications(input)
+  print("Alert Notifications Enabled: ", db.profile.social.alertNotificationsEnabled)  -- Debugging line
+  if db.profile.social.alertNotificationsEnabled == true then
+    return input
+  end
+end
+
+local function checkChatNotifications(input)
+  print("Chat Notifications Enabled: ", db.profile.social.chatNotificationsEnabled)  -- Debugging line
+  if db.profile.social.chatNotificationsEnabled == true then
+    return input
+  end
+end
+
 
 local function AddHighestHitsToTooltip(self, slot, isSpellBook)
   if (not slot) then
@@ -211,18 +225,40 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is a heal and it's a critical heal.
               if amount > CritMaticData[baseSpellName].highestHealCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHealCrit = amount
-                PlaySoundFile(soundHealCrit)
+                if not db.profile.soundSettings.muteAllSounds then
+                  PlaySoundFile(soundHealCrit)
+                end
+
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
-                CritMatic.ShowNewHealCritMessage(baseSpellName, amount)
-                print("New highest crit heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHealCrit)
+
+                if db.profile.social.alertNotificationsEnabled then
+                  CritMatic.ShowNewHealCritMessage(baseSpellName, amount)
+                end
+
+                if db.profile.social.chatNotificationsEnabled then
+                  print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" ..
+                          CritMaticData[baseSpellName].highestHealCrit)
+                end
+
               end
             elseif not critical then
               if amount > CritMaticData[baseSpellName].highestHeal and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHeal = amount
-                PlaySoundFile(soundHealNormal)
+
+                if not db.profile.soundSettings.muteAllSounds then
+                  PlaySoundFile(soundHealNormal)
+                end
+
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heaven.ogg", "SFX")
-                CritMatic.ShowNewHealMessage(baseSpellName, amount)
-                print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHeal)
+
+                if db.profile.social.alertNotificationsEnabled then
+                  CritMatic.ShowNewHealMessage(baseSpellName, amount)
+                end
+
+                if db.profile.social.chatNotificationsEnabled then
+                  print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHeal)
+                end
+
               end
             end
           elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
@@ -231,19 +267,39 @@ f:SetScript("OnEvent", function(self, event, ...)
               if amount > CritMaticData[baseSpellName].highestCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestCrit = amount
                 --PlaySound(888, "SFX")
-                PlaySoundFile(soundCrit)
+                if not db.profile.soundSettings.muteAllSounds then
+                  PlaySoundFile(soundCrit)
+                end
+
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
-                CritMatic.ShowNewCritMessage(baseSpellName, amount)
-                print("New highest crit hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestCrit)
+                if db.profile.social.alertNotificationsEnabled then
+                  CritMatic.ShowNewCritMessage(baseSpellName, amount)
+                end
+
+                if db.profile.social.chatNotificationsEnabled then
+                  print("|cffffd700New highest crit hit for " .. baseSpellName .. ": |r" ..
+                          CritMaticData[baseSpellName].highestCrit)
+
+                end
+
               end
             elseif not critical then
               -- When the event is damage but it's not a critical hit.
               if amount > CritMaticData[baseSpellName].highestNormal and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestNormal = amount
-                PlaySoundFile(soundNormal)
+                if not db.profile.soundSettings.muteAllSounds then
+                  PlaySoundFile(soundNormal)
+                end
+
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heroism_Cast.ogg", "SFX")
-                CritMatic.ShowNewNormalMessage(baseSpellName, amount)
-                print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestNormal)
+                if db.profile.social.alertNotificationsEnabled then
+                  CritMatic.ShowNewNormalMessage(baseSpellName, amount)
+                end
+
+                if db.profile.social.chatNotificationsEnabled then
+                  print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestNormal)
+                end
+
               end
             end
           end

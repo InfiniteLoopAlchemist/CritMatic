@@ -216,6 +216,14 @@ local options = {
             db.profile.soundSettings.healCrit = newVal
           end,
         },
+        muteAllSounds = {
+          name = "Mute All Sounds",
+          desc = "Do you want to mute all sounds regardless of settings?",
+          type = "toggle",
+          set = function(_, newVal) db.profile.soundSettings.muteAllSounds = newVal
+          end,
+          get = function() return db.profile.soundSettings.muteAllSounds end,
+        },
         resetSounds = {
           name = "Reset Sounds to Default",
           desc = "Reset all sounds",
@@ -224,7 +232,7 @@ local options = {
           func = ResetSoundsToDefault,
           confirm = true,
           confirmText = "Are you sure you want to reset sound settings to their default values?",
-          order = 5,
+          order = 6,
         },
       },
     },
@@ -241,6 +249,28 @@ local options = {
           end,
           get = function() return db.profile.miscellaneous.autoAttacksEnabled end,
         }
+      }
+    },
+    social ={
+      name = "Social Settings",
+      type = "group",
+      args = {
+        chatNotificationsEnabled = {
+          name = "Show Chat Notifications",
+          desc = "Do you want damage / heal chat messages for when you get a higher crit/normal hit/heal?",
+          type = "toggle",
+          set = function(_, newVal) db.profile.social.chatNotificationsEnabled = newVal
+          end,
+          get = function() return db.profile.social.chatNotificationsEnabled end,
+        },
+        alertNotificationsEnabled = {
+          name = "Show Alert Notifications",
+          desc = "Do you want damage / heal alerts messages for when you get a higher crit/normal hit/heal?",
+          type = "toggle",
+          set = function(_, newVal) db.profile.social.alertNotificationsEnabled = newVal
+          end,
+          get = function() return db.profile.social.alertNotificationsEnabled end,
+        },
       }
     }
   },
