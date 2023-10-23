@@ -2,10 +2,7 @@
 
 ## CritMatic: v0.2.9.1
 
-### Your Personal Damage and Heal Tracker
-
-CritMatic is a lightweight World of Warcraft addon designed to help players keep track of their highest critical and
-normal hits (both damage and heal).
+### CritMatic is a lightweight World of Warcraft addon designed to help players keep track of their highest critical and normal hits (both damage and heal).
 
 ### NOTE:
 
@@ -35,7 +32,6 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 
 ## Planned:
 
-- Chat Messages are gold for crits.
 - Crit-log by level and ability.
 - Option to disable the Crit/Normal/Heal notification message.
 - Option to disable the CritMatic tooltip information.
