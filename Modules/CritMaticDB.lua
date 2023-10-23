@@ -1,6 +1,14 @@
 -- Default values for the database
 defaults = {
   profile = {
+    generalSettings = {
+
+    },
+    alertNotificationSettings = {
+      alertPositionX = 0,
+      alertPositionY = 350,
+      maxAlerts = 4,
+    },
     fontSettings = {
       font = "Anton",
       fontOutline = "THICKOUTLINE",
@@ -24,7 +32,8 @@ defaults = {
     social = {
       chatNotificationsEnabled = true,
       alertNotificationsEnabled = true
-    }
+    },
+
   }
 }
 

@@ -15,6 +15,63 @@ local options = {
   type = "group",
 
   args = {
+    generalSettings = {
+      name = "General Settings",
+      type = "group",
+      args = {
+        discordLink = {
+          name = "Help/Suggestions Discord Link",
+          desc = "Get help or make a suggestion, Just Copy this link to join our Discord server.",
+          type = "input",
+          width='full',
+          get = function() return "https://discord.gg/34JJyrnGGC" end,  -- Replace with your actual Discord link
+          set = function(_, val)  -- Do nothing when the user tries to modify it
+
+          end,
+        },
+
+      }
+    },
+    alertNotificationSettings = {
+      name = "Alert Notification Settings",
+      type = "group",
+      args = {
+
+        alertPositionX = {
+          name = "Position X Horizontal",
+          desc = "Adjust the horizontal (X) coordinate for alert messages. Enter a positive number to move the messages to the right, and a negative number to move them to the left. The default value is 0, which centers the messages.",
+          type = "input",
+          order = 1,
+          set = function(_, val) db.profile.alertNotificationSettings.alertPositionX = tonumber(val) end,
+          get = function() return tostring(db.profile.alertNotificationSettings.alertPositionX) end,
+        },
+        alertPositionY = {
+          name = "Position Y Vertical",
+          desc = "Adjust the vertical (Y) coordinate for alert messages. Enter a positive number to move the messages upward, and a negative number to move them downward. The default value is 350, positioning the messages near the top of the screen.",
+          type = "input",
+          order = 2,
+          set = function(_, val) db.profile.alertNotificationSettings.alertPositionY = tonumber(val) end,
+          get = function() return tostring(db.profile.alertNotificationSettings.alertPositionY) end,
+        },
+       maxAlerts = {
+          type = 'range',
+          name = 'Max Alert Notifications - Requires Reload',
+          desc = 'Set the max alert notifications you want displayed at a time. Requires Reload',
+          min = 2,
+          max = 6,
+          step = 1,
+          order = 3,
+          width = '600',
+          get = function()
+            return db.profile.alertNotificationSettings.maxAlerts
+          end,
+          set = function(_, value)
+            db.profile.alertNotificationSettings.maxAlerts = tonumber(value)
+          end,
+        },
+
+      }
+    },
     font = {
       name = "Font Settings",
       type = "group",
@@ -26,7 +83,7 @@ local options = {
           dialogControl = "LSM30_Font",
           values = LSM:HashTable("font"),
           width = "full",
-          order = 1,
+          order = 2,
           get = function()
             return db.profile.fontSettings.font
           end,
@@ -40,7 +97,7 @@ local options = {
           min = 8,
           max = 32,
           step = 1,
-          order = 4,
+          order = 5,
           width = "full",
           get = function()
             return db.profile.fontSettings.fontSize
@@ -53,7 +110,7 @@ local options = {
           type = "color",
           name = "Crit Color",
           desc = "Choose a Crit color for your font",
-          order = 2,
+          order = 3,
           hasAlpha = false,
           width = "normal",
           get = function(info)
@@ -68,7 +125,7 @@ local options = {
           type = "color",
           name = "Color (Non-Crit)",
           desc = "Choose a (Non-Crit) color for your font",
-          order = 3,
+          order = 4,
           width = "200",
           hasAlpha = false, -- set to true if you want an alpha slider (for transparency)
           get = function(info)
@@ -88,7 +145,7 @@ local options = {
             ["THICKOUTLINE"] = "Thick Outline",
           },
           width = "full",
-          order = 4,
+          order = 5,
           get = function()
             return db.profile.fontSettings.fontOutline
           end,
@@ -104,7 +161,7 @@ local options = {
           max = 10,
           width = "normal",
           step = 1,
-          order = 5,
+          order = 6,
           get = function()
             return db.profile.fontSettings.fontShadowSize[1]
           end,
@@ -120,7 +177,7 @@ local options = {
           min = -10,
           max = 10,
           step = 1,
-          order = 6,
+          order = 7,
           width = "3",
           get = function()
             return db.profile.fontSettings.fontShadowSize[2]
@@ -134,7 +191,7 @@ local options = {
           name = 'Shadow Color',
           desc = 'Set the shadow color for the font.',
           hasAlpha = false,
-          order = 7,
+          order = 8,
           get = function()
             return unpack(db.profile.fontSettings.fontShadowColor)
           end,
@@ -150,7 +207,7 @@ local options = {
           func = ResetFontSettingsToDefault,
           confirm = true,
           confirmText = "Are you sure you want to reset font settings to their default values?",
-          order = 8,
+          order = 9,
         },
 
       },

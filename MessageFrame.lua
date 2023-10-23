@@ -1,18 +1,26 @@
 local MESSAGE_SPACING = 3
-local MAX_MESSAGES = 4
+local MAX_MESSAGES
 local activeMessages = {}
+
+
+function InitializeMessageFrame()
+  MAX_MESSAGES = db.profile.alertNotificationSettings.maxAlerts
+  -- rest of initialization code
+end
+
 --/run CritMatic.ShowNewCritMessage("Killing Spree", 300)CritMatic.ShowNewNormalMessage("Killing Spree",435)
 
 -- Utility function to adjust message positions
 local function AdjustMessagePositions()
-  -- Position the first message at the top
-  activeMessages[1]:SetPoint("CENTER", UIParent, "CENTER", 0, 350)
+  -- Position the first message based on generalSettings
+  activeMessages[1]:SetPoint("CENTER", UIParent, "CENTER", db.profile.alertNotificationSettings.alertPositionX, db.profile.alertNotificationSettings.alertPositionY)
 
   -- Position subsequent messages relative to the previous one
   for i = 2, #activeMessages do
     activeMessages[i]:SetPoint("TOP", activeMessages[i - 1], "BOTTOM", 0, -MESSAGE_SPACING)
   end
 end
+
 
 
 

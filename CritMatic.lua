@@ -18,7 +18,7 @@ end
 CritMatic.CreateNewMessageFrame = function()
   local f = CreateFrame("Frame", nil, UIParent)
   f:SetSize(1000, 30)
-  f:SetPoint("CENTER", UIParent, "CENTER", 0, 350)
+  f:SetPoint("CENTER", UIParent, "CENTER", db.profile.alertNotificationSettings.alertPositionX, db.profile.alertNotificationSettings.alertPositionY)
 
   f.text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
   f.text:SetAllPoints()
@@ -337,6 +337,7 @@ function Critmatic:OnInitialize()
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
   Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
+  InitializeMessageFrame()
 
   hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
   local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
