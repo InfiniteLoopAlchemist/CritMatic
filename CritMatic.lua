@@ -176,7 +176,16 @@ end
 -- Register an event that fires when the player hits an enemy.
 local f = CreateFrame("FRAME")
 f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-
+f:RegisterEvent("PLAYER_REGEN_ENABLED")
+-- Variables to hold the highest values during combat
+local highestCritDuringCombat = 0
+local highestNormalHitDuringCombat = 0
+local highestCritHealDuringCombat = 0
+local highestHealDuringCombat = 0
+highestCritSpellName = ""
+highestNormalHitSpellName = ""
+highestCritHealSpellName = ""
+highestHealSpellName = ""
 f:SetScript("OnEvent", function(self, event, ...)
 
   if event == "COMBAT_LOG_EVENT_UNFILTERED" then
@@ -216,6 +225,8 @@ f:SetScript("OnEvent", function(self, event, ...)
           highestHeal = 0,
 
         }
+
+
         if IsSpellInSpellbook(baseSpellName) or baseSpellName == "Auto Attack" then
           --print(CombatLogGetCurrentEventInfo())
 
@@ -279,7 +290,6 @@ f:SetScript("OnEvent", function(self, event, ...)
                 if db.profile.social.chatNotificationsEnabled then
                   print("|cffffd700New highest crit hit for " .. baseSpellName .. ": |r" ..
                           CritMaticData[baseSpellName].highestCrit)
-
                 end
 
               end
@@ -303,12 +313,109 @@ f:SetScript("OnEvent", function(self, event, ...)
               end
             end
           end
+          ProcessNewHighs(eventType, baseSpellName, amount, critical)
         end
       end
     end
-  end
-end)
+  elseif event == "PLAYER_REGEN_ENABLED" then
+    if IsInGroup() then
 
+      if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+          -- For highest critical hit
+
+          if highestCritDuringCombat > 0 then
+            print("Debug: Sending highestCritDuringCombat message.")
+            SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                    highestCritDuringCombat,  "PARTY")
+          end
+          print(highestNormalHitDuringCombat)
+          -- For highest normal hit
+          if highestNormalHitDuringCombat > 0 then
+            print("Debug: Sending highestNormalHitDuringCombat message.")
+            SendChatMessage("{star}CritMatic: New highest normal hit for " .. highestNormalHitSpellName .. ": "
+                    .. highestNormalHitDuringCombat, "PARTY")
+          end
+
+          -- For highest critical heal
+          if highestCritHealDuringCombat > 0 then
+            print("Debug: Sending highestCritHealDuringCombat message.")
+            SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat,  "PARTY")
+          end
+
+          -- For highest heal
+          if highestHealDuringCombat > 0 then
+            print("Debug: Sending highestHealDuringCombat message.")
+            SendChatMessage("{star}CritMatic: New highest heal for " .. highestHealSpellName .. ": " ..
+                    highestHealDuringCombat, "PARTY")
+          end
+          else
+          if highestCritDuringCombat > 0 then
+            print("Debug: Sending highestCritDuringCombat message.")
+            SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                    highestCritDuringCombat,  "INSTANCE_CHAT")
+          end
+          print(highestNormalHitDuringCombat)
+          -- For highest normal hit
+          if highestNormalHitDuringCombat > 0 then
+            print("Debug: Sending highestNormalHitDuringCombat message.")
+            SendChatMessage("{star}CritMatic: New highest normal hit for " .. highestNormalHitSpellName .. ": "
+                    .. highestNormalHitDuringCombat, "INSTANCE_CHAT")
+          end
+
+          -- For highest critical heal
+          if highestCritHealDuringCombat > 0 then
+            print("Debug: Sending highestCritHealDuringCombat message.")
+            SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat,  "INSTANCE_CHAT")
+          end
+
+          -- For highest heal
+          if highestHealDuringCombat > 0 then
+            print("Debug: Sending highestHealDuringCombat message.")
+            SendChatMessage("{star}CritMatic: New highest heal for " .. highestHealSpellName .. ": " ..
+                    highestHealDuringCombat, "INSTANCE_CHAT")
+          end
+
+
+        end
+      end
+      highestCritDuringCombat = 0
+      highestNormalHitDuringCombat = 0
+      highestCritHealDuringCombat = 0
+      highestHealDuringCombat = 0
+      highestCritSpellName  = ""
+      highestNormalHitSpellName = ""
+      highestCritHealSpellName = ""
+      highestHealSpellName = ""
+    end
+end)
+-- Function to process new high values during combat
+function ProcessNewHighs(eventType, baseSpellName, amount, critical)
+  if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
+    if critical then
+      if amount > highestCritHealDuringCombat then
+        highestCritHealDuringCombat = amount
+        highestCritHealSpellName = baseSpellName
+      end
+    else
+      if amount > highestHealDuringCombat then
+        highestHealDuringCombat = amount
+        highestHealSpellName = baseSpellName
+      end
+    end
+  elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
+    if critical then
+      if amount > highestCritDuringCombat then
+        highestCritDuringCombat = amount
+        highestCritSpellName = baseSpellName
+      end
+    else
+      if amount > highestNormalHitDuringCombat then
+        highestNormalHitDuringCombat = amount
+        highestNormalHitSpellName = baseSpellName
+      end
+    end
+  end
+end
 Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0")
 
 local version = GetAddOnMetadata("CritMatic", "Version")
