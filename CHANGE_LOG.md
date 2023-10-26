@@ -2,26 +2,26 @@
 
 ### Updated:
 
-- **Various changes.<a:matrix:1153778509106397304>**
+- **Various changes.**
 
 ### Added:
 
-- **General options.<:Cheers:1153763170171752458>**
+- **General options.**
 
 
 ## [v0.3.1-release] - 10/26/2023
 
 ### Fixed:
 
-- **After Working on the addon all day I left some debug messages. <:Sleeper:1153764861046685829>**
+- **After Working on the addon all day I left some debug messages.**
 
 ### Updated:
 
-- **Party Notifications updated: Now only displays Critical Hits and Critical Heals. Removed notifications for Normal Hits and Heals. <a:Check:1153778942495445122>**
+- **Party Notifications updated: Now only displays Critical Hits and Critical Heals. Removed notifications for Normal Hits and Heals.**
 
 ### Added:
 
-- **Option to shut up CritMatic party notifications. <:CoolStoryBob:1153763060163555328>**
+- **Option to shut up CritMatic party notifications**
 
 
 ## [v0.3.0-release] - 10/25/2023
