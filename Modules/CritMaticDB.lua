@@ -23,7 +23,8 @@ defaults = {
     },
     social = {
       chatNotificationsEnabled = true,
-      alertNotificationsEnabled = true
+      alertNotificationsEnabled = true,
+      critmaticShutUp = false
     }
   }
 }

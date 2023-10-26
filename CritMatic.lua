@@ -317,66 +317,37 @@ f:SetScript("OnEvent", function(self, event, ...)
       end
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
-    if IsInGroup() then
+    if not db.profile.social.critmaticShutUp then
+      if IsInGroup() then
 
-      if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+        if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
           -- For highest critical hit
 
           if highestCritDuringCombat > 0 then
-            print("Debug: Sending highestCritDuringCombat message.")
             SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
                     highestCritDuringCombat,  "PARTY")
           end
-          print(highestNormalHitDuringCombat)
-          -- For highest normal hit
-          if highestNormalHitDuringCombat > 0 then
-            print("Debug: Sending highestNormalHitDuringCombat message.")
-            SendChatMessage("{star}CritMatic: New highest normal hit for " .. highestNormalHitSpellName .. ": "
-                    .. highestNormalHitDuringCombat, "PARTY")
-          end
 
           -- For highest critical heal
           if highestCritHealDuringCombat > 0 then
-            print("Debug: Sending highestCritHealDuringCombat message.")
             SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat,  "PARTY")
           end
 
-          -- For highest heal
-          if highestHealDuringCombat > 0 then
-            print("Debug: Sending highestHealDuringCombat message.")
-            SendChatMessage("{star}CritMatic: New highest heal for " .. highestHealSpellName .. ": " ..
-                    highestHealDuringCombat, "PARTY")
-          end
-          else
+        else
           if highestCritDuringCombat > 0 then
-            print("Debug: Sending highestCritDuringCombat message.")
             SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
                     highestCritDuringCombat,  "INSTANCE_CHAT")
-          end
-          print(highestNormalHitDuringCombat)
-          -- For highest normal hit
-          if highestNormalHitDuringCombat > 0 then
-            print("Debug: Sending highestNormalHitDuringCombat message.")
-            SendChatMessage("{star}CritMatic: New highest normal hit for " .. highestNormalHitSpellName .. ": "
-                    .. highestNormalHitDuringCombat, "INSTANCE_CHAT")
           end
 
           -- For highest critical heal
           if highestCritHealDuringCombat > 0 then
-            print("Debug: Sending highestCritHealDuringCombat message.")
             SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat,  "INSTANCE_CHAT")
           end
 
-          -- For highest heal
-          if highestHealDuringCombat > 0 then
-            print("Debug: Sending highestHealDuringCombat message.")
-            SendChatMessage("{star}CritMatic: New highest heal for " .. highestHealSpellName .. ": " ..
-                    highestHealDuringCombat, "INSTANCE_CHAT")
-          end
-
-
         end
       end
+
+    end
       highestCritDuringCombat = 0
       highestNormalHitDuringCombat = 0
       highestCritHealDuringCombat = 0

@@ -271,6 +271,13 @@ local options = {
           end,
           get = function() return db.profile.social.alertNotificationsEnabled end,
         },
+        critmaticShutUp = {
+          name = "CritMatic Shut Up",
+          desc = "Do you want to send party chat messages when you Crit?",
+          type = "toggle",
+          set = function(_, newVal) db.profile.social.critmaticShutUp = newVal end,
+          get = function() return db.profile.social.critmaticShutUp end,
+        },
       }
     }
   },
