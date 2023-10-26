@@ -15,9 +15,28 @@ local options = {
   type = "group",
 
   args = {
+    generalSettings = {
+      name = "General",
+      type = "group",
+      order = 1,
+      args = {
+        discordLink = {
+          name = "Help/Suggestions Discord Link",
+          desc = "Get help or make a suggestion, Just Copy this link to join our Discord server.",
+          type = "input",
+          width='full',
+          get = function() return "https://discord.gg/34JJyrnGGC" end,  -- Replace with your actual Discord link
+          set = function(_, val)  -- Do nothing when the user tries to modify it
+
+          end,
+        },
+
+      }
+    },
     font = {
       name = "Font Settings",
       type = "group",
+      order = 2,
       args = {
         font = {
           name = "Font",
@@ -159,6 +178,7 @@ local options = {
     sounds = {
       name = "Sound Settings",
       type = "group",
+      order = 3,
       args = {
         damageNormal = {
           name = "Normal Damage Sound",
@@ -236,24 +256,10 @@ local options = {
         },
       },
     },
-    miscellaneous = {
-      name = "Miscellaneous Settings",
-      type = "group",
-      order= 100,
-      args = {
-        autoAttacksEnabled = {
-          name = "Track Auto Attacks",
-          desc = "Track Auto Attacks?",
-          type = "toggle",
-          set = function(_, newVal) db.profile.miscellaneous.autoAttacksEnabled = newVal
-          end,
-          get = function() return db.profile.miscellaneous.autoAttacksEnabled end,
-        }
-      }
-    },
     social ={
       name = "Social Settings",
       type = "group",
+      order = 4,
       args = {
         chatNotificationsEnabled = {
           name = "Show Chat Notifications",
@@ -279,7 +285,22 @@ local options = {
           get = function() return db.profile.social.critmaticShutUp end,
         },
       }
-    }
+    },
+    miscellaneous = {
+      name = "Miscellaneous Settings",
+      type = "group",
+      order = 5,
+      args = {
+        autoAttacksEnabled = {
+          name = "Track Auto Attacks",
+          desc = "Track Auto Attacks?",
+          type = "toggle",
+          set = function(_, newVal) db.profile.miscellaneous.autoAttacksEnabled = newVal
+          end,
+          get = function() return db.profile.miscellaneous.autoAttacksEnabled end,
+        }
+      }
+    },
   },
 }
 

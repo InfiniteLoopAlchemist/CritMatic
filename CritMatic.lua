@@ -312,7 +312,9 @@ f:SetScript("OnEvent", function(self, event, ...)
               end
             end
           end
-          ProcessNewHighs(eventType, baseSpellName, amount, critical)
+          if not db.profile.social.critmaticShutUp then
+            ProcessNewHighs(eventType, baseSpellName, amount, critical)
+          end
         end
       end
     end
