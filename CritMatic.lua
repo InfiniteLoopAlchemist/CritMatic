@@ -1,8 +1,7 @@
 -- Define a table to hold the highest hits data.
 CritMaticData = CritMaticData or {}
---CTODO: add party/raid chat messages for highest hits with the option to turn off.
 
---CTODO:  make a changes pop like details  does
+--CTODO:  make a changes popup like details  does
 
 local MAX_HIT = 40000
 
