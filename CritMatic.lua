@@ -176,16 +176,16 @@ end
 local f = CreateFrame("FRAME")
 f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 f:RegisterEvent("PLAYER_REGEN_ENABLED")
+f:RegisterEvent("PLAYER_LOGIN")
+f:RegisterEvent("GROUP_JOINED")
+
 -- Variables to hold the highest values during combat
 local highestCritDuringCombat = 0
-local highestNormalHitDuringCombat = 0
 local highestCritHealDuringCombat = 0
-local highestHealDuringCombat = 0
 highestCritSpellName = ""
-highestNormalHitSpellName = ""
 highestCritHealSpellName = ""
-highestHealSpellName = ""
 f:SetScript("OnEvent", function(self, event, ...)
+
 
   if event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local eventInfo = { CombatLogGetCurrentEventInfo() }
@@ -321,43 +321,26 @@ f:SetScript("OnEvent", function(self, event, ...)
   elseif event == "PLAYER_REGEN_ENABLED" then
     if not db.profile.social.critmaticShutUp then
       if IsInGroup() then
-
-        if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
           -- For highest critical hit
-
-          if highestCritDuringCombat > 0 then
-            SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                    highestCritDuringCombat,  "PARTY")
-          end
-
-          -- For highest critical heal
-          if highestCritHealDuringCombat > 0 then
-            SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat,  "PARTY")
-          end
-
-        else
-          if highestCritDuringCombat > 0 then
-            SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                    highestCritDuringCombat,  "INSTANCE_CHAT")
-          end
-
-          -- For highest critical heal
-          if highestCritHealDuringCombat > 0 then
-            SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat,  "INSTANCE_CHAT")
-          end
+        if highestCritDuringCombat > 0 then
+              SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                      highestCritDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY" or "RAID")
 
         end
+          -- For highest critical heal
+          if highestCritHealDuringCombat > 0 then
+            SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
+                    highestCritHealDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY" or "RAID")
+          end
+
+
       end
 
     end
       highestCritDuringCombat = 0
-      highestNormalHitDuringCombat = 0
       highestCritHealDuringCombat = 0
-      highestHealDuringCombat = 0
       highestCritSpellName  = ""
-      highestNormalHitSpellName = ""
       highestCritHealSpellName = ""
-      highestHealSpellName = ""
     end
 end)
 -- Function to process new high values during combat
@@ -368,11 +351,6 @@ function ProcessNewHighs(eventType, baseSpellName, amount, critical)
         highestCritHealDuringCombat = amount
         highestCritHealSpellName = baseSpellName
       end
-    else
-      if amount > highestHealDuringCombat then
-        highestHealDuringCombat = amount
-        highestHealSpellName = baseSpellName
-      end
     end
   elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
     if critical then
@@ -380,15 +358,10 @@ function ProcessNewHighs(eventType, baseSpellName, amount, critical)
         highestCritDuringCombat = amount
         highestCritSpellName = baseSpellName
       end
-    else
-      if amount > highestNormalHitDuringCombat then
-        highestNormalHitDuringCombat = amount
-        highestNormalHitSpellName = baseSpellName
-      end
     end
   end
 end
-Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0")
+Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0","AceComm-3.0")
 
 local version = GetAddOnMetadata("CritMatic", "Version")
 
@@ -403,6 +376,42 @@ end
 function Critmatic:OpenOptions()
   LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
 end
+-- Flag to indicate whether the message has been displayed
+Critmatic.hasDisplayedUpdateMessage = false
+
+function Critmatic:OnCommReceived(prefix , message, distribution, sender)
+
+  if message and version then
+
+    local isNewerVersion = message > version
+
+    if isNewerVersion and not Critmatic.hasDisplayedUpdateMessage then
+      Critmatic:Print("|cff0000ffAn updated version of CritMatic has been released. We strongly recommend upgrading to the latest version for enhanced features and stability.|r |cff918d86The update is available on CurseForge, Wago .io, and WoW Interface.|r")
+      Critmatic.hasDisplayedUpdateMessage = true
+    end
+  end
+end
+
+
+
+
+
+-- Function to broadcast your version
+function Critmatic:BroadcastVersion()
+  -- Check and send to guild
+  if IsInGuild() then
+    self:SendCommMessage("Critmatic", version, "GUILD")
+  end
+    self:SendCommMessage("Critmatic", version, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
+  if IsInRaid() then
+    self:SendCommMessage("Critmatic", version, "RAID")
+  end
+end
+
+-- Event handler for GROUP_ROSTER_UPDATE
+function Critmatic:GROUP_ROSTER_UPDATE()
+  self:BroadcastVersion()
+end
 
 
 -- Called when the addon is loaded
@@ -416,6 +425,11 @@ function Critmatic:OnInitialize()
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
   Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
+
+  self:RegisterComm("Critmatic")
+  -- Trigger version broadcast when group roster updates
+  Critmatic:RegisterEvent("GROUP_ROSTER_UPDATE", "BroadcastVersion")
+  -- Function to handle incoming messages
 
   hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
   local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
