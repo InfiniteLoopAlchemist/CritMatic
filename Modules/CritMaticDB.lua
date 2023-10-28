@@ -17,15 +17,17 @@ defaults = {
       healCrit = "Level Up",
       muteAllSounds = false
     },
-
-    miscellaneous = {
-      autoAttacksEnabled = true
-    },
     social = {
       chatNotificationsEnabled = true,
       alertNotificationsEnabled = true,
-      critmaticShutUp = false
-    }
+      critmaticShutUp = true,
+      critmaticShutUpGuild = false,
+      critmaticShutUpRaid = true
+
+    },
+    miscellaneous = {
+      autoAttacksEnabled = true
+    },
   }
 }
 

@@ -312,32 +312,63 @@ f:SetScript("OnEvent", function(self, event, ...)
               end
             end
           end
-          if not db.profile.social.critmaticShutUp then
+
             ProcessNewHighs(eventType, baseSpellName, amount, critical)
-          end
+
         end
       end
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
-    if not db.profile.social.critmaticShutUp then
-      if IsInGroup() then
-          -- For highest critical hit
-        if highestCritDuringCombat > 0 then
-              SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                      highestCritDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY" or "RAID")
 
-        end
-          -- For highest critical heal
-          if highestCritHealDuringCombat > 0 then
-            SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
-                    highestCritHealDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY" or "RAID")
-          end
-
-
+    if IsInGroup() and db.profile.social.critmaticShutUp then
+      print("Debug: Inside IsInGroup and critmaticShutUp is true")
+      -- For highest critical hit
+      print(highestCritDuringCombat)
+      if highestCritDuringCombat > 0 then
+        print("Debug: highestCritDuringCombat is greater than 0")
+        SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                highestCritDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY"  )
       end
-
+      -- For highest critical heal
+      print(highestCritHealDuringCombat)
+      if highestCritHealDuringCombat > 0 then
+        print("Debug: highestCritHealDuringCombat is greater than 0")
+        SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
+                highestCritHealDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
+      end
+    elseif IsInRaid() and db.profile.social.critmaticShutUpRaid then
+      print("Debug: Inside IsInRaid and critmaticShutUpRaid is true")
+      if highestCritDuringCombat > 0 then
+        print("Debug: highestCritDuringCombat is greater than 0 in Raid")
+        SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                highestCritDuringCombat,  "RAID"  )
+      end
+      -- For highest critical heal
+      if highestCritHealDuringCombat > 0 then
+        print("Debug: highestCritHealDuringCombat is greater than 0 in Raid")
+        SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
+                highestCritHealDuringCombat, "RAID")
+      end
+    elseif IsInGuild() and db.profile.social.critmaticShutUpGuild then
+      print("Debug: Inside IsInGuild and critmaticShutUpGuild is true")
+      if highestCritDuringCombat > 0 then
+        print("Debug: highestCritDuringCombat is greater than 0 in Guild")
+        SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                highestCritDuringCombat,  "GUILD"  )
+      end
+      -- For highest critical heal
+      if highestCritHealDuringCombat > 0 then
+        print("Debug: highestCritHealDuringCombat is greater than 0 in Guild")
+        SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
+                highestCritHealDuringCombat,  "GUILD")
+      end
+    else
+      print("Debug: None of the conditions were met")
     end
-      highestCritDuringCombat = 0
+
+
+
+    highestCritDuringCombat = 0
       highestCritHealDuringCombat = 0
       highestCritSpellName  = ""
       highestCritHealSpellName = ""
