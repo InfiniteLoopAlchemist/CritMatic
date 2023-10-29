@@ -320,7 +320,7 @@ f:SetScript("OnEvent", function(self, event, ...)
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
 
-    if IsInGroup() and db.profile.social.critmaticShutUp then
+    if IsInGroup() and db.profile.social.canSendCritsToParty then
       -- For highest critical hit
       if highestCritDuringCombat > 0 then
 
@@ -328,12 +328,11 @@ f:SetScript("OnEvent", function(self, event, ...)
                 highestCritDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY"  )
       end
       -- For highest critical heal
-      print(highestCritHealDuringCombat)
       if highestCritHealDuringCombat > 0 then
         SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
                 highestCritHealDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
       end
-    elseif IsInRaid() and db.profile.social.critmaticShutUpRaid then
+    elseif IsInRaid() and db.profile.social.canSendCritsToRaid then
       if highestCritDuringCombat > 0 then
         SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
                 highestCritDuringCombat,  "RAID"  )
@@ -343,7 +342,7 @@ f:SetScript("OnEvent", function(self, event, ...)
         SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
                 highestCritHealDuringCombat, "RAID")
       end
-    elseif IsInGuild() and db.profile.social.critmaticShutUpGuild then
+    elseif IsInGuild() and db.profile.social.canSendCritsToGuild then
       if highestCritDuringCombat > 0 then
         SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
                 highestCritDuringCombat,  "GUILD"  )
