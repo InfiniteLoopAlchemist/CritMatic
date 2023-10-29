@@ -206,7 +206,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 
     local baseSpellName = removeImproved(spellName)
 
-    if baseSpellName == "Auto Attack" and not db.profile.miscellaneous.autoAttacksEnabled then
+    if baseSpellName == "Auto Attack" and not db.profile.generalSettings.autoAttacksEnabled then
       return
     end
     local LSM = LibStub("LibSharedMedia-3.0")
@@ -241,11 +241,11 @@ f:SetScript("OnEvent", function(self, event, ...)
 
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
 
-                if db.profile.social.alertNotificationsEnabled then
+                if db.profile.generalSettings.alertNotificationsEnabled then
                   CritMatic.ShowNewHealCritMessage(baseSpellName, amount)
                 end
 
-                if db.profile.social.chatNotificationsEnabled then
+                if db.profile.generalSettings.chatNotificationsEnabled then
                   print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" ..
                           CritMaticData[baseSpellName].highestHealCrit)
                 end
@@ -261,11 +261,11 @@ f:SetScript("OnEvent", function(self, event, ...)
 
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heaven.ogg", "SFX")
 
-                if db.profile.social.alertNotificationsEnabled then
+                if db.profile.generalSettings.alertNotificationsEnabled then
                   CritMatic.ShowNewHealMessage(baseSpellName, amount)
                 end
 
-                if db.profile.social.chatNotificationsEnabled then
+                if db.profile.generalSettings.chatNotificationsEnabled then
                   print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHeal)
                 end
 
@@ -282,11 +282,11 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
-                if db.profile.social.alertNotificationsEnabled then
+                if db.profile.generalSettings.alertNotificationsEnabled then
                   CritMatic.ShowNewCritMessage(baseSpellName, amount)
                 end
 
-                if db.profile.social.chatNotificationsEnabled then
+                if db.profile.generalSettings.chatNotificationsEnabled then
                   print("|cffffd700New highest crit hit for " .. baseSpellName .. ": |r" ..
                           CritMaticData[baseSpellName].highestCrit)
                 end
@@ -301,11 +301,11 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heroism_Cast.ogg", "SFX")
-                if db.profile.social.alertNotificationsEnabled then
+                if db.profile.generalSettings.alertNotificationsEnabled then
                   CritMatic.ShowNewNormalMessage(baseSpellName, amount)
                 end
 
-                if db.profile.social.chatNotificationsEnabled then
+                if db.profile.generalSettings.chatNotificationsEnabled then
                   print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestNormal)
                 end
 

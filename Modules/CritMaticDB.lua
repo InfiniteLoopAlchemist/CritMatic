@@ -1,6 +1,11 @@
 -- Default values for the database
 defaults = {
   profile = {
+    generalSettings = {
+      chatNotificationsEnabled = true,
+      alertNotificationsEnabled = true,
+      autoAttacksEnabled = true
+    },
     fontSettings = {
       font = "Anton",
       fontOutline = "THICKOUTLINE",
@@ -18,15 +23,9 @@ defaults = {
       muteAllSounds = false
     },
     social = {
-      chatNotificationsEnabled = true,
-      alertNotificationsEnabled = true,
       canSendCritsToParty = true,
       canSendCritsToGuild = false,
       canSendCritsToRaid = true
-
-    },
-    miscellaneous = {
-      autoAttacksEnabled = true
     },
   }
 }

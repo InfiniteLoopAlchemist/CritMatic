@@ -20,11 +20,39 @@ local options = {
       type = "group",
       order = 1,
       args = {
+        autoAttacksEnabled = {
+          name = "Track Auto Attacks",
+          desc = "Track Auto Attacks?",
+          type = "toggle",
+          order = 1,
+          set = function(_, newVal) db.profile.generalSettings.autoAttacksEnabled = newVal
+          end,
+          get = function() return db.profile.generalSettings.autoAttacksEnabled end,
+        },
+        chatNotificationsEnabled = {
+          name = "Show Chat Notifications",
+          desc = "Do you want damage / heal chat messages for when you get a higher crit/normal hit/heal?",
+          type = "toggle",
+          order = 2,
+          set = function(_, newVal) db.profile.generalSettings.chatNotificationsEnabled = newVal
+          end,
+          get = function() return db.profile.generalSettings.chatNotificationsEnabled end,
+        },
+        alertNotificationsEnabled = {
+          name = "Show Alert Notifications",
+          desc = "Do you want damage / heal alerts messages for when you get a higher crit/normal hit/heal?",
+          type = "toggle",
+          order = 3,
+          set = function(_, newVal) db.profile.generalSettings.alertNotificationsEnabled = newVal
+          end,
+          get = function() return db.profile.generalSettings.alertNotificationsEnabled end,
+        },
         discordLink = {
           name = "Help/Suggestions Discord Link",
           desc = "Get help or make a suggestion, Just Copy this link to join our Discord server.",
           type = "input",
-          width='full',
+          order = 4,
+          width = 'full',
           get = function() return "https://discord.gg/34JJyrnGGC" end,  -- Replace with your actual Discord link
           set = function(_, val)  -- Do nothing when the user tries to modify it
 
@@ -261,29 +289,11 @@ local options = {
       type = "group",
       order = 4,
       args = {
-        chatNotificationsEnabled = {
-          name = "Show Chat Notifications",
-          desc = "Do you want damage / heal chat messages for when you get a higher crit/normal hit/heal?",
-          type = "toggle",
-          order = 1,
-          set = function(_, newVal) db.profile.social.chatNotificationsEnabled = newVal
-          end,
-          get = function() return db.profile.social.chatNotificationsEnabled end,
-        },
-        alertNotificationsEnabled = {
-          name = "Show Alert Notifications",
-          desc = "Do you want damage / heal alerts messages for when you get a higher crit/normal hit/heal?",
-          type = "toggle",
-          order = 2,
-          set = function(_, newVal) db.profile.social.alertNotificationsEnabled = newVal
-          end,
-          get = function() return db.profile.social.alertNotificationsEnabled end,
-        },
         canSendCritsToRaid = {
           name = " Send Crits to Raid",
           desc = "Do you want to send raid chat messages when you Crit? Default: Checked",
           type = "toggle",
-          order = 3,
+          order = 1,
           set = function(_, newVal) db.profile.social.canSendCritsToRaid = newVal end,
           get = function() return db.profile.social.canSendCritsToRaid end,
         },
@@ -291,7 +301,7 @@ local options = {
           name = "Send Crits to Guild",
           desc = "Do you want to send guild chat messages when you Crit? Default: Un-Checked",
           type = "toggle",
-          order = 4,
+          order = 2,
           set = function(_, newVal) db.profile.social.canSendCritsToGuild = newVal end,
           get = function() return db.profile.social.canSendCritsToGuild end,
         },
@@ -299,25 +309,10 @@ local options = {
           name = "Send Crits to Party",
           desc = "Do you want to send party chat messages when you Crit? default: Checked ",
           type = "toggle",
-          order = 5,
+          order = 3,
           set = function(_, newVal) db.profile.social.canSendCritsToParty = newVal end,
           get = function() return db.profile.social.canSendCritsToParty end,
         },
-      }
-    },
-    miscellaneous = {
-      name = "Miscellaneous Settings",
-      type = "group",
-      order = 5,
-      args = {
-        autoAttacksEnabled = {
-          name = "Track Auto Attacks",
-          desc = "Track Auto Attacks?",
-          type = "toggle",
-          set = function(_, newVal) db.profile.miscellaneous.autoAttacksEnabled = newVal
-          end,
-          get = function() return db.profile.miscellaneous.autoAttacksEnabled end,
-        }
       }
     },
   },
