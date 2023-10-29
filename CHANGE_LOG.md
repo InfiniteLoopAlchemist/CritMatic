@@ -1,3 +1,10 @@
+## [v0.3.5.1-release] - 10/29/2023
+
+### Fixed:
+
+- **I left some debug print statements in. Sorry about that.**
+
+
 ## [v0.3.5-release] - 10/28/2023
 
 ### Added:
@@ -9,7 +16,7 @@
 
 ### Added:
 
-- **Added Options to send Crits to Raid and Guild. <a:ted:1153779416158191706>**
+- **Added Options to send Crits to Raid and Guild.**
 
 
 ## [v0.3.3-release] - 10/28/2023
