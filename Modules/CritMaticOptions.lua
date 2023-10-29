@@ -278,28 +278,30 @@ local options = {
           set = function(_, newVal) db.profile.social.alertNotificationsEnabled = newVal
           end,
           get = function() return db.profile.social.alertNotificationsEnabled end,
-        },  critmaticShutUpRaid = {
+        },
+        canSendCritsToRaid = {
           name = " Send Crits to Raid",
           desc = "Do you want to send raid chat messages when you Crit? Default: Checked",
           type = "toggle",
           order = 3,
-          set = function(_, newVal) db.profile.social.critmaticShutUpRaid = newVal end,
-          get = function() return db.profile.social.critmaticShutUpRaid end,
+          set = function(_, newVal) db.profile.social.canSendCritsToRaid = newVal end,
+          get = function() return db.profile.social.canSendCritsToRaid end,
         },
-        critmaticShutUpGuild = {
+        canSendCritsToGuild = {
           name = "Send Crits to Guild",
           desc = "Do you want to send guild chat messages when you Crit? Default: Un-Checked",
           type = "toggle",
           order = 4,
-          set = function(_, newVal) db.profile.social.critmaticShutUpGuild = newVal end,
-          get = function() return db.profile.social.critmaticShutUpGuild end,
-        }, critmaticShutUp = {
+          set = function(_, newVal) db.profile.social.canSendCritsToGuild = newVal end,
+          get = function() return db.profile.social.canSendCritsToGuild end,
+        },
+        canSendCritsToParty = {
           name = "Send Crits to Party",
           desc = "Do you want to send party chat messages when you Crit? default: Checked ",
           type = "toggle",
           order = 5,
-          set = function(_, newVal) db.profile.social.critmaticShutUp = newVal end,
-          get = function() return db.profile.social.critmaticShutUp end,
+          set = function(_, newVal) db.profile.social.canSendCritsToParty = newVal end,
+          get = function() return db.profile.social.canSendCritsToParty end,
         },
       }
     },

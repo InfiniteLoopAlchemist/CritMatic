@@ -358,7 +358,7 @@ f:SetScript("OnEvent", function(self, event, ...)
       end
       -- For highest critical heal
       if highestCritHealDuringCombat > 0 then
-        print("Debug: highestCritHealDuringCombat is greater than 0 in Guild")
+
         SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
                 highestCritHealDuringCombat,  "GUILD")
       end

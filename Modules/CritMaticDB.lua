@@ -20,9 +20,9 @@ defaults = {
     social = {
       chatNotificationsEnabled = true,
       alertNotificationsEnabled = true,
-      critmaticShutUp = true,
-      critmaticShutUpGuild = false,
-      critmaticShutUpRaid = true
+      canSendCritsToParty = true,
+      canSendCritsToGuild = false,
+      canSendCritsToRaid = true
 
     },
     miscellaneous = {
