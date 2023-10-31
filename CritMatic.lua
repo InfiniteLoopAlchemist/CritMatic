@@ -1,6 +1,5 @@
 -- This line should be at the top of your main Lua file, outside any function.
 Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0","AceComm-3.0")
---CTODO:  make a changes popup like details  does
 
 local MAX_HIT = 40000
 
