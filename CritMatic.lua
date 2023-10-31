@@ -179,9 +179,6 @@ function Critmatic:OnInitialize()
   Critmatic.oldVersion = Critmatic.db.profile.oldVersion
   Critmatic.newVersion = version
 
-  print("Debug: newVersion value is ", Critmatic.newVersion)
-  print("Debug: .oldVersion value is ", Critmatic.oldVersion)
-
   if Critmatic.newVersion and Critmatic.oldVersion then
 
     local isNewerVersion = Critmatic.newVersion > Critmatic.oldVersion
@@ -282,29 +279,6 @@ function Critmatic:CritMaticDBReset()
 
   Critmatic:Print("|cffff0000Database Reset!|r")
 end
-
-
-
-
-
-
-local function checkAlertNotifications(input)
-  print("Alert Notifications Enabled: ", Critmatic.db.profile.social.alertNotificationsEnabled)  -- Debugging line
-  if Critmatic.db.profile.social.alertNotificationsEnabled == true then
-    return input
-  end
-end
-
-local function checkChatNotifications(input)
-  print("Chat Notifications Enabled: ", Critmatic.db.profile.social.chatNotificationsEnabled)  -- Debugging line
-  if db.profile.social.chatNotificationsEnabled == true then
-    return input
-  end
-end
-
-
-
-
 
 -- Register an event that fires when the player hits an enemy.
 local f = CreateFrame("FRAME")
@@ -488,8 +462,6 @@ f:SetScript("OnEvent", function(self, event, ...)
       end
 
     end
-
-
 
     highestCritDuringCombat = 0
     highestCritHealDuringCombat = 0
