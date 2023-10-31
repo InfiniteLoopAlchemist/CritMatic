@@ -1,49 +1,6 @@
--- Define a table to hold the highest hits data.
-CritMaticData = CritMaticData or {}
+-- This line should be at the top of your main Lua file, outside any function.
+Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0","AceComm-3.0")
 
---CTODO:  make a changes popup like details  does
-
-local MAX_HIT = 40000
-
-local function GetGCD()
-  local _, gcdDuration = GetSpellCooldown(78) -- 78 is the spell ID for Warrior's Heroic Strike
-  if gcdDuration == 0 then
-    return 1.5 -- Default GCD duration if not available (you may adjust this value if needed)
-  else
-    return gcdDuration
-  end
-end
--- Function to create a new frame based on the template
-CritMatic.CreateNewMessageFrame = function()
-  local f = CreateFrame("Frame", nil, UIParent)
-  f:SetSize(1000, 30)
-  f:SetPoint("CENTER", UIParent, "CENTER", 0, 350)
-
-  f.text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
-  f.text:SetAllPoints()
-
-  f.bounce = f:CreateAnimationGroup()
-  local scaleUp = f.bounce:CreateAnimation("Scale")
-  scaleUp:SetScale(1.5, 1.5)
-  scaleUp:SetDuration(0.15)
-  scaleUp:SetOrder(1)
-  local pause = f.bounce:CreateAnimation("Pause")
-  pause:SetDuration(0.12) -- Duration of the pause
-  pause:SetOrder(2) -- Second phase
-
-  -- Scale down to original size
-  local scaleDown = f.bounce:CreateAnimation("Scale")
-  scaleDown:SetScale(1 / 1.5, 1 / 1.5)
-  scaleDown:SetDuration(0.15) -- Duration of the scale-down phase
-  scaleDown:SetOrder(3) -- Third phase
-  local LSM = LibStub("LibSharedMedia-3.0")
-  local fontPath = LSM:Fetch("font", db.profile.fontSettings.font)
-  f.text:SetFont(fontPath, db.profile.fontSettings.fontSize, db.profile.fontSettings.fontOutline)
-  f.text:SetShadowOffset(unpack(db.profile.fontSettings.fontShadowSize))
-  f.text:SetShadowColor(unpack(db.profile.fontSettings.fontShadowColor))
-
-  return f
-end
 
 local function removeImproved(spellName)
   -- Stripping out "Improved " prefix
@@ -58,20 +15,6 @@ local function IsSpellInSpellbook(spellName)
   local name = GetSpellInfo(spellName)
   return name ~= nil
 end
-local function checkAlertNotifications(input)
-  print("Alert Notifications Enabled: ", db.profile.social.alertNotificationsEnabled)  -- Debugging line
-  if db.profile.social.alertNotificationsEnabled == true then
-    return input
-  end
-end
-
-local function checkChatNotifications(input)
-  print("Chat Notifications Enabled: ", db.profile.social.chatNotificationsEnabled)  -- Debugging line
-  if db.profile.social.chatNotificationsEnabled == true then
-    return input
-  end
-end
-
 
 local function AddHighestHitsToTooltip(self, slot, isSpellBook)
   if (not slot) then
@@ -171,6 +114,199 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
     end
   end
 end
+--CTODO:  make a changes popup like details  does
+
+local MAX_HIT = 40000
+
+local function GetGCD()
+  local _, gcdDuration = GetSpellCooldown(78) -- 78 is the spell ID for Warrior's Heroic Strike
+  if gcdDuration == 0 then
+    return 1.5 -- Default GCD duration if not available (you may adjust this value if needed)
+  else
+    return gcdDuration
+  end
+end
+-- Function to create a new frame based on the template
+Critmatic.CreateNewMessageFrame = function()
+  local f = CreateFrame("Frame", nil, UIParent)
+  f:SetSize(1000, 30)
+  f:SetPoint("CENTER", UIParent, "CENTER", 0, 350)
+
+  f.text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
+  f.text:SetAllPoints()
+
+  f.bounce = f:CreateAnimationGroup()
+  local scaleUp = f.bounce:CreateAnimation("Scale")
+  scaleUp:SetScale(1.5, 1.5)
+  scaleUp:SetDuration(0.15)
+  scaleUp:SetOrder(1)
+  local pause = f.bounce:CreateAnimation("Pause")
+  pause:SetDuration(0.12) -- Duration of the pause
+  pause:SetOrder(2) -- Second phase
+
+  -- Scale down to original size
+  local scaleDown = f.bounce:CreateAnimation("Scale")
+  scaleDown:SetScale(1 / 1.5, 1 / 1.5)
+  scaleDown:SetDuration(0.15) -- Duration of the scale-down phase
+  scaleDown:SetOrder(3) -- Third phase
+  local LSM = LibStub("LibSharedMedia-3.0")
+  local fontPath = LSM:Fetch("font", Critmatic.db.profile.fontSettings.font)
+  f.text:SetFont(fontPath, Critmatic.db.profile.fontSettings.fontSize, Critmatic.db.profile.fontSettings.fontOutline)
+  f.text:SetShadowOffset(unpack(Critmatic.db.profile.fontSettings.fontShadowSize))
+  f.text:SetShadowColor(unpack(Critmatic.db.profile.fontSettings.fontShadowColor))
+
+  return f
+end
+function Critmatic:OnInitialize()
+  -- Initialization code here.
+  self.db = LibStub("AceDB-3.0"):New("CritMaticDB14", defaults)
+  CritMaticData = CritMaticData or {}
+
+  CritMaticData = _G["CritMaticData"]
+  local version = GetAddOnMetadata("CritMatic", "Version")
+  function Critmatic:OnCommReceived(prefix , message, distribution, sender)
+
+    if message and Critmatic.version then
+
+      local isNewerVersion = message > version
+
+      if isNewerVersion and not Critmatic.hasDisplayedUpdateMessage then
+        Critmatic:Print("|cff0000ffAn updated version of CritMatic has been released. We strongly recommend upgrading to the latest version for enhanced features and stability.|r |cff918d86The update is available on CurseForge, Wago .io, and WoW Interface.|r")
+        Critmatic.hasDisplayedUpdateMessage = true
+      end
+    end
+  end
+  Critmatic.oldVersion = Critmatic.db.profile.oldVersion
+  Critmatic.newVersion = version
+
+  print("Debug: newVersion value is ", Critmatic.newVersion)
+  print("Debug: .oldVersion value is ", Critmatic.oldVersion)
+
+  if Critmatic.newVersion and Critmatic.oldVersion then
+
+    local isNewerVersion = Critmatic.newVersion > Critmatic.oldVersion
+
+    if isNewerVersion then
+      Critmatic.showChangeLog()
+
+      Critmatic.db.profile.oldVersion = Critmatic.newVersion
+
+    end
+
+  end
+  -- Register console commands
+  Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
+  -- Register the slash commands
+  Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
+  Critmatic:RegisterChatCommand("cm", "OpenOptions")
+  Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
+
+  self:RegisterComm("Critmatic")
+  -- Trigger version broadcast when group roster updates
+  Critmatic:RegisterEvent("GROUP_ROSTER_UPDATE", "BroadcastVersion")
+  -- Function to handle incoming messages
+
+  hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
+  local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
+  hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
+
+  function Critmatic:CritMaticLoaded()
+    self:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700  /cm|r|cff918d86 for options|r")
+  end
+
+  local f = Critmatic.CreateNewMessageFrame()
+  -- Ensure Ace3 and AceGUI are loaded
+  local SharedMedia = LibStub("LibSharedMedia-3.0")
+  local borders = SharedMedia:List("border")
+  print("Available Border Textures:")
+  for i, name in ipairs(borders) do
+    print(name)
+  end
+
+
+  local fonts = SharedMedia:List("font")
+  print("Available Fonts:")
+  for i, name in ipairs(fonts) do
+    print(name)
+  end
+
+  function Critmatic:TimerCritMaticLoaded()
+    Critmatic:CritMaticLoaded()
+  end
+
+  if IsAddOnLoaded("ElvUI") then
+    Critmatic:ScheduleTimer("TimerCritMaticLoaded", 8)
+  else
+    Critmatic:ScheduleTimer("TimerCritMaticLoaded", 4)
+  end
+
+
+  -- Flag to indicate whether the message has been displayed
+  Critmatic.hasDisplayedUpdateMessage = false
+
+end
+
+function Critmatic:OnEnable()
+  -- Code to run when the addon is enabled.
+end
+
+function Critmatic:OnDisable()
+  -- Code to run when the addon is disabled.
+end
+function Critmatic:OpenOptions()
+  LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
+end
+
+-- Function to broadcast your version
+function Critmatic:BroadcastVersion()
+  -- Check and send to guild
+  if IsInGuild() then
+    self:SendCommMessage("Critmatic", Critmatic.newVersion, "GUILD")
+  end
+  self:SendCommMessage("Critmatic", Critmatic.newVersion, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
+  if IsInRaid() then
+    self:SendCommMessage("Critmatic", Critmatic.newVersion, "RAID")
+  end
+end
+
+-- Event handler for GROUP_ROSTER_UPDATE
+function Critmatic:GROUP_ROSTER_UPDATE()
+  self:BroadcastVersion()
+end
+
+
+
+function Critmatic:CritMaticReset()
+  CritMaticData = {}
+  Critmatic:Print("|cffff0000Data Reset!|r")
+end
+function Critmatic:CritMaticDBReset()
+
+  Critmatic:Print("|cffff0000Database Reset!|r")
+end
+
+
+
+
+
+
+local function checkAlertNotifications(input)
+  print("Alert Notifications Enabled: ", Critmatic.db.profile.social.alertNotificationsEnabled)  -- Debugging line
+  if Critmatic.db.profile.social.alertNotificationsEnabled == true then
+    return input
+  end
+end
+
+local function checkChatNotifications(input)
+  print("Chat Notifications Enabled: ", Critmatic.db.profile.social.chatNotificationsEnabled)  -- Debugging line
+  if db.profile.social.chatNotificationsEnabled == true then
+    return input
+  end
+end
+
+
+
+
 
 -- Register an event that fires when the player hits an enemy.
 local f = CreateFrame("FRAME")
@@ -206,14 +342,14 @@ f:SetScript("OnEvent", function(self, event, ...)
 
     local baseSpellName = removeImproved(spellName)
 
-    if baseSpellName == "Auto Attack" and not db.profile.generalSettings.autoAttacksEnabled then
+    if baseSpellName == "Auto Attack" and not Critmatic.db.profile.generalSettings.autoAttacksEnabled then
       return
     end
     local LSM = LibStub("LibSharedMedia-3.0")
-    local soundCrit = LSM:Fetch("sound", db.profile.soundSettings.damageCrit)
-    local soundNormal = LSM:Fetch("sound", db.profile.soundSettings.damageNormal)
-    local soundHealCrit = LSM:Fetch("sound", db.profile.soundSettings.healCrit)
-    local soundHealNormal = LSM:Fetch("sound", db.profile.soundSettings.healNormal)
+    local soundCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageCrit)
+    local soundNormal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageNormal)
+    local soundHealCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healCrit)
+    local soundHealNormal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healNormal)
 
     if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
       if baseSpellName then
@@ -235,17 +371,17 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is a heal and it's a critical heal.
               if amount > CritMaticData[baseSpellName].highestHealCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHealCrit = amount
-                if not db.profile.soundSettings.muteAllSounds then
+                if not Critmatic.db.profile.soundSettings.muteAllSounds then
                   PlaySoundFile(soundHealCrit)
                 end
 
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
 
-                if db.profile.generalSettings.alertNotificationsEnabled then
-                  CritMatic.ShowNewHealCritMessage(baseSpellName, amount)
+                if Critmatic.db.profile.generalSettings.alertNotificationsEnabled then
+                  Critmatic.ShowNewHealCritMessage(baseSpellName, amount)
                 end
 
-                if db.profile.generalSettings.chatNotificationsEnabled then
+                if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" ..
                           CritMaticData[baseSpellName].highestHealCrit)
                 end
@@ -255,17 +391,17 @@ f:SetScript("OnEvent", function(self, event, ...)
               if amount > CritMaticData[baseSpellName].highestHeal and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHeal = amount
 
-                if not db.profile.soundSettings.muteAllSounds then
+                if not Critmatic.db.profile.soundSettings.muteAllSounds then
                   PlaySoundFile(soundHealNormal)
                 end
 
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heaven.ogg", "SFX")
 
-                if db.profile.generalSettings.alertNotificationsEnabled then
-                  CritMatic.ShowNewHealMessage(baseSpellName, amount)
+                if Critmatic.db.profile.generalSettings.alertNotificationsEnabled then
+                  Critmatic.ShowNewHealMessage(baseSpellName, amount)
                 end
 
-                if db.profile.generalSettings.chatNotificationsEnabled then
+                if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHeal)
                 end
 
@@ -277,16 +413,16 @@ f:SetScript("OnEvent", function(self, event, ...)
               if amount > CritMaticData[baseSpellName].highestCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestCrit = amount
                 --PlaySound(888, "SFX")
-                if not db.profile.soundSettings.muteAllSounds then
+                if not Critmatic.db.profile.soundSettings.muteAllSounds then
                   PlaySoundFile(soundCrit)
                 end
 
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
-                if db.profile.generalSettings.alertNotificationsEnabled then
-                  CritMatic.ShowNewCritMessage(baseSpellName, amount)
+                if Critmatic.db.profile.generalSettings.alertNotificationsEnabled then
+                  Critmatic.ShowNewCritMessage(baseSpellName, amount)
                 end
 
-                if db.profile.generalSettings.chatNotificationsEnabled then
+                if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("|cffffd700New highest crit hit for " .. baseSpellName .. ": |r" ..
                           CritMaticData[baseSpellName].highestCrit)
                 end
@@ -296,16 +432,16 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is damage but it's not a critical hit.
               if amount > CritMaticData[baseSpellName].highestNormal and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestNormal = amount
-                if not db.profile.soundSettings.muteAllSounds then
+                if not Critmatic.db.profile.soundSettings.muteAllSounds then
                   PlaySoundFile(soundNormal)
                 end
 
                 --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heroism_Cast.ogg", "SFX")
-                if db.profile.generalSettings.alertNotificationsEnabled then
-                  CritMatic.ShowNewNormalMessage(baseSpellName, amount)
+                if Critmatic.db.profile.generalSettings.alertNotificationsEnabled then
+                  Critmatic.ShowNewNormalMessage(baseSpellName, amount)
                 end
 
-                if db.profile.generalSettings.chatNotificationsEnabled then
+                if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestNormal)
                 end
 
@@ -313,14 +449,14 @@ f:SetScript("OnEvent", function(self, event, ...)
             end
           end
 
-            ProcessNewHighs(eventType, baseSpellName, amount, critical)
+          ProcessNewHighs(eventType, baseSpellName, amount, critical)
 
         end
       end
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
 
-    if IsInGroup() and db.profile.social.canSendCritsToParty then
+    if IsInGroup() and Critmatic.db.profile.social.canSendCritsToParty then
       -- For highest critical hit
       if highestCritDuringCombat > 0 then
 
@@ -332,7 +468,7 @@ f:SetScript("OnEvent", function(self, event, ...)
         SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
                 highestCritHealDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
       end
-    elseif IsInRaid() and db.profile.social.canSendCritsToRaid then
+    elseif IsInRaid() and Critmatic.db.profile.social.canSendCritsToRaid then
       if highestCritDuringCombat > 0 then
         SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
                 highestCritDuringCombat,  "RAID"  )
@@ -342,7 +478,7 @@ f:SetScript("OnEvent", function(self, event, ...)
         SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
                 highestCritHealDuringCombat, "RAID")
       end
-    elseif IsInGuild() and db.profile.social.canSendCritsToGuild then
+    elseif IsInGuild() and Critmatic.db.profile.social.canSendCritsToGuild then
       if highestCritDuringCombat > 0 then
         SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
                 highestCritDuringCombat,  "GUILD"  )
@@ -358,10 +494,10 @@ f:SetScript("OnEvent", function(self, event, ...)
 
 
     highestCritDuringCombat = 0
-      highestCritHealDuringCombat = 0
-      highestCritSpellName  = ""
-      highestCritHealSpellName = ""
-    end
+    highestCritHealDuringCombat = 0
+    highestCritSpellName  = ""
+    highestCritHealSpellName = ""
+  end
 end)
 -- Function to process new high values during combat
 function ProcessNewHighs(eventType, baseSpellName, amount, critical)
@@ -380,526 +516,4 @@ function ProcessNewHighs(eventType, baseSpellName, amount, critical)
       end
     end
   end
-end
-Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0","AceComm-3.0")
-
-local version = GetAddOnMetadata("CritMatic", "Version")
-
-local function CritMaticLoaded()
-  Critmatic:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700 /cm|r|cff918d86 for options|r")
-end
-
-function Critmatic:TimerCritMaticLoaded()
-  CritMaticLoaded()
-end
-
-function Critmatic:OpenOptions()
-  LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
-end
--- Flag to indicate whether the message has been displayed
-Critmatic.hasDisplayedUpdateMessage = false
-
-function Critmatic:OnCommReceived(prefix , message, distribution, sender)
-
-  if message and version then
-
-    local isNewerVersion = message > version
-
-    if isNewerVersion and not Critmatic.hasDisplayedUpdateMessage then
-      Critmatic:Print("|cff0000ffAn updated version of CritMatic has been released. We strongly recommend upgrading to the latest version for enhanced features and stability.|r |cff918d86The update is available on CurseForge, Wago .io, and WoW Interface.|r")
-      Critmatic.hasDisplayedUpdateMessage = true
-    end
-  end
-end
-
-
-
-
-
--- Function to broadcast your version
-function Critmatic:BroadcastVersion()
-  -- Check and send to guild
-  if IsInGuild() then
-    self:SendCommMessage("Critmatic", version, "GUILD")
-  end
-    self:SendCommMessage("Critmatic", version, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
-  if IsInRaid() then
-    self:SendCommMessage("Critmatic", version, "RAID")
-  end
-end
-
--- Event handler for GROUP_ROSTER_UPDATE
-function Critmatic:GROUP_ROSTER_UPDATE()
-  self:BroadcastVersion()
-end
-
-
--- Called when the addon is loaded
-function Critmatic:OnInitialize()
-
-  db = LibStub("AceDB-3.0"):New("CritMaticDB14", defaults)
-  CritMaticData = _G["CritMaticData"]
-  -- Register console commands
-  Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
-  -- Register the slash commands
-  Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
-  Critmatic:RegisterChatCommand("cm", "OpenOptions")
-  Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
-
-  self:RegisterComm("Critmatic")
-  -- Trigger version broadcast when group roster updates
-  Critmatic:RegisterEvent("GROUP_ROSTER_UPDATE", "BroadcastVersion")
-  -- Function to handle incoming messages
-
-  hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
-  local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
-  hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
-  local f = CritMatic.CreateNewMessageFrame()
-  -- Ensure Ace3 and AceGUI are loaded
-  local SharedMedia = LibStub("LibSharedMedia-3.0")
-  local borders = SharedMedia:List("border")
-  print("Available Border Textures:")
-  for i, name in ipairs(borders) do
-    print(name)
-  end
-  -- Ensure Ace3 and AceGUI are loaded
-  local AceGUI = LibStub("AceGUI-3.0")
-
-  -- Ensure SharedMedia is loaded
-  local SharedMedia = LibStub("LibSharedMedia-3.0")
-
-  -- Function to show the change log
-  local function ShowChangeLog()
-    -- Create a container frame
-    local frame = AceGUI:Create("Frame")
-    frame:SetTitle("CritMatic - Change Log")
-    frame:SetStatusText("Need Help? Follow the Discord Link in General Options. ")
-    frame:SetLayout("Fill")
-    frame:SetWidth(600)
-    frame:SetHeight(500)
-
-    local backgroundTexture = SharedMedia:Fetch("background", "Blizzard Parchment 2")
-    frame.frame:SetBackdrop({
-      bgFile = backgroundTexture,
-      edgeFile = SharedMedia:Fetch("border", "Blizzard Achievement Wood"),  -- Set the border to "Parchment 2"
-      edgeSize = 24,
-    })
-
-    -- Create a scroll container
-    local scrollContainer = AceGUI:Create("SimpleGroup")
-    scrollContainer:SetFullWidth(true)
-    scrollContainer:SetFullHeight(true)
-    scrollContainer:SetLayout("Fill")
-    frame:AddChild(scrollContainer)
-
-    -- Create a ScrollFrame
-    local scroll = AceGUI:Create("ScrollFrame")
-    scroll:SetLayout("List")
-    scrollContainer:AddChild(scroll)
-
-    -- Add the change log text
-    local changelog = [[
-
-  [v0.3.5.3-release] - 10/29/2023
-
-    Fixed:
-      Various Fixes.
-
-
-  [v0.3.5.1-release] - 10/29/2023
-
-   Fixed:
-    I left some debug print statements in. Sorry about that.
-
-
-  [v0.3.5-release] - 10/28/2023
-
-   Added:
-
-    CritMatic is now compatible with Retail.
-
-
-  [v0.3.4.1-release] - 10/28/2023
-
-   Added:
-
-    Added Options to send Crits to Raid and Guild.
-
-
-  [v0.3.3-release] - 10/28/2023
-
-     Added:
-
-      Added notification when CritMatic is out of date.
-
-
-  [v0.3.2-release] - 10/26/2023
-
-   Updated:
-
-    Various changes.
-
-   Added:
-
-    General options.
-
-
-  [v0.3.1-release] - 10/26/2023
-
-  Fixed:
-
-    After Working on the addon all day I left some debug messages.
-
-  Updated:
-
-    Party Notifications updated: Now only displays Critical Hits and Critical Heals. Removed notifications for Normal Hits and Heals.
-
-  Added:
-
-    Option to shut up CritMatic party notifications
-
-
- [v0.3.0-release] - 10/25/2023
-
-
- [v0.2.9.1-release] - 10/22/2023
-
-   Updated:
-
-    Quick hot fix
-
-    Changed the color of the crit heal and normal crits chat notifications to gold.
-
-   Added:
-
-    Options to turn off chat and alert notifications.
-
-
-## [v0.2.8-release] - 10/21/2023
-
-### Added:
-
-- **Option to track auto attacks or not.**
-
-
-## [v0.2.5.7-release] - 9/27/2023
-
-### Updated:
-
-- **Various Fixes.**
-
-
-## [v0.2.5.6-relea## [v0.3.5.3-release] - 10/29/2023
-
-### Fixed:
-
-- **Various Fixes.**
-
-
-## [v0.3.5.1-release] - 10/29/2023
-
-### Fixed:
-
-- **I left some debug print statements in. Sorry about that.**
-
-
-## [v0.3.5-release] - 10/28/2023
-
-### Added:
-
-- **CritMatic is now compatible with Retail.**
-
-
-## [v0.3.4.1-release] - 10/28/2023
-
-### Added:
-
-- **Added Options to send Crits to Raid and Guild.**
-
-
-## [v0.3.3-release] - 10/28/2023
-
-### Added:
-
-- **Added notification when CritMatic is out of date.**
-
-
-## [v0.3.2-release] - 10/26/2023
-
-### Updated:
-
-- **Various changes.**
-
-### Added:
-
-- **General options.**
-
-
-## [v0.3.1-release] - 10/26/2023
-
-### Fixed:
-
-- **After Working on the addon all day I left some debug messages.**
-
-### Updated:
-
-- **Party Notifications updated: Now only displays Critical Hits and Critical Heals. Removed notifications for Normal Hits and Heals.**
-
-### Added:
-
-- **Option to shut up CritMatic party notifications**
-
-
-## [v0.3.0-release] - 10/25/2023
-
-
-## [v0.2.9.1-release] - 10/22/2023
-
-### Updated:
-
-- **Quick hot fix**
-
-- **Changed the color of the crit heal and normal crits chat notifications to gold.**
-
-### Added:
-
-- **Options to turn off chat and alert notifications.**
-
-
-## [v0.2.8-release] - 10/21/2023
-
-### Added:
-
-- **Option to track auto attacks or not.**
-
-
-## [v0.2.5.7-release] - 9/27/2023
-
-### Updated:
-
-- **Various Fixes.**
-
-
-## [v0.2.5.6-release] - 9/27/2023
-
-### Updated:
-
-- **Various Changes.**
-
-
-## [v0.2.5.5-release] - 9/26/2023
-
-### Fixed:
-
-- **Various Fixes.**
-
-
-## [v0.2.3-release] - 9/19/2023
-
-### Fixed
-
-- **Fixed the problem for setting not saving on exit or reload.**
-
-### Updated
-
-- **Changed the default font size to 22**
-- **Delayed the notification message by 0.45**
-
-## [v0.2.2-release] - 9/17/2023
-
-### Updated
-
-- **Changed the default font size to 24**
-- **Delayed the notification message, by adding 0.25 seconds to it. So you have more time to notice the animation.**
-
-## [v0.2.1.5-release] - 9/12/2023
-
-### Fixed
-
-- **Fixed Various Bugs.**
-
-## [v0.2.1-release] - 9/10/2023
-
-### Added
-
-- **Added Font Settings**
-
-- **More options coming soon**
-
-## [v0.2.0-release] - 9/05/2023
-
-### Added
-
-- **New Slash Commands to open the options menu /cm and /critmatic**
-- **You can Change the Crit and Normal hit / heal sounds.**
-  More options coming soon
-
-## [v0.1.6-release] - 9/01/2023
-
-### Updated
-
-- **Updated the notification animation.**
-
-## [v0.1.6-release] - 8/29/2023
-
-### Fixed
-
-- **Fixed a bug that would not display the first Crit/Normal/Heal notification when just starting the game.**
-
-## [v0.1.5.6-release] - 8/28/2023
-
-### Added
-
-- **Added A new Heal Sound SFX for Normal Heals.**
-
-## [v0.1.5.5-release] - 8/27/2023
-
-- **Fixed A bug where there was no sound for normal hit/heals**
-
-### Added
-
-- **Added Support for Classic Era / Hardcore.**
-- **Updated Notification Animation.**
-
-## [v0.1.4-alpha] - 8/23/2023
-
-### Added
-
-- **Added new Crit animation for crits.**
-- **Added CritMatic tooltip information to the spell-book.**
-
-## [v0.1.3-alpha] - 8/20/2023
-
-### Fixed
-
-- **A bug where hit messages disappearing too fast.**
-
-## [v0.1.2-alpha] - 8/18/2023
-
-### Added
-
-- **Added a max for crits,heals and normal hits so on some bosses you don't get a 1 million crits.**
-- **Added a check to prevent CritMatic from attempting to track spells that are not in your spell-book.**
-
-se] - 9/27/2023
-
-
-## [v0.2.5.5-release] - 9/26/2023
-
-### Fixed:
-
-- **Various Fixes.**
-
-
-## [v0.2.3-release] - 9/19/2023
-
-### Fixed
-
-- **Fixed the problem for setting not saving on exit or reload.**
-
-### Updated
-
-- **Changed the default font size to 22**
-- **Delayed the notification message by 0.45**
-
-## [v0.2.2-release] - 9/17/2023
-
-### Updated
-
-- **Changed the default font size to 24**
-- **Delayed the notification message, by adding 0.25 seconds to it. So you have more time to notice the animation.**
-
-## [v0.2.1.5-release] - 9/12/2023
-
-### Fixed
-
-- **Fixed Various Bugs.**
-
-## [v0.2.1-release] - 9/10/2023
-
-### Added
-
-- **Added Font Settings**
-
-- **More options coming soon**
-
-## [v0.2.0-release] - 9/05/2023
-
-### Added
-
-- **New Slash Commands to open the options menu /cm and /critmatic**
-- **You can Change the Crit and Normal hit / heal sounds.**
-  More options coming soon
-
-## [v0.1.6-release] - 9/01/2023
-
-### Updated
-
-- **Updated the notification animation.**
-
-## [v0.1.6-release] - 8/29/2023
-
-### Fixed
-
-
-- **A bug where hit messages disappearing too fast.**
-
-## [v0.1.2-alpha] - 8/18/2023
-
-### Added
-
-- **Added a max for crits,heals and normal hits so on some bosses you don't get a 1 million crits.**
-- **Added a check to prevent CritMatic from attempting to track spells that are not in your spell-book.**
-
-
-    ]]
-
-    -- Fetch the custom font from SharedMedia
-    local customFont = SharedMedia:Fetch("font", "Coming Soon")  -- Replace "YourCustomFont" with your font's name
-
-    local logLabel = AceGUI:Create("Label")
-    logLabel:SetText(changelog)
-    logLabel:SetFullWidth(true)
-    logLabel:SetFont(customFont, 12, "OUTLINE")-- Set the font here
-    logLabel:SetColor(0.22, 0.25, 0.25)
-
-    scroll:AddChild(logLabel)
-  end
-
-  -- Show the change log (call this function when you want to display the log)
-  ShowChangeLog()
-
-
-  local fonts = SharedMedia:List("font")
-  print("Available Fonts:")
-  for i, name in ipairs(fonts) do
-    print(name)
-  end
-
-
-
-
-  if IsAddOnLoaded("ElvUI") then
-    self:ScheduleTimer("TimerCritMaticLoaded", 8)
-  else
-    self:ScheduleTimer("TimerCritMaticLoaded", 8)
-  end
-end
--- Called when the addon is enabled
-function Critmatic:OnEnable()
-
-end
-
--- Called when the addon is disabled
-function Critmatic:OnDisable()
-
-end
-
-function Critmatic:CritMaticReset()
-  CritMaticData = {}
-  Critmatic:Print("|cffff0000Data Reset!|r")
-end
-function Critmatic:CritMaticDBReset()
-
-  Critmatic:Print("|cffff0000Database Reset!|r")
 end

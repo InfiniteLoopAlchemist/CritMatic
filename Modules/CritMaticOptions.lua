@@ -3,11 +3,11 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
 function ResetSoundsToDefault()
-  db.profile.soundSettings = defaults.profile.soundSettings
+  Critmatic.db.profile.soundSettings = defaults.profile.soundSettings
 end
 
 function ResetFontSettingsToDefault()
-  db.profile.fontSettings = defaults.profile.fontSettings
+  Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
 end
 
 local options = {
@@ -25,30 +25,30 @@ local options = {
           desc = "Track Auto Attacks?",
           type = "toggle",
           order = 1,
-          set = function(_, newVal) db.profile.generalSettings.autoAttacksEnabled = newVal
+          set = function(_, newVal) Critmatic.db.profile.generalSettings.autoAttacksEnabled = newVal
           end,
-          get = function() return db.profile.generalSettings.autoAttacksEnabled end,
+          get = function() return Critmatic.db.profile.generalSettings.autoAttacksEnabled end,
         },
         chatNotificationsEnabled = {
           name = "Show Chat Notifications",
           desc = "Do you want damage / heal chat messages for when you get a higher crit/normal hit/heal?",
           type = "toggle",
           order = 2,
-          set = function(_, newVal) db.profile.generalSettings.chatNotificationsEnabled = newVal
+          set = function(_, newVal) Critmatic.db.profile.generalSettings.chatNotificationsEnabled = newVal
           end,
-          get = function() return db.profile.generalSettings.chatNotificationsEnabled end,
+          get = function() return Critmatic.db.profile.generalSettings.chatNotificationsEnabled end,
         },
         alertNotificationsEnabled = {
           name = "Show Alert Notifications",
           desc = "Do you want damage / heal alerts messages for when you get a higher crit/normal hit/heal?",
           type = "toggle",
           order = 3,
-          set = function(_, newVal) db.profile.generalSettings.alertNotificationsEnabled = newVal
+          set = function(_, newVal) Critmatic.db.profile.generalSettings.alertNotificationsEnabled = newVal
           end,
-          get = function() return db.profile.generalSettings.alertNotificationsEnabled end,
+          get = function() return Critmatic.db.profile.generalSettings.alertNotificationsEnabled end,
         },
         discordLink = {
-          name = "Help/Suggestions Discord Link",
+          name = "Help/Suggestions CritMatic Discord Link",
           desc = "Get help or make a suggestion, Just Copy this link to join our Discord server.",
           type = "input",
           order = 4,
@@ -75,10 +75,10 @@ local options = {
           width = "full",
           order = 1,
           get = function()
-            return db.profile.fontSettings.font
+            return Critmatic.db.profile.fontSettings.font
           end,
           set = function(_, newVal)
-            db.profile.fontSettings.font = newVal
+            Critmatic.db.profile.fontSettings.font = newVal
           end,
         },
         fontSize = {
@@ -90,10 +90,10 @@ local options = {
           order = 4,
           width = "full",
           get = function()
-            return db.profile.fontSettings.fontSize
+            return Critmatic.db.profile.fontSettings.fontSize
           end,
           set = function(_, newVal)
-            db.profile.fontSettings.fontSize = newVal
+            Critmatic.db.profile.fontSettings.fontSize = newVal
           end,
         },
         fontColorCrit = {
@@ -104,11 +104,11 @@ local options = {
           hasAlpha = false,
           width = "normal",
           get = function(info)
-            local r, g, b = unpack(db.profile.fontSettings.fontColorCrit)
+            local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
             return r, g, b
           end,
           set = function(info, r, g, b)
-            db.profile.fontSettings.fontColorCrit = { r, g, b }
+            Critmatic.db.profile.fontSettings.fontColorCrit = { r, g, b }
           end,
         },
         fontColor = {
@@ -119,11 +119,11 @@ local options = {
           width = "200",
           hasAlpha = false, -- set to true if you want an alpha slider (for transparency)
           get = function(info)
-            local r, g, b = unpack(db.profile.fontSettings.fontColor)
+            local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
             return r, g, b
           end,
           set = function(info, r, g, b)
-            db.profile.fontSettings.fontColor = { r, g, b }
+            Critmatic.db.profile.fontSettings.fontColor = { r, g, b }
           end,
         },
         fontOutline = {
@@ -137,10 +137,10 @@ local options = {
           width = "full",
           order = 4,
           get = function()
-            return db.profile.fontSettings.fontOutline
+            return Critmatic.db.profile.fontSettings.fontOutline
           end,
           set = function(_, newVal)
-            db.profile.fontSettings.fontOutline = newVal
+            Critmatic.db.profile.fontSettings.fontOutline = newVal
           end,
         },
         fontShadowSizeX = {
@@ -153,10 +153,10 @@ local options = {
           step = 1,
           order = 5,
           get = function()
-            return db.profile.fontSettings.fontShadowSize[1]
+            return Critmatic.db.profile.fontSettings.fontShadowSize[1]
           end,
           set = function(_, value)
-            db.profile.fontSettings.fontShadowSize[1] = value
+            Critmatic.db.profile.fontSettings.fontShadowSize[1] = value
           end,
         },
 
@@ -170,10 +170,10 @@ local options = {
           order = 6,
           width = "3",
           get = function()
-            return db.profile.fontSettings.fontShadowSize[2]
+            return Critmatic.db.profile.fontSettings.fontShadowSize[2]
           end,
           set = function(_, value)
-            db.profile.fontSettings.fontShadowSize[2] = value
+            Critmatic.db.profile.fontSettings.fontShadowSize[2] = value
           end,
         },
         fontShadowColor = {
@@ -183,10 +183,10 @@ local options = {
           hasAlpha = false,
           order = 7,
           get = function()
-            return unpack(db.profile.fontSettings.fontShadowColor)
+            return unpack(Critmatic.db.profile.fontSettings.fontShadowColor)
           end,
           set = function(_, r, g, b)
-            db.profile.fontSettings.fontShadowColor = { r, g, b }
+            Critmatic.db.profile.fontSettings.fontShadowColor = { r, g, b }
           end,
         },
         resetFontSettings = {
@@ -216,10 +216,10 @@ local options = {
           width = "full",
           order = 2,
           get = function()
-            return db.profile.soundSettings.damageNormal
+            return Critmatic.db.profile.soundSettings.damageNormal
           end,
           set = function(_, newVal)
-            db.profile.soundSettings.damageNormal = newVal
+            Critmatic.db.profile.soundSettings.damageNormal = newVal
           end,
         },
         damageCrit = {
@@ -230,10 +230,10 @@ local options = {
           width = "full",
           order = 1,
           get = function()
-            return db.profile.soundSettings.damageCrit
+            return Critmatic.db.profile.soundSettings.damageCrit
           end,
           set = function(_, newVal)
-            db.profile.soundSettings.damageCrit = newVal
+            Critmatic.db.profile.soundSettings.damageCrit = newVal
           end,
         },
         healNormal = {
@@ -244,10 +244,10 @@ local options = {
           width = "full",
           order = 4,
           get = function()
-            return db.profile.soundSettings.healNormal
+            return Critmatic.db.profile.soundSettings.healNormal
           end,
           set = function(_, newVal)
-            db.profile.soundSettings.healNormal = newVal
+            Critmatic.db.profile.soundSettings.healNormal = newVal
           end,
         },
         healCrit = {
@@ -258,19 +258,19 @@ local options = {
           width = "full",
           order = 3,
           get = function()
-            return db.profile.soundSettings.healCrit
+            return Critmatic.db.profile.soundSettings.healCrit
           end,
           set = function(_, newVal)
-            db.profile.soundSettings.healCrit = newVal
+            Critmatic.db.profile.soundSettings.healCrit = newVal
           end,
         },
         muteAllSounds = {
           name = "Mute All Sounds",
           desc = "Do you want to mute all sounds regardless of settings?",
           type = "toggle",
-          set = function(_, newVal) db.profile.soundSettings.muteAllSounds = newVal
+          set = function(_, newVal) Critmatic.db.profile.soundSettings.muteAllSounds = newVal
           end,
-          get = function() return db.profile.soundSettings.muteAllSounds end,
+          get = function() return Critmatic.db.profile.soundSettings.muteAllSounds end,
         },
         resetSounds = {
           name = "Reset Sounds to Default",
@@ -294,24 +294,24 @@ local options = {
           desc = "Do you want to send raid chat messages when you Crit? Default: Checked",
           type = "toggle",
           order = 1,
-          set = function(_, newVal) db.profile.social.canSendCritsToRaid = newVal end,
-          get = function() return db.profile.social.canSendCritsToRaid end,
+          set = function(_, newVal) Critmatic.db.profile.social.canSendCritsToRaid = newVal end,
+          get = function() return Critmatic.db.profile.social.canSendCritsToRaid end,
         },
         canSendCritsToGuild = {
           name = "Send Crits to Guild",
           desc = "Do you want to send guild chat messages when you Crit? Default: Un-Checked",
           type = "toggle",
           order = 2,
-          set = function(_, newVal) db.profile.social.canSendCritsToGuild = newVal end,
-          get = function() return db.profile.social.canSendCritsToGuild end,
+          set = function(_, newVal) Critmatic.db.profile.social.canSendCritsToGuild = newVal end,
+          get = function() return Critmatic.db.profile.social.canSendCritsToGuild end,
         },
         canSendCritsToParty = {
           name = "Send Crits to Party",
           desc = "Do you want to send party chat messages when you Crit? default: Checked ",
           type = "toggle",
           order = 3,
-          set = function(_, newVal) db.profile.social.canSendCritsToParty = newVal end,
-          get = function() return db.profile.social.canSendCritsToParty end,
+          set = function(_, newVal) Critmatic.db.profile.social.canSendCritsToParty = newVal end,
+          get = function() return Critmatic.db.profile.social.canSendCritsToParty end,
         },
       }
     },

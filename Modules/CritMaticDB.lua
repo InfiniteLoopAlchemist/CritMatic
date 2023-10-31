@@ -27,6 +27,8 @@ defaults = {
       canSendCritsToGuild = false,
       canSendCritsToRaid = true
     },
+    oldVersion = "0.3.5.3"
+
   }
 }
 

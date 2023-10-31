@@ -15,8 +15,8 @@
     <Script file="Modules\CritMaticDB.lua"/>
     <Script file="Modules\CritMaticSharedMedia.lua"/>
     <Script file="Modules\CritMaticOptions.lua"/>
-    <Script file="Namespace.lua"/>
-    <Script file="MessageFrame.lua"/>
     <Script file="CritMatic.lua"/>
+    <Script file="MessageFrame.lua"/>
+    <Script file="Modules\ChangeLogPopUp.lua"/>
 </Ui>
 

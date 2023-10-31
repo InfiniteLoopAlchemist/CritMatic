@@ -28,13 +28,13 @@ local function RemoveOldestMessage()
   end
 end
 
-CritMatic.MessageFrame = {}
+Critmatic.MessageFrame = {}
 
-function CritMatic.MessageFrame:CreateMessage(text, r, g, b)
+function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
   local delayInSeconds = 0.45
   local function delayedExecution()
     -- Replace frame creation with a call to CreateNewMessageFrame()
-    local f = CritMatic.CreateNewMessageFrame()
+    local f = Critmatic.CreateNewMessageFrame()
 
     -- Set the text and color
     f.text:SetText(text)
@@ -73,34 +73,34 @@ function CritMatic.MessageFrame:CreateMessage(text, r, g, b)
   C_Timer.After(delayInSeconds, delayedExecution)
 end
 
-function CritMatic.ShowNewHealCritMessage(spellName, amount)
+function Critmatic.ShowNewHealCritMessage(spellName, amount)
 
   local message = string.upper(string.format("New %s crit heal: %d!", spellName, amount))
-  local r, g, b = unpack(db.profile.fontSettings.fontColorCrit)
-  CritMatic.MessageFrame:CreateMessage(message, r, g, b)  -- Gold color
+  local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
+  Critmatic.MessageFrame:CreateMessage(message, r, g, b)  -- Gold color
 
 end
 
-function CritMatic.ShowNewHealMessage(spellName, amount)
+function Critmatic.ShowNewHealMessage(spellName, amount)
 
   local message = string.upper(string.format("New %s normal heal record: %d!", spellName, amount))
-  local r, g, b = unpack(db.profile.fontSettings.fontColor)
-  CritMatic.MessageFrame:CreateMessage(message, r, g, b)
+  local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
+  Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 
 end
 
-function CritMatic.ShowNewCritMessage(spellName, amount)
+function Critmatic.ShowNewCritMessage(spellName, amount)
 
   local message = string.upper(string.format("New %s crit: %d!", spellName, amount))
-  local r, g, b = unpack(db.profile.fontSettings.fontColorCrit)
-  CritMatic.MessageFrame:CreateMessage(message, r, g, b)
+  local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
+  Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 end
 
-function CritMatic.ShowNewNormalMessage(spellName, amount)
+function Critmatic.ShowNewNormalMessage(spellName, amount)
 
   local message = string.upper(string.format("New %s normal hit record: %d!", spellName, amount))
-  local r, g, b = unpack(db.profile.fontSettings.fontColor)
-  CritMatic.MessageFrame:CreateMessage(message, r, g, b)
+  local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
+  Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 
 end
 
