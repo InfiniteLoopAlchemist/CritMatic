@@ -1,6 +1,17 @@
 -- This line should be at the top of your main Lua file, outside any function.
 Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0","AceComm-3.0")
+--CTODO:  make a changes popup like details  does
 
+local MAX_HIT = 40000
+
+local function GetGCD()
+  local _, gcdDuration = GetSpellCooldown(78) -- 78 is the spell ID for Warrior's Heroic Strike
+  if gcdDuration == 0 then
+    return 1.5 -- Default GCD duration if not available (you may adjust this value if needed)
+  else
+    return gcdDuration
+  end
+end
 
 local function removeImproved(spellName)
   -- Stripping out "Improved " prefix
@@ -114,18 +125,7 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
     end
   end
 end
---CTODO:  make a changes popup like details  does
 
-local MAX_HIT = 40000
-
-local function GetGCD()
-  local _, gcdDuration = GetSpellCooldown(78) -- 78 is the spell ID for Warrior's Heroic Strike
-  if gcdDuration == 0 then
-    return 1.5 -- Default GCD duration if not available (you may adjust this value if needed)
-  else
-    return gcdDuration
-  end
-end
 -- Function to create a new frame based on the template
 Critmatic.CreateNewMessageFrame = function()
   local f = CreateFrame("Frame", nil, UIParent)
@@ -166,12 +166,12 @@ function Critmatic:OnInitialize()
   local version = GetAddOnMetadata("CritMatic", "Version")
   function Critmatic:OnCommReceived(prefix , message, distribution, sender)
 
-    if message and Critmatic.version then
+    if message and version then
 
       local isNewerVersion = message > version
 
       if isNewerVersion and not Critmatic.hasDisplayedUpdateMessage then
-        Critmatic:Print("|cff0000ffAn updated version of CritMatic has been released. We strongly recommend upgrading to the latest version for enhanced features and stability.|r |cff918d86The update is available on CurseForge, Wago .io, and WoW Interface.|r")
+        Critmatic:Print("|cffff0000An updated version of CritMatic has been released. We strongly recommend upgrading to the latest version for enhanced features and stability.|r |cff918d86The update is available on CurseForge, Wago .io, and WoW Interface.|r")
         Critmatic.hasDisplayedUpdateMessage = true
       end
     end
@@ -194,6 +194,22 @@ function Critmatic:OnInitialize()
     end
 
   end
+  -- Function to broadcast your version
+  function Critmatic:BroadcastVersion()
+    -- Check and send to guild
+    if IsInGuild() then
+      self:SendCommMessage("Critmatic", version, "GUILD")
+    end
+    self:SendCommMessage("Critmatic", version, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
+    if IsInRaid() then
+      self:SendCommMessage("Critmatic", version, "RAID")
+    end
+  end
+
+  -- Event handler for GROUP_ROSTER_UPDATE
+  function Critmatic:GROUP_ROSTER_UPDATE()
+    self:BroadcastVersion()
+  end
   -- Register console commands
   Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
   -- Register the slash commands
@@ -213,6 +229,7 @@ function Critmatic:OnInitialize()
   function Critmatic:CritMaticLoaded()
     self:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700  /cm|r|cff918d86 for options|r")
   end
+
 
   local f = Critmatic.CreateNewMessageFrame()
   -- Ensure Ace3 and AceGUI are loaded
@@ -256,25 +273,6 @@ end
 function Critmatic:OpenOptions()
   LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
 end
-
--- Function to broadcast your version
-function Critmatic:BroadcastVersion()
-  -- Check and send to guild
-  if IsInGuild() then
-    self:SendCommMessage("Critmatic", Critmatic.newVersion, "GUILD")
-  end
-  self:SendCommMessage("Critmatic", Critmatic.newVersion, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
-  if IsInRaid() then
-    self:SendCommMessage("Critmatic", Critmatic.newVersion, "RAID")
-  end
-end
-
--- Event handler for GROUP_ROSTER_UPDATE
-function Critmatic:GROUP_ROSTER_UPDATE()
-  self:BroadcastVersion()
-end
-
-
 
 function Critmatic:CritMaticReset()
   CritMaticData = {}
