@@ -175,7 +175,7 @@ function Critmatic:OnInitialize()
       end
     end
   end
-  Critmatic.oldVersion = Critmatic.db.profile.oldVersion
+  Critmatic.oldVersion = '0.0.0'--ctodo: dont forget about this. Critmatic.db.profile.oldVersion
   Critmatic.newVersion = version
 
   if Critmatic.newVersion and Critmatic.oldVersion then
@@ -185,7 +185,7 @@ function Critmatic:OnInitialize()
     if isNewerVersion then
       Critmatic.showChangeLog()
 
-      Critmatic.db.profile.oldVersion = Critmatic.newVersion
+      --ctodo: dont forget about this. Critmatic.db.profile.oldVersion = Critmatic.newVersion
 
     end
 
@@ -229,19 +229,6 @@ function Critmatic:OnInitialize()
 
   local f = Critmatic.CreateNewMessageFrame()
   -- Ensure Ace3 and AceGUI are loaded
-  local SharedMedia = LibStub("LibSharedMedia-3.0")
-  local borders = SharedMedia:List("border")
-  print("Available Border Textures:")
-  for i, name in ipairs(borders) do
-    print(name)
-  end
-
-
-  local fonts = SharedMedia:List("font")
-  print("Available Fonts:")
-  for i, name in ipairs(fonts) do
-    print(name)
-  end
 
   function Critmatic:TimerCritMaticLoaded()
     Critmatic:CritMaticLoaded()
