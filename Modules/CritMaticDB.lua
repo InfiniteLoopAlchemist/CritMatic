@@ -27,9 +27,18 @@ defaults = {
       canSendCritsToGuild = false,
       canSendCritsToRaid = true
     },
-    oldVersion = "0.3.5.3"
+    changeLogPopUp = {
+      font = "MoK",
+      fontOutline = "OUTLINE",
+      fontSize = 15,
+      fontColor = { 0.2, 0.2, 0.2 },
+      fontShadowSize = { 3, -3 },
+      fontShadowColor = { 0.1, 0.1, 0.1 } -- Almost pure black
+    },
 
-  }
+    oldVersion = "0.0.0"
+  },
+
 }
 
 
