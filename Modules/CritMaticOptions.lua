@@ -10,8 +10,48 @@ function ResetFontSettingsToDefault()
   Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
 end
 function ResetChangeLogFontSettingsToDefault()
-  Critmatic.db.profile.changeLogPopUp = defaults.profile.changeLogPopUp
+  Critmatic.db.profile.changeLogPopUp.fontSettings = defaults.profile.changeLogPopUp.fontSettings
 end
+function ResetChangeLogBorderAndBackgroundSettingsToDefault()
+  Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings = defaults.profile.changeLogPopUp.borderAndBackgroundSettings
+end
+
+local allowedBorderTextures = {
+  "Blizzard Achievement Wood",
+  "Blizzard Tooltip",
+  "Blizzard Dialog",
+  "Blizzard Dialog Gold",
+  "None",
+
+}
+
+-- Fetch the full list of border textures from SharedMedia
+local allBorderTextures = LSM:HashTable("border")
+
+-- Create a filtered list of allowed border textures
+local allowedBorderTexturesForConfig = {}
+for _, textureName in ipairs(allowedBorderTextures) do
+  if allBorderTextures[textureName] then
+    allowedBorderTexturesForConfig[textureName] = allBorderTextures[textureName]
+  end
+end
+-- Fetch the full list of border textures from SharedMedia
+local allBackgrounds = LSM:HashTable("background")
+
+-- Define a list of borders to exclude
+local excludeList = {
+  ["None"] = true
+}
+
+-- Create a filtered list of borders
+local filteredBackgrounds = {}
+for name, _ in pairs(allBackgrounds) do
+  if not excludeList[name] then
+    filteredBackgrounds[name] = allBackgrounds[name]
+  end
+end
+
+
 
 local options = {
   name = "CritMatic Options",
@@ -25,7 +65,7 @@ local options = {
       args = {
         autoAttacksEnabled = {
           name = "Track Auto Attacks",
-          desc = "Track Auto Attacks?",
+          desc = "Do you want to track auto attacks?",
           type = "toggle",
           order = 1,
           set = function(_, newVal)
@@ -59,16 +99,28 @@ local options = {
             return Critmatic.db.profile.generalSettings.alertNotificationsEnabled
           end,
         },
+        isChangeLogAutoPopUpEnabled = {
+          name = "Show Change Log ",
+          desc = "Do you want the change log to auto show when a new version comes out?",
+          type = "toggle",
+          order = 4,
+          set = function(_, newVal)
+            Critmatic.db.profile.generalSettings.isChangeLogAutoPopUpEnabled = newVal
+          end,
+          get = function()
+            return Critmatic.db.profile.generalSettings.isChangeLogAutoPopUpEnabled
+          end,
+        },
         discordLink = {
           name = "Help/Suggestions: Copy the CritMatic Discord Link",
           desc = "Get help or make a suggestion, Just Copy this link to join our Discord server.",
           type = "input",
-          order = 4,
+          order = 5,
           width = 'full',
           get = function()
             return "https://discord.gg/34JJyrnGGC"
           end, -- Replace with your actual Discord link
-          set = function(_, val)
+          set = function(_, _)
             -- Do nothing when the user tries to modify it
 
           end,
@@ -77,7 +129,7 @@ local options = {
       }
     },
     font = {
-      name = "Font Settings",
+      name = "Alert Font Settings",
       type = "group",
       order = 2,
       args = {
@@ -118,11 +170,11 @@ local options = {
           order = 2,
           hasAlpha = false,
           width = "normal",
-          get = function(info)
+          get = function(_)
             local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
             return r, g, b
           end,
-          set = function(info, r, g, b)
+          set = function(_, r, g, b)
             Critmatic.db.profile.fontSettings.fontColorCrit = { r, g, b }
           end,
         },
@@ -133,11 +185,11 @@ local options = {
           order = 3,
           width = "200",
           hasAlpha = false, -- set to true if you want an alpha slider (for transparency)
-          get = function(info)
+          get = function(_)
             local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
             return r, g, b
           end,
-          set = function(info, r, g, b)
+          set = function(_, r, g, b)
             Critmatic.db.profile.fontSettings.fontColor = { r, g, b }
           end,
         },
@@ -147,7 +199,9 @@ local options = {
           values = {
             ["NONE"] = "None",
             ["OUTLINE"] = "Outline",
+            ["OUTLINEMONOCHROME"] = "Outline Monochrome",
             ["THICKOUTLINE"] = "Thick Outline",
+            ["THICKOUTLINEMONOCHROME"] = "Thick Outline Monochrome",
           },
           width = "full",
           order = 4,
@@ -365,10 +419,10 @@ local options = {
               width = "full",
               order = 1,
               get = function()
-                return Critmatic.db.profile.changeLogPopUp.font
+                return Critmatic.db.profile.changeLogPopUp.fontSettings.font
               end,
               set = function(_, newVal)
-                Critmatic.db.profile.changeLogPopUp.font = newVal
+                Critmatic.db.profile.changeLogPopUp.fontSettings.font = newVal
               end,
             },
             fontSize = {
@@ -380,10 +434,10 @@ local options = {
               order = 4,
               width = "full",
               get = function()
-                return Critmatic.db.profile.changeLogPopUp.fontSize
+                return Critmatic.db.profile.changeLogPopUp.fontSettings.fontSize
               end,
               set = function(_, newVal)
-                Critmatic.db.profile.changeLogPopUp.fontSize = newVal
+                Critmatic.db.profile.changeLogPopUp.fontSettings.fontSize = newVal
               end,
             },
             fontColor = {
@@ -392,106 +446,116 @@ local options = {
               desc = "Choose a color for your Change Log font",
               order = 3,
               width = "200",
-              hasAlpha = false, -- set to true if you want an alpha slider (for transparency)
-              get = function(info)
-                local r, g, b = unpack(Critmatic.db.profile.changeLogPopUp.fontColor)
+              hasAlpha = false,
+              get = function(_)
+                local r, g, b = unpack(Critmatic.db.profile.changeLogPopUp.fontSettings.fontColor)
                 return r, g, b
               end,
-              set = function(info, r, g, b)
-                Critmatic.db.profile.changeLogPopUp.fontColor = { r, g, b }
+              set = function(_, r, g, b)
+                Critmatic.db.profile.changeLogPopUp.fontSettings.fontColor = { r, g, b }
               end,
             },
             fontOutline = {
               name = "Outline",
               type = "select",
               values = {
-                ["NONE"] = "None",
+                [""] = "None",
                 ["OUTLINE"] = "Outline",
+                ["OUTLINEMONOCHROME"] = "Outline Monochrome",
                 ["THICKOUTLINE"] = "Thick Outline",
+                ["THICKOUTLINEMONOCHROME"] = "Thick Outline Monochrome",
+
               },
               width = "full",
               order = 4,
               get = function()
-                return Critmatic.db.profile.changeLogPopUp.fontOutline
+                return Critmatic.db.profile.changeLogPopUp.fontSettings.fontOutline
               end,
               set = function(_, newVal)
-                Critmatic.db.profile.changeLogPopUp.fontOutline = newVal
-              end,
-            },
-            fontShadowSizeX = {
-              type = 'range',
-              name = 'Shadow Size X',
-              desc = 'Set the shadow size for the font in the horizontal direction.',
-              min = -10,
-              max = 10,
-              width = "normal",
-              step = 1,
-              order = 5,
-              get = function()
-                return Critmatic.db.profile.changeLogPopUp.fontShadowSize[1]
-              end,
-              set = function(_, value)
-                Critmatic.db.profile.changeLogPopUp.fontShadowSize[1] = value
+                Critmatic.db.profile.changeLogPopUp.fontSettings.fontOutline = newVal
               end,
             },
 
-            fontShadowSizeY = {
-              type = 'range',
-              name = 'Shadow Size Y',
-              desc = 'Set the shadow size for the font in the vertical direction.',
-              min = -10,
-              max = 10,
-              step = 1,
-              order = 6,
-              width = "3",
-              get = function()
-                return Critmatic.db.profile.changeLogPopUp.fontShadowSize[2]
-              end,
-              set = function(_, value)
-                Critmatic.db.profile.changeLogPopUp.fontShadowSize[2] = value
-              end,
-            },
-            fontShadowColor = {
-              type = 'color',
-              name = 'Shadow Color',
-              desc = 'Set the shadow color for the font.',
-              hasAlpha = false,
-              order = 7,
-              get = function()
-                return unpack(Critmatic.db.profile.changeLogPopUp.fontShadowColor)
-              end,
-              set = function(_, r, g, b)
-                Critmatic.db.profile.changeLogPopUp.fontShadowColor = { r, g, b }
-              end,
-            },
             resetFontSettings = {
               name = "Reset Change Log Font Settings",
-              desc = "Reset all Change Log Font settings to their default values",
+              desc = "Reset all Change Log Font settings to their default values?",
               width = "full",
               type = "execute",
               func = ResetChangeLogFontSettingsToDefault,
               confirm = true,
-              confirmText = "Are you sure you want to reset font settings to their default values?",
-              order = 8,
+              confirmText = "Are you sure you want to reset change log font settings to their default values?",
+              order = 5,
             },
 
           },
         },
-        otherOptionsTab = {
-          name = "Other Options",
+        borderAndBackgroundTab = {
+          name = "Border and Background Options",
           type = "group",
           order = 2,
           args = {
-            exampleOtherSetting = {
-              name = "Example Other Setting",
-              type = "input",
+            borderTexture = {
+              type = 'select',
+              width = 'full',
+              dialogControl = 'LSM30_Border',
+              name = "Border Texture",
               order = 1,
-              set = function(_, newVal)
+              desc = "Choose a border texture from the list. Requires Reload",
+              values = allowedBorderTexturesForConfig,
+              get = function(_)
+
+                return Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderTexture
               end,
-              get = function()
-                return "example"
+              set = function(_, values)
+
+                Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderTexture = values
+
               end,
             },
+            borderSize = {
+              type = 'range',
+              name = "Border Size",
+              desc = "Set the border size for the border frame. Requires Reload",
+              width = 'full',
+              order = 2,
+              min = 1,
+              max = 35,
+              step = 1,
+              get = function(_)
+                return Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderSize
+              end,
+              set = function(_, value)
+                Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderSize = value
+
+              end,
+            },
+            backgroundTexture = {
+              type = 'select',
+              dialogControl = 'LSM30_Background',
+              name = "Background Texture",
+              width = 'full',
+              order = 3,
+              desc = "Choose a background texture from the list. Requires Reload",
+              values = filteredBackgrounds,
+              get = function(_)
+                return Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.backgroundTexture
+              end,
+              set = function(_, values)
+                Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.backgroundTexture = values
+
+              end,
+            },
+            resetBorderBackgroundSettings = {
+              name = "Reset Change Log Font Settings",
+              desc = "Reset all Change Log Border and Background settings to their default values?",
+              width = "full",
+              type = "execute",
+              func = ResetChangeLogBorderAndBackgroundSettingsToDefault,
+              confirm = true,
+              confirmText = "Are you sure you want to reset change log border and background settings to their default values?",
+              order = 4,
+            },
+
           }, },
       },
     },

@@ -175,7 +175,7 @@ function Critmatic:OnInitialize()
       end
     end
   end
-  Critmatic.oldVersion = '0.0.0'--ctodo: dont forget about this. Critmatic.db.profile.oldVersion
+  Critmatic.oldVersion = Critmatic.db.profile.oldVersion
   Critmatic.newVersion = version
 
   if Critmatic.newVersion and Critmatic.oldVersion then
@@ -183,9 +183,11 @@ function Critmatic:OnInitialize()
     local isNewerVersion = Critmatic.newVersion > Critmatic.oldVersion
 
     if isNewerVersion then
+      if Critmatic.db.profile.generalSettings.isChangeLogAutoPopUpEnabled then
       Critmatic.showChangeLog()
+      end
 
-      --ctodo: dont forget about this. Critmatic.db.profile.oldVersion = Critmatic.newVersion
+      Critmatic.db.profile.oldVersion = Critmatic.newVersion
 
     end
 
@@ -196,8 +198,13 @@ function Critmatic:OnInitialize()
     if IsInGuild() then
       self:SendCommMessage("Critmatic", version, "GUILD")
     end
-    self:SendCommMessage("Critmatic", version, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
-    if IsInRaid() then
+    local inInstance, instanceType = IsInInstance()
+    if inInstance and (instanceType == "pvp" or instanceType == "arena") then
+      return
+
+    elseif
+    self:SendCommMessage("Critmatic", version, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY") then
+    elseif IsInRaid() then
       self:SendCommMessage("Critmatic", version, "RAID")
     end
   end
@@ -211,6 +218,7 @@ function Critmatic:OnInitialize()
   -- Register the slash commands
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
+  Critmatic:RegisterChatCommand("cmlog", "OpenChangeLog")
   Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
 
   self:RegisterComm("Critmatic")
@@ -223,7 +231,7 @@ function Critmatic:OnInitialize()
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
   function Critmatic:CritMaticLoaded()
-    self:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700  /cm|r|cff918d86 for options|r")
+    self:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700  /cm|r|cff918d86 for options and |cffffd700cmlog|r|cff918d86 for change log. |r")
   end
 
 
@@ -256,7 +264,9 @@ end
 function Critmatic:OpenOptions()
   LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
 end
-
+function Critmatic:OpenChangeLog()
+  Critmatic.showChangeLog()
+end
 function Critmatic:CritMaticReset()
   CritMaticData = {}
   Critmatic:Print("|cffff0000Data Reset!|r")
@@ -413,8 +423,12 @@ f:SetScript("OnEvent", function(self, event, ...)
       end
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
+    -- First check if we are in an instance and what type it is
+    local inInstance, instanceType = IsInInstance()
 
-    if IsInGroup() and Critmatic.db.profile.social.canSendCritsToParty then
+    if inInstance and (instanceType == "pvp" or instanceType == "arena") then
+      return
+    elseif IsInGroup() and Critmatic.db.profile.social.canSendCritsToParty then
       -- For highest critical hit
       if highestCritDuringCombat > 0 then
 

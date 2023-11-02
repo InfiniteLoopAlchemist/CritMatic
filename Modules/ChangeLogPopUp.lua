@@ -1,7 +1,7 @@
 local AceGUI = LibStub("AceGUI-3.0")
 
 -- Ensure SharedMedia is loaded
-local SharedMedia = LibStub("LibSharedMedia-3.0")
+local LSM = LibStub("LibSharedMedia-3.0")
 
 -- Function to show the change log
 Critmatic.showChangeLog = function()
@@ -13,11 +13,11 @@ Critmatic.showChangeLog = function()
     frame:SetWidth(600)
     frame:SetHeight(500)
 
-    local backgroundTexture = SharedMedia:Fetch("background", "Blizzard Parchment 2")
+    local backgroundTexture = LSM:Fetch("background", Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.backgroundTexture)
     frame.frame:SetBackdrop({
         bgFile = backgroundTexture,
-        edgeFile = SharedMedia:Fetch("border", "Blizzard Achievement Wood"),
-        edgeSize = 24,
+        edgeFile = LSM:Fetch("border", Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderTexture),
+        edgeSize = Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderSize,
     })
 
     -- Create a scroll container
@@ -232,17 +232,14 @@ Critmatic.showChangeLog = function()
 
 ]]
 
-    local r, g, b = unpack(Critmatic.db.profile.changeLogPopUp.fontColor)
+    local r, g, b = unpack(Critmatic.db.profile.changeLogPopUp.fontSettings.fontColor)
     -- Fetch the custom font from SharedMedia
-    local customFont = SharedMedia:Fetch("font", Critmatic.db.profile.changeLogPopUp.font)
+    local customFont = LSM:Fetch("font", Critmatic.db.profile.changeLogPopUp.fontSettings.font)
     local logLabel = AceGUI:Create("Label")
     logLabel:SetText(changelog)
     logLabel:SetFullWidth(true)
-    local outline = Critmatic.db.profile.changeLogPopUp.fontOutline
-    if outline == "NONE" then
-        outline = ""
-    end
-    logLabel:SetFont(customFont, Critmatic.db.profile.changeLogPopUp.fontSize, outline)
+
+    logLabel:SetFont(customFont, Critmatic.db.profile.changeLogPopUp.fontSettings.fontSize, Critmatic.db.profile.changeLogPopUp.fontSettings.fontOutline)
     logLabel:SetColor(r, g, b)
 
     scroll:AddChild(logLabel)
