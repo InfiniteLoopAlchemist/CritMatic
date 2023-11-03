@@ -27,7 +27,8 @@ defaults = {
     social = {
       canSendCritsToParty = true,
       canSendCritsToGuild = false,
-      canSendCritsToRaid = true
+      canSendCritsToRaid = true,
+      canSendCritsToBattleGrounds = true
     },
     changeLogPopUp = {
       borderAndBackgroundSettings = {

@@ -231,7 +231,7 @@ function Critmatic:OnInitialize()
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
   function Critmatic:CritMaticLoaded()
-    self:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700  /cm|r|cff918d86 for options and |cffffd700cmlog|r|cff918d86 for change log. |r")
+    self:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700  /cm|r|cff918d86 for options and |cffffd700/cmlog|r|cff918d86 for change log. |r")
   end
 
 
@@ -426,40 +426,57 @@ f:SetScript("OnEvent", function(self, event, ...)
     -- First check if we are in an instance and what type it is
     local inInstance, instanceType = IsInInstance()
 
-    if inInstance and (instanceType == "pvp" or instanceType == "arena") then
-      return
-    elseif IsInGroup() and Critmatic.db.profile.social.canSendCritsToParty then
-      -- For highest critical hit
+    if inInstance and (instanceType == "pvp") and Critmatic.db.profile.social.canSendCritsToBattleGrounds then
       if highestCritDuringCombat > 0 then
 
         SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                highestCritDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY"  )
+                highestCritDuringCombat, "INSTANCE_CHAT")
       end
       -- For highest critical heal
       if highestCritHealDuringCombat > 0 then
         SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
-                highestCritHealDuringCombat,  IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
+                highestCritHealDuringCombat, "INSTANCE_CHAT")
       end
-    elseif IsInRaid() and Critmatic.db.profile.social.canSendCritsToRaid then
-      if highestCritDuringCombat > 0 then
-        SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                highestCritDuringCombat,  "RAID"  )
+    else
+
+      if inInstance and (instanceType == "pvp" or instanceType == "arena") then
+        return
+      elseif IsInGroup() and Critmatic.db.profile.social.canSendCritsToParty then
+        -- For highest critical hit
+        if highestCritDuringCombat > 0 then
+
+          SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                  highestCritDuringCombat, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
+        end
+        -- For highest critical heal
+        if highestCritHealDuringCombat > 0 then
+          SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
+                  highestCritHealDuringCombat, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
+        end
+      elseif IsInRaid() and Critmatic.db.profile.social.canSendCritsToRaid then
+        if highestCritDuringCombat > 0 then
+          SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                  highestCritDuringCombat, "RAID")
+        end
+        -- For highest critical heal
+        if highestCritHealDuringCombat > 0 then
+          SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
+                  highestCritHealDuringCombat, "RAID")
+        end
+
       end
-      -- For highest critical heal
-      if highestCritHealDuringCombat > 0 then
-        SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
-                highestCritHealDuringCombat, "RAID")
+      if IsInGuild() and Critmatic.db.profile.social.canSendCritsToGuild then
+        if highestCritDuringCombat > 0 then
+          SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
+                  highestCritDuringCombat, "GUILD")
+        end
+        -- For highest critical heal
+        if highestCritHealDuringCombat > 0 then
+          SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
+                  highestCritHealDuringCombat, "GUILD")
+        end
       end
-    elseif IsInGuild() and Critmatic.db.profile.social.canSendCritsToGuild then
-      if highestCritDuringCombat > 0 then
-        SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                highestCritDuringCombat,  "GUILD"  )
-      end
-      -- For highest critical heal
-      if highestCritHealDuringCombat > 0 then
-        SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
-                highestCritHealDuringCombat,  "GUILD")
-      end
+
 
     end
 

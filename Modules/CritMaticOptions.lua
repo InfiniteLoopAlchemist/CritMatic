@@ -361,11 +361,23 @@ local options = {
       type = "group",
       order = 4,
       args = {
+        canSendCritsToParty = {
+          name = "Send Crits to Party",
+          desc = "Do you want to send party chat messages when you Crit? default: Checked ",
+          type = "toggle",
+          order = 1,
+          set = function(_, newVal)
+            Critmatic.db.profile.social.canSendCritsToParty = newVal
+          end,
+          get = function()
+            return Critmatic.db.profile.social.canSendCritsToParty
+          end,
+        },
         canSendCritsToRaid = {
           name = " Send Crits to Raid",
           desc = "Do you want to send raid chat messages when you Crit? Default: Checked",
           type = "toggle",
-          order = 1,
+          order = 2,
           set = function(_, newVal)
             Critmatic.db.profile.social.canSendCritsToRaid = newVal
           end,
@@ -377,7 +389,7 @@ local options = {
           name = "Send Crits to Guild",
           desc = "Do you want to send guild chat messages when you Crit? Default: Un-Checked",
           type = "toggle",
-          order = 2,
+          order = 3,
           set = function(_, newVal)
             Critmatic.db.profile.social.canSendCritsToGuild = newVal
           end,
@@ -385,16 +397,16 @@ local options = {
             return Critmatic.db.profile.social.canSendCritsToGuild
           end,
         },
-        canSendCritsToParty = {
-          name = "Send Crits to Party",
-          desc = "Do you want to send party chat messages when you Crit? default: Checked ",
+        canSendCritsToBattleGrounds = {
+          name = "Send Crits to Battlegrounds",
+          desc = "Do you want to send Battleground chat messages when you Crit? Default: Checked",
           type = "toggle",
-          order = 3,
+          order = 4,
           set = function(_, newVal)
-            Critmatic.db.profile.social.canSendCritsToParty = newVal
+            Critmatic.db.profile.social.canSendCritsToBattleGrounds = newVal
           end,
           get = function()
-            return Critmatic.db.profile.social.canSendCritsToParty
+            return Critmatic.db.profile.social.canSendCritsToBattleGrounds
           end,
         },
       }
