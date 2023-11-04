@@ -35,16 +35,26 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.6.2-release] - 11/4/2023
+
+ Fixed:
+
+ We've patched up the 'New Version' popup to ensure it's functioning smoothly. You should now receive a popup when an update is available, keeping you in the loop with the latest enhancements.
+
+
+
+
+
 [v0.3.5.9.6-release] - 11/4/2023
 
  Updated:
 
- We've overhauled the internal code structure for the Options Tables to pave the way for an exciting new feature dubbed "CritLog." Picture a widget similar to the Deathlog addon, which you can toggle on or off. The CritLog will track and display your critical strikes, regular hits, critical heals, and standard heals. Accessing this feature will be a breeze with the new slash command `/cmlog`. Stay tuned as we begin the development phase!
+ We've overhauled the internal code structure for the Options Tables to pave the way for an exciting new feature
+  dubbed "CritLog." Picture a widget similar to the Deathlog addon, which you can toggle on or off. The CritLog will
+  track and display your critical strikes, regular hits, critical heals, and standard heals. Accessing this feature will
+  be a breeze with the new slash command `/cmlog`. Stay tuned as we begin the development phase!
 
  We've updated the font color for the "CritMatic Loaded" notification for better visibility and style.
-
-
-
 
 
 
@@ -54,7 +64,6 @@ Critmatic.showChangeLog = function()
 
  The change log should now reflect new changes correctly.
  Various other fixes
-
 
 
 
@@ -70,12 +79,12 @@ Critmatic.showChangeLog = function()
 
 
 
-
 [v0.3.5.7-release] - 11/2/2023
 
  Fixed:
 
- Resolved an edgecase condition where CritMatic erroneously reported 'not in a party or raid' within battlegrounds and arenas. 
+ Resolved an edgecase condition where CritMatic erroneously reported 'not in a party or raid' within battlegrounds
+  and arenas. 
 
  Added:
 
@@ -83,10 +92,10 @@ Critmatic.showChangeLog = function()
 
 
 
-
 [v0.3.5.3-release] - 10/29/2023
 
  Fixed:
+
  Various Fixes.
 
 
@@ -221,14 +230,6 @@ Critmatic.showChangeLog = function()
  Updated:
 
  Modified default font size to 24 and added a 0.25s delay to notification messages.
-
-
-
-[v0.2.1.5-release] - 9/12/2023
-
- Fixed:
-
- Addressed multiple bugs and issues.
 
 
 ]]
