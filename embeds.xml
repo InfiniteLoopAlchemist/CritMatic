@@ -14,6 +14,11 @@
     <Include file="Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml"/>
     <Script file="Modules\CritMaticDB.lua"/>
     <Script file="Modules\CritMaticSharedMedia.lua"/>
+    <Script file="Modules\optionParts\GeneralSettings.lua"/>
+    <Script file="Modules\optionParts\AlertFontSettings.lua"/>
+    <Script file="Modules\optionParts\SoundSettings.lua"/>
+    <Script file="Modules\optionParts\SocialSettings.lua"/>
+    <Script file="Modules\optionParts\ChangeLogSettings.lua"/>
     <Script file="Modules\CritMaticOptions.lua"/>
     <Script file="CritMatic.lua"/>
     <Script file="MessageFrame.lua"/>
