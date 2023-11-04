@@ -231,7 +231,7 @@ function Critmatic:OnInitialize()
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
   function Critmatic:CritMaticLoaded()
-    self:Print("|cff918d86 v|r|cffd3cfc7 " .. version .. "|r|cff918d86 Loaded! - Use|cffffd700  /cm|r|cff918d86 for options and |cffffd700/cmlog|r|cff918d86 for change log. |r")
+    self:Print("|cffd4d4d4 v|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 Loaded! - Use|cffffd700  /cm|r|cffd4d4d4 for options and |cffffd700/cmlog|r|cffd4d4d4 for change log. |r")
   end
 
 
