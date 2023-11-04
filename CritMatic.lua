@@ -175,13 +175,45 @@ function Critmatic:OnInitialize()
       end
     end
   end
-  Critmatic.oldVersion = Critmatic.db.profile.oldVersion
-  Critmatic.newVersion = version
+  function compareVersions(version1, version2)
+    local function splitVersion(str)
+      local parts = {}
+      for part in string.gmatch(str, "[%d]+") do
+        table.insert(parts, tonumber(part))
+      end
+      return parts
+    end
 
+    local parts1 = splitVersion(version1)
+    local parts2 = splitVersion(version2)
+
+    for i = 1, math.max(#parts1, #parts2) do
+      local num1 = parts1[i] or 0
+      local num2 = parts2[i] or 0
+      if num1 > num2 then
+        return true -- version1 is newer
+      elseif num1 < num2 then
+        return false -- version2 is newer
+      end
+      -- if equal, continue to the next part
+    end
+
+    return false -- versions are equal or indistinguishable
+  end
+
+
+
+
+
+
+  Critmatic.oldVersion = Critmatic.db.profile.oldVersion
+  Critmatic.newVersion = tostring(version)
+  print(Critmatic.newVersion)
+  print(Critmatic.oldVersion)
   if Critmatic.newVersion and Critmatic.oldVersion then
 
-    local isNewerVersion = Critmatic.newVersion > Critmatic.oldVersion
-
+    local isNewerVersion = compareVersions(Critmatic.newVersion, Critmatic.oldVersion)
+    print(isNewerVersion)
     if isNewerVersion then
       if Critmatic.db.profile.generalSettings.isChangeLogAutoPopUpEnabled then
       Critmatic.showChangeLog()
