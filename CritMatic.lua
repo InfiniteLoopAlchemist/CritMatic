@@ -208,12 +208,9 @@ function Critmatic:OnInitialize()
 
   Critmatic.oldVersion = Critmatic.db.profile.oldVersion
   Critmatic.newVersion = tostring(version)
-  print(Critmatic.newVersion)
-  print(Critmatic.oldVersion)
   if Critmatic.newVersion and Critmatic.oldVersion then
 
     local isNewerVersion = compareVersions(Critmatic.newVersion, Critmatic.oldVersion)
-    print(isNewerVersion)
     if isNewerVersion then
       if Critmatic.db.profile.generalSettings.isChangeLogAutoPopUpEnabled then
       Critmatic.showChangeLog()
