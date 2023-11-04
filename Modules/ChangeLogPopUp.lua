@@ -35,6 +35,71 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.5.8-release] - 11/3/2023
+
+ Fixed:
+
+ Resolved an issue where critical hit notifications were failing to dispatch in battleground instances.
+
+ Added:
+
+  Added a toggle to disable broadcasting critical hit alerts in battlegrounds.
+
+
+
+
+[v0.3.5.7-release] - 11/2/2023
+
+ Fixed:
+
+ Resolved an edgecase condition where CritMatic erroneously reported 'not in a party or raid' within battlegrounds and arenas. 
+
+ Added:
+
+  An automated changelog popup to brief you on the latest patches. Run /cmlog anytime.
+
+
+
+
+[v0.3.5.3-release] - 10/29/2023
+
+ Fixed:
+ Various Fixes.
+
+
+
+[v0.3.5.1-release] - 10/29/2023
+
+ Fixed:
+
+ Removed extraneous debug log invocations.
+
+
+
+[v0.3.5-release] - 10/28/2023
+
+ Added:
+
+ Extended compatibility to include WoW Retail through API adjustments.
+
+
+
+[v0.3.4.1-release] - 10/28/2023
+
+ Added:
+
+ Implemented options for broadcasting critical events to Raid and Guild channels.
+
+
+
+[v0.3.3-release] - 10/28/2023
+
+ Added:
+
+ Introduced versionchecking mechanism to notify users of outdated CritMatic versions.
+
+
+
 [v0.3.2-release] - 10/26/2023
 
  Updated:
@@ -160,67 +225,6 @@ Critmatic.showChangeLog = function()
  Sound settings for Crit and Normal hits/heals are now customizable.
 
 
-
-[v0.1.6.5-release] - 9/01/2023
-
- Updated:
-
- Enhanced notification animations.
-
-
-
-[v0.1.6-release] - 8/29/2023
-
- Fixed:
-
- Addressed a bug causing the first notification for Crit/Normal/Heal events to not display upon game start.
-
-
-
-[v0.1.5.6-release] - 8/28/2023
-
- Added:
-
- Introduced a distinct sound effect for Normal Heals.
-
-
-
-[v0.1.5.5-release] - 8/27/2023
-
- Fixed:
-
- Resolved a bug causing the absence of sound for normal hit/heals.
-
- Added:
-
- Extended support for Classic Era / Hardcore.
- Updated Notification Animation.
-
-
-
-[v0.1.4-alpha] - 8/23/2023
-
- Added:
-
- New Crit animations introduced.
- Tooltip information for CritMatic added to the spellbook.
-
-
-
-[v0.1.3-alpha] - 8/20/2023
-
- Fixed:
-
- Addressed an issue causing premature disappearance of hit messages.
-
-
-
-[v0.1.2-alpha] - 8/18/2023
-
- Added:
-
- Implemented a cap for extremely highvalue crits, heals, and hits.
- Added a validation check to prevent tracking of nonspellbook spells.
 ]]
 
     local r, g, b = unpack(Critmatic.db.profile.changeLogPopUp.fontSettings.fontColor)
