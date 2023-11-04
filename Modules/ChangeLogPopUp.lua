@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.6.2.1-release] - 11/4/2023
+
+ Fixed:
+
+  We've rolled out a series of tweaks and fixes to enhance stability and performance. 
+
+
+
+
+
 [v0.3.6.2-release] - 11/4/2023
 
  Fixed:
@@ -222,14 +232,6 @@ Critmatic.showChangeLog = function()
  Updated:
 
  Adjusted default font size to 22 and introduced a 0.45s delay for notification messages.
-
-
-
-[v0.2.2-release] - 9/17/2023
-
- Updated:
-
- Modified default font size to 24 and added a 0.25s delay to notification messages.
 
 
 ]]

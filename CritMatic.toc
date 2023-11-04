@@ -2,7 +2,7 @@
 ## Interface-Classic: 11404
 ## Interface-Wrath: 30403
 ## Title: CritMatic
-## Version: 0.3.6.2
+## Version: 0.3.6.2.1
 ## X-License: GNU GPL3
 ## Notes: Records and displays the highest critical hits and Normals for the player.
 ## DefaultState: enabled
