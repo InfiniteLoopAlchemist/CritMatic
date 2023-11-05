@@ -44,7 +44,7 @@
 ### Fixed:
 
 - **Resolved an edge-case condition where CritMatic erroneously reported 'not in a party or raid' within battlegrounds
-  and arenas. **
+  and arenas.**
 
 ### Added:
 
