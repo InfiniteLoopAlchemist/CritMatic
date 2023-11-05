@@ -2,7 +2,7 @@
 
 ### Fixed:
 
-- ** We've rolled out a series of tweaks and fixes to enhance stability and performance. **
+- **We've rolled out a series of tweaks and fixes to enhance stability and performance.**
 
 ## [v0.3.6.2-release] - 11/4/2023
 
