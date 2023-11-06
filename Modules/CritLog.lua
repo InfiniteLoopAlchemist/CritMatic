@@ -1,47 +1,58 @@
 local AceGUI = LibStub("AceGUI-3.0")
 Critmatic = Critmatic or {}
--- Ensure SharedMedia is loaded
-local LSM = LibStub("LibSharedMedia-3.0")
 
--- Function to show the change log
 Critmatic.showCritLog = function()
-    -- Create a container frame
-    local frame = AceGUI:Create("Frame")
-    frame:SetTitle("CritMatic - Change Log")
-    frame:SetStatusText("Need Help? Copy the Discord Link in General Options. ")
-    frame:SetLayout("Fill")
-    frame:SetWidth(300)
-    frame:SetHeight(150)
+    local frame = CreateFrame("Frame", nil, UIParent)
+    frame:SetSize(300, 200) -- Set the default size
+    frame:SetMovable(true) -- Make the frame movable
+    frame:EnableMouse(true) -- Enable mouse for the frame
+    frame:RegisterForDrag("LeftButton") -- Register left mouse button for drag
+    frame:SetScript("OnDragStart", frame.StartMoving) -- Start moving on drag start
+    frame:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing() -- Stop moving on drag stop
+        -- Save the position here if needed
+    end)
+    -- Create a background texture
+    local background = frame:CreateTexture(nil, "BACKGROUND")
+    background:SetAllPoints(frame)
+    background:SetColorTexture(0, 0, 0, 0.5) -- Set the color and alpha of the background
 
-    local backgroundTexture = LSM:Fetch("background", Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.backgroundTexture)
-    frame.frame:SetBackdrop({
-        bgFile = backgroundTexture,
-        edgeFile = LSM:Fetch("border", Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderTexture),
-        edgeSize = Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderSize,
+    -- Create a border
+    local border = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
+    border:SetAllPoints(frame)
+    border:SetBackdrop({
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", -- Path to border texture
+        tile = true,
+        tileSize = 16,
+        edgeSize = 16,
+        insets = { left = 4, right = 4, top = 4, bottom = 4 }
     })
 
-    -- Create a scroll container
-    local scrollContainer = AceGUI:Create("SimpleGroup")
-    scrollContainer:SetFullWidth(true)
-    scrollContainer:SetFullHeight(true)
-    scrollContainer:SetLayout("Fill")
-    frame:AddChild(scrollContainer)
+    local widget = {
+        frame = frame,
+        type = "CritMatic_miniLog"
+    }
 
-    -- Create a ScrollFrame
-    local scroll = AceGUI:Create("ScrollFrame")
-    scroll:SetLayout("List")
-    scrollContainer:AddChild(scroll)
+    -- OnAcquire is called when the widget is requested for use
+    function widget:OnAcquire()
+        self.frame:Show()
+    end
 
-    local r, g, b = unpack(Critmatic.db.profile.changeLogPopUp.fontSettings.fontColor)
-    -- Fetch the custom font from SharedMedia
-    local customFont = LSM:Fetch("font", Critmatic.db.profile.changeLogPopUp.fontSettings.font)
-    local logLabel = AceGUI:Create("Label")
-    logLabel:SetFullWidth(true)
-    logLabel:SetText("Your change log text goes here")
+    -- OnRelease is called when the widget is no longer needed
+    function widget:OnRelease()
+        self.frame:Hide()
+    end
 
-    logLabel:SetFont(customFont, Critmatic.db.profile.changeLogPopUp.fontSettings.fontSize, Critmatic.db.profile.changeLogPopUp.fontSettings.fontOutline)
-    logLabel:SetColor(r, g, b)
+    -- Other widget methods would go here
 
-    scroll:AddChild(logLabel)
-
+    return AceGUI:RegisterAsWidget(widget)
 end
+
+-- Register the widget with AceGUI
+AceGUI:RegisterWidgetType("CritMatic_miniLog", Critmatic.showCritLog, 1)
+local myLogWidget = AceGUI:Create("CritMatic_miniLog")
+-- Now 'myLogWidget' contains your custom widget
+
+-- You can then manipulate 'myLogWidget' as needed, for example:
+myLogWidget.frame:SetPoint("CENTER", UIParent, "CENTER") -- This centers the widget on the screen
+myLogWidget.frame:Show() -- This makes sure the widget is visible, though it should be already from 'OnAcquire'

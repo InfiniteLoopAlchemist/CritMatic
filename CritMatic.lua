@@ -387,8 +387,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" ..
-                          CritMaticData[baseSpellName].highestHealCrit)
+                  print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" .. CritMaticData[baseSpellName].highestHealCrit)
                 end
 
               end
