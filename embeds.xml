@@ -20,8 +20,11 @@
     <Script file="Modules\optionParts\SocialSettings.lua"/>
     <Script file="Modules\optionParts\ChangeLogSettings.lua"/>
     <Script file="Modules\CritMaticOptions.lua"/>
+
     <Script file="CritMatic.lua"/>
     <Script file="MessageFrame.lua"/>
+
     <Script file="Modules\ChangeLogPopUp.lua"/>
+    <Script file="Modules\CritLog.lua"/>
 </Ui>
 
