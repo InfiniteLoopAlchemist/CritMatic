@@ -395,12 +395,19 @@ Critmatic.showCritLog = function()
     end
 
     AceGUI:RegisterWidgetType(Type, Constructor, Version)
-
-    local death_log_icon_frame = CreateFrame("frame")
-    death_log_icon_frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+    local death_log_frame = AceGUI:Create("Deathlog_MiniLog")
+    death_log_frame.frame:SetMovable(true)
+    death_log_frame.frame:EnableMouse(true)
+    death_log_frame:SetTitle("CritMatic")
+    death_log_frame:SetLayout("Fill")
+    death_log_frame.frame:SetSize(255, 125)
+    --death_log_frame.frame:SetPoint("TOPLEFT", death_log_icon_frame, "TOPLEFT", 10, -10)
+    death_log_frame:Show()
+    local death_log_icon_frame = CreateFrame("Frame", nil, death_log_frame.frame)
     death_log_icon_frame:SetSize(40, 40)
     death_log_icon_frame:SetMovable(true)
     death_log_icon_frame:EnableMouse(true)
+    death_log_icon_frame:SetPoint("TOPLEFT", death_log_frame.frame, "TOPLEFT", -4, 10)
     death_log_icon_frame:Show()
 
 
@@ -460,72 +467,57 @@ Critmatic.showCritLog = function()
     death_tomb_frame_tex_glow:SetHeight(55)
     death_tomb_frame_tex_glow:SetWidth(55)
     death_tomb_frame_tex_glow:Hide()
-    local death_log_frame = AceGUI:Create("Deathlog_MiniLog")
-    death_log_frame.frame:SetMovable(true)
-    death_log_frame.frame:EnableMouse(true)
-    death_log_frame:SetTitle("CritMatic")
-    death_log_frame:SetLayout("Fill")
-    death_log_frame.frame:SetSize(255, 125)
-    death_log_frame.frame:SetPoint("TOPLEFT", death_log_icon_frame, "TOPLEFT", 10, -10)
-    death_log_frame:Show()
 
 
 
-    -- Assuming Critmatic.db.profile is properly initialized before this code runs
+
+
     local db = Critmatic.db.profile.critLogWidgetPos
 
-    -- Debug: Reset the frame position to the center of the screen
-    db.pos_x = UIParent:GetWidth() / 2
-    db.pos_y = UIParent:GetHeight() / 2
+    print("CritMatic Debug: Starting to position the frame.")
 
-    -- Make sure the frame is movable and draggable
-    death_log_icon_frame:SetMovable(true)
-    death_log_icon_frame:RegisterForDrag("LeftButton")
-    print("CritMatic Debug: Frame is now movable and can be dragged with the left mouse button.")
+    -- Make sure the main frame is movable and draggable
+    death_log_frame.frame:SetMovable(true)
+    death_log_frame.frame:RegisterForDrag("LeftButton")
 
-    -- When you start dragging the frame, this will be called
-    death_log_icon_frame:SetScript("OnDragStart", function(self)
-        if db.lock then
-            print("CritMatic Debug: Frame drag start ignored, frame is locked.")
-            return
-        end
+    -- When you start dragging the main frame, this will be called
+    death_log_frame.frame:SetScript("OnDragStart", function(self)
+        if db.lock then return end
         self:StartMoving()
-        print("CritMatic Debug: Started moving the frame.")
+        print("CritMatic Debug: Starting to move the frame.")
+        death_log_icon_frame:StartMoving()
     end)
 
-    -- When you stop dragging the frame, this will be called
-    death_log_icon_frame:SetScript("OnDragStop", function(self)
-        if db.lock then
-            print("CritMatic Debug: Frame drag stop ignored, frame is locked.")
-            return
-        end
+    -- When you stop dragging the main frame, this will be called
+    death_log_frame.frame:SetScript("OnDragStop", function(self)
+        if db.lock then return end
         self:StopMovingOrSizing()
-        -- Check if the frame has an anchor point before getting the position
-        if self:IsUserPlaced() then
-            local point, _, _, xOfs, yOfs = self:GetPoint()
-            if point then
-                db.pos_x = xOfs
-                db.pos_y = yOfs
-                print(string.format("CritMatic Debug: Stopped moving. New position: X=%s Y=%s", tostring(xOfs), tostring(yOfs)))
-            else
-                print("CritMatic Debug: Frame does not have a valid anchor point after moving.")
-            end
-        else
-            print("CritMatic Debug: Frame is not user placed.")
-        end
+        death_log_icon_frame:StopMovingOrSizing()
+        local point, _, _, xOfs, yOfs = self:GetPoint()
+        db.pos_x = xOfs
+        db.pos_y = yOfs
+        print(string.format("CritMatic Debug: Stopped moving death_log_frame. New position: X=%s Y=%s", tostring(xOfs), tostring(yOfs)))
+        -- AceDB automatically handles saving the position when it is set
     end)
 
-    -- Position the frame at the last saved position on addon load or UI reload
-    death_log_icon_frame:ClearAllPoints()
-    death_log_icon_frame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", db.pos_x, db.pos_y)
-    print(string.format("CritMatic Debug: Frame position set on load or UI reload. X=%s Y=%s", tostring(db.pos_x), tostring(db.pos_y)))
+    -- Reset the frame position to the center of the screen
+    local centerX = UIParent:GetWidth() / 2
+    local centerY = UIParent:GetHeight() / 2
+    db.pos_x = centerX
+    db.pos_y = centerY
+    death_log_frame.frame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", centerX, centerY)
+    print("CritMatic Debug: Frame position reset to the center of the screen.")
+    hooksecurefunc(death_log_frame.frame, "StopMovingOrSizing", function()
+        db.size_x = death_log_frame.frame:GetWidth()
+        db.size_y = death_log_frame.frame:GetHeight()
+    end)
+    death_log_frame.frame:SetFrameStrata("BACKGROUND")
+    death_log_frame.frame:Lower()
 
-    -- Ensure the frame is shown
-    death_log_icon_frame:Show()
+    -- This is to ensure the frame is visible
+    death_log_frame.frame:Show()
     print("CritMatic Debug: Frame should be visible now.")
 
-    -- Debug: Print out the size of the frame
-    print(string.format("CritMatic Debug: Frame size Width=%s Height=%s", tostring(death_log_icon_frame:GetWidth()), tostring(death_log_icon_frame:GetHeight())))
 
 
 end
