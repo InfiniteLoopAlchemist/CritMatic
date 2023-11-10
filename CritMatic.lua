@@ -156,6 +156,15 @@ Critmatic.CreateNewMessageFrame = function()
 
   return f
 end
+--[[local function InitializeFrames()
+  -- Initialize your frames here...
+  local db = Critmatic.db.profile.critLogWidgetPos
+
+  death_log_frame.frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.pos_x, db.pos_y)
+  death_log_frame.frame:SetSize(db.size_x, db.size_y)
+end
+
+]]
 function Critmatic:OnInitialize()
   -- Initialization code here.
   self.db = LibStub("AceDB-3.0"):New("CritMaticDB14", defaults)
@@ -201,8 +210,7 @@ function Critmatic:OnInitialize()
     return false -- versions are equal or indistinguishable
   end
 
-
-
+  --InitializeFrames()
 
 
 
@@ -362,14 +370,14 @@ f:SetScript("OnEvent", function(self, event, ...)
           highestHeal = 0,
 
         }
-        if amount <= MAX_HIT then
 
-
-          ProcessNewHighs(eventType, baseSpellName, amount, critical)
-        end
         if IsSpellInSpellbook(baseSpellName) or baseSpellName == "Auto Attack" then
           --print(CombatLogGetCurrentEventInfo())
+          if amount <= MAX_HIT then
 
+
+            ProcessNewHighs(eventType, baseSpellName, amount, critical)
+          end
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
             if critical then
 

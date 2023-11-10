@@ -395,54 +395,54 @@ Critmatic.showCritLog = function()
     end
 
     AceGUI:RegisterWidgetType(Type, Constructor, Version)
-    local death_log_frame = AceGUI:Create("Deathlog_MiniLog")
-    death_log_frame.frame:SetMovable(true)
-    death_log_frame.frame:EnableMouse(true)
-    death_log_frame:SetTitle("CritMatic")
-    death_log_frame:SetLayout("Fill")
-    death_log_frame.frame:SetSize(255, 125)
+    local crit_log_frame = AceGUI:Create("Deathlog_MiniLog")
+    crit_log_frame.frame:SetMovable(true)
+    crit_log_frame.frame:EnableMouse(true)
+    crit_log_frame:SetTitle("CritMatic")
+    crit_log_frame:SetLayout("Fill")
+    crit_log_frame.frame:SetSize(255, 125)
     --death_log_frame.frame:SetPoint("TOPLEFT", death_log_icon_frame, "TOPLEFT", 10, -10)
-    death_log_frame:Show()
-    local death_log_icon_frame = CreateFrame("Frame", nil, death_log_frame.frame)
-    death_log_icon_frame:SetSize(40, 40)
-    death_log_icon_frame:SetMovable(true)
-    death_log_icon_frame:EnableMouse(true)
-    death_log_icon_frame:SetPoint("TOPLEFT", death_log_frame.frame, "TOPLEFT", -4, 10)
-    death_log_icon_frame:Show()
+    crit_log_frame:Show()
+    local critmatic_icon_frame = CreateFrame("Frame", nil, crit_log_frame.frame)
+    critmatic_icon_frame:SetSize(40, 40)
+    critmatic_icon_frame:SetMovable(true)
+    critmatic_icon_frame:EnableMouse(true)
+    critmatic_icon_frame:SetPoint("TOPLEFT", crit_log_frame.frame, "TOPLEFT", -4, 10)
+    critmatic_icon_frame:Show()
 
 
 
-    local black_round_tex = death_log_icon_frame:CreateTexture(nil, "OVERLAY")
-    black_round_tex:SetPoint("CENTER", death_log_icon_frame, "CENTER", -5, 4)
+    local black_round_tex = critmatic_icon_frame:CreateTexture(nil, "OVERLAY")
+    black_round_tex:SetPoint("CENTER", critmatic_icon_frame, "CENTER", -5, 4)
     black_round_tex:SetParent(UIParent)
     black_round_tex:SetDrawLayer("OVERLAY", 2)
     black_round_tex:SetHeight(40)
     black_round_tex:SetWidth(40)
     black_round_tex:SetTexture("Interface\\PVPFrame\\PVP-Separation-Circle-Cooldown-overlay")
 
-    local hc_fire_tex = death_log_icon_frame:CreateTexture(nil, "OVERLAY")
+    local hc_fire_tex = critmatic_icon_frame:CreateTexture(nil, "OVERLAY")
     hc_fire_tex:SetParent(UIParent)
-    hc_fire_tex:SetPoint("CENTER", death_log_icon_frame, "CENTER", -4, 4)
+    hc_fire_tex:SetPoint("CENTER", critmatic_icon_frame, "CENTER", -4, 4)
     hc_fire_tex:SetDrawLayer("OVERLAY", 3)
     hc_fire_tex:SetHeight(25)
     hc_fire_tex:SetWidth(25)
-    hc_fire_tex:SetTexture("Interface\\TARGETINGFRAME\\UI-TargetingFrame-Skull")
+    hc_fire_tex:SetTexture("Interface\\AddOns\\CritMatic\\Media\\IMGS\\Spell_Holy_WeaponMastery.blp")
 
-    local gold_ring_tex = death_log_icon_frame:CreateTexture(nil, "OVERLAY")
+    local gold_ring_tex = critmatic_icon_frame:CreateTexture(nil, "OVERLAY")
     gold_ring_tex:SetParent(UIParent)
-    gold_ring_tex:SetPoint("CENTER", death_log_icon_frame, "CENTER", 0, 0)
+    gold_ring_tex:SetPoint("CENTER", critmatic_icon_frame, "CENTER", 0, 0)
     gold_ring_tex:SetDrawLayer("OVERLAY", 4)
     gold_ring_tex:SetHeight(50)
     gold_ring_tex:SetWidth(50)
     gold_ring_tex:SetTexture("Interface\\COMMON\\BlueMenuRing")
 
-    death_log_icon_frame:HookScript("OnShow", function(self, button)
+    critmatic_icon_frame:HookScript("OnShow", function(self, button)
         black_round_tex:Show()
         hc_fire_tex:Show()
         gold_ring_tex:Show()
     end)
 
-    death_log_icon_frame:HookScript("OnHide", function(self, button)
+    critmatic_icon_frame:HookScript("OnHide", function(self, button)
         black_round_tex:Hide()
         hc_fire_tex:Hide()
         gold_ring_tex:Hide()
@@ -477,22 +477,22 @@ Critmatic.showCritLog = function()
     print("CritMatic Debug: Starting to position the frame.")
 
     -- Make sure the main frame is movable and draggable
-    death_log_frame.frame:SetMovable(true)
-    death_log_frame.frame:RegisterForDrag("LeftButton")
+    crit_log_frame.frame:SetMovable(true)
+    crit_log_frame.frame:RegisterForDrag("LeftButton")
 
     -- When you start dragging the main frame, this will be called
-    death_log_frame.frame:SetScript("OnDragStart", function(self)
+    crit_log_frame.frame:SetScript("OnDragStart", function(self)
         if db.lock then return end
         self:StartMoving()
         print("CritMatic Debug: Starting to move the frame.")
-        death_log_icon_frame:StartMoving()
+        critmatic_icon_frame:StartMoving()
     end)
 
     -- When you stop dragging the main frame, this will be called
-    death_log_frame.frame:SetScript("OnDragStop", function(self)
+    crit_log_frame.frame:SetScript("OnDragStop", function(self)
         if db.lock then return end
         self:StopMovingOrSizing()
-        death_log_icon_frame:StopMovingOrSizing()
+        critmatic_icon_frame:StopMovingOrSizing()
         local point, _, _, xOfs, yOfs = self:GetPoint()
         db.pos_x = xOfs
         db.pos_y = yOfs
@@ -505,17 +505,17 @@ Critmatic.showCritLog = function()
     local centerY = UIParent:GetHeight() / 2
     db.pos_x = centerX
     db.pos_y = centerY
-    death_log_frame.frame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", centerX, centerY)
+    crit_log_frame.frame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", centerX, centerY)
     print("CritMatic Debug: Frame position reset to the center of the screen.")
-    hooksecurefunc(death_log_frame.frame, "StopMovingOrSizing", function()
-        db.size_x = death_log_frame.frame:GetWidth()
-        db.size_y = death_log_frame.frame:GetHeight()
+    hooksecurefunc(crit_log_frame.frame, "StopMovingOrSizing", function()
+        db.size_x = crit_log_frame.frame:GetWidth()
+        db.size_y = crit_log_frame.frame:GetHeight()
     end)
-    death_log_frame.frame:SetFrameStrata("BACKGROUND")
-    death_log_frame.frame:Lower()
+    crit_log_frame.frame:SetFrameStrata("BACKGROUND")
+    crit_log_frame.frame:Lower()
 
     -- This is to ensure the frame is visible
-    death_log_frame.frame:Show()
+    crit_log_frame.frame:Show()
     print("CritMatic Debug: Frame should be visible now.")
 
 
