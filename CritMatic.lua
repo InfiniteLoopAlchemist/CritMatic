@@ -357,14 +357,13 @@ f:SetScript("OnEvent", function(self, event, ...)
           highestHeal = 0,
 
         }
-        if amount <= MAX_HIT then
 
-
-          ProcessNewHighs(eventType, baseSpellName, amount, critical)
-        end
         if IsSpellInSpellbook(baseSpellName) or baseSpellName == "Auto Attack" then
           --print(CombatLogGetCurrentEventInfo())
+          if amount <= MAX_HIT then
 
+            ProcessNewHighs(eventType, baseSpellName, amount, critical)
+          end
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
             if critical then
 
