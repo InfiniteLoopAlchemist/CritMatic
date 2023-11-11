@@ -227,14 +227,20 @@ function Critmatic:OnInitialize()
     if IsInGuild() then
       self:SendCommMessage("Critmatic", version, "GUILD")
     end
+
     local inInstance, instanceType = IsInInstance()
     if inInstance and (instanceType == "pvp" or instanceType == "arena") then
       return
+    end
 
-    elseif
-    self:SendCommMessage("Critmatic", version, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY") then
+    -- Check if IsPartyLFG exists (Retail version)
+    if IsPartyLFG and IsPartyLFG() then
+      self:SendCommMessage("Critmatic", version, "INSTANCE_CHAT")
     elseif IsInRaid() then
       self:SendCommMessage("Critmatic", version, "RAID")
+    else
+      -- For Classic Era or if not in LFG party (Retail)
+      self:SendCommMessage("Critmatic", version, "PARTY")
     end
   end
 
