@@ -1,3 +1,11 @@
+## [v0.3.6.2.2-release] - 11/10/2023
+
+### Fixed:
+
+- **Various fixes.**
+
+
+
 ## [v0.3.6.2.1-release] - 11/4/2023
 
 ### Fixed:

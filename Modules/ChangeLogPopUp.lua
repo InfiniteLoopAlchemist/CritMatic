@@ -35,13 +35,21 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.6.2.2-release] - 11/10/2023
+
+ Fixed:
+
+ Various fixes.
+
+
+
+
+
 [v0.3.6.2.1-release] - 11/4/2023
 
  Fixed:
 
-  We've rolled out a series of tweaks and fixes to enhance stability and performance. 
-
-
+ We've rolled out a series of tweaks and fixes to enhance stability and performance.
 
 
 
@@ -49,9 +57,8 @@ Critmatic.showChangeLog = function()
 
  Fixed:
 
- We've patched up the 'New Version' popup to ensure it's functioning smoothly. You should now receive a popup when an update is available, keeping you in the loop with the latest enhancements.
-
-
+ We've patched up the 'New Version' popup to ensure it's functioning smoothly. You should now receive a popup when
+  an update is available, keeping you in the loop with the latest enhancements.
 
 
 
@@ -94,7 +101,7 @@ Critmatic.showChangeLog = function()
  Fixed:
 
  Resolved an edgecase condition where CritMatic erroneously reported 'not in a party or raid' within battlegrounds
-  and arenas. 
+  and arenas.
 
  Added:
 
@@ -220,18 +227,6 @@ Critmatic.showChangeLog = function()
  Fixed:
 
  Rectified various issues and bugs.
-
-
-
-[v0.2.3-release] - 9/19/2023
-
- Fixed:
-
- Resolved issue with settings not persisting across sessions.
-
- Updated:
-
- Adjusted default font size to 22 and introduced a 0.45s delay for notification messages.
 
 
 ]]
