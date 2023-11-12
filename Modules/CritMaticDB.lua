@@ -43,7 +43,13 @@ defaults = {
         fontSize = 15,
       }
     },
-
+critLogWidgetPos = {
+  pos_x = 470,
+  pos_y = -100,
+  size_x = 255,
+  size_y = 125,
+  lock = false
+},
     oldVersion = "0.0.0"
   },
 

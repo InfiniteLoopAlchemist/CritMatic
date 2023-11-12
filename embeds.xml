@@ -30,6 +30,6 @@
     <!-- Additional Scripts and Modules -->
     <Script file="MessageFrame.lua"/>
     <Script file="Modules\ChangeLogPopUp.lua"/>
-
+    <Script file="Modules\CritLog.lua"/>
 </Ui>
 

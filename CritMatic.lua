@@ -157,6 +157,15 @@ Critmatic.CreateNewMessageFrame = function()
 
   return f
 end
+--[[local function InitializeFrames()
+  -- Initialize your frames here...
+  local db = Critmatic.db.profile.critLogWidgetPos
+
+  death_log_frame.frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.pos_x, db.pos_y)
+  death_log_frame.frame:SetSize(db.size_x, db.size_y)
+end
+
+]]
 function Critmatic:OnInitialize()
   -- Initialization code here.
   self.db = LibStub("AceDB-3.0"):New("CritMaticDB14", defaults)
@@ -202,8 +211,7 @@ function Critmatic:OnInitialize()
     return false -- versions are equal or indistinguishable
   end
 
-
-
+  --InitializeFrames()
 
 
 
@@ -255,6 +263,7 @@ function Critmatic:OnInitialize()
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
   Critmatic:RegisterChatCommand("cmlog", "OpenChangeLog")
+  Critmatic:RegisterChatCommand("cmcritlog", "OpenCritLog")
   Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
 
   self:RegisterComm("Critmatic")
@@ -267,7 +276,7 @@ function Critmatic:OnInitialize()
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
   function Critmatic:CritMaticLoaded()
-    self:Print("|cffd4d4d4 v|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 Loaded! - Use|cffffd700  /cm|r|cffd4d4d4 for options and |cffffd700/cmlog|r|cffd4d4d4 for change log. |r")
+    self:Print("|cffd4d4d4 v|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 Loaded! - Use|cffffd700  /cm|r|cffd4d4d4 for  options - |cffffd700/cmcritlog |r|cffd4d4d4 for crit log. |r - |cffffd700/cmlog|r|cffd4d4d4 for change log. |r")
   end
 
 
@@ -300,9 +309,13 @@ end
 function Critmatic:OpenOptions()
   LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
 end
+function Critmatic:OpenCritLog()
+  Critmatic.showCritLog()
+end
 function Critmatic:OpenChangeLog()
   Critmatic.showChangeLog()
 end
+
 function Critmatic:CritMaticReset()
   CritMaticData = {}
   Critmatic:Print("|cffff0000Data Reset!|r")
@@ -392,8 +405,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" ..
-                          CritMaticData[baseSpellName].highestHealCrit)
+                  print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" .. CritMaticData[baseSpellName].highestHealCrit)
                 end
 
               end
