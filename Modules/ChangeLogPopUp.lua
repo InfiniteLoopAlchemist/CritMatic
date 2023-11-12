@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.6.2.5-release] - 11/12/2023
+
+ Fixed:
+
+ Turning off social messages was not working its fixed now.
+
+
+
+
+
 [v0.3.6.2.4-release] - 11/12/2023
 
  Fixed:
@@ -225,14 +235,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Optionality added for tracking autoattacks.
-
-
-
-[v0.2.5.7-release] - 9/27/2023
-
- Updated:
-
- General improvements and bug fixes.
 
 
 ]]
