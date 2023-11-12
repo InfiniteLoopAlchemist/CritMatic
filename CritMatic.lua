@@ -12,6 +12,7 @@ local function GetGCD()
   end
 end
 
+
 local function removeImproved(spellName)
   -- Stripping out "Improved " prefix
   local baseSpellName = spellName
@@ -321,8 +322,8 @@ f:RegisterEvent("GROUP_JOINED")
 -- Variables to hold the highest values during combat
 local highestCritDuringCombat = 0
 local highestCritHealDuringCombat = 0
-highestCritSpellName = ""
-highestCritHealSpellName = ""
+local highestCritSpellName = ""
+local highestCritHealSpellName = ""
 f:SetScript("OnEvent", function(self, event, ...)
 
 
@@ -366,16 +367,20 @@ f:SetScript("OnEvent", function(self, event, ...)
 
         if IsSpellInSpellbook(baseSpellName) or baseSpellName == "Auto Attack" then
           --print(CombatLogGetCurrentEventInfo())
-          if amount <= MAX_HIT then
+        --[[ if amount <= MAX_HIT then
 
             ProcessNewHighs(eventType, baseSpellName, amount, critical)
-          end
+          end]]
+
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
             if critical then
 
               -- When the event is a heal and it's a critical heal.
               if amount > CritMaticData[baseSpellName].highestHealCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestHealCrit = amount
+
+                 highestCritHealDuringCombat = amount
+                 highestCritHealSpellName = baseSpellName
                 if not Critmatic.db.profile.soundSettings.muteAllSounds then
                   PlaySoundFile(soundHealCrit)
                 end
@@ -417,6 +422,8 @@ f:SetScript("OnEvent", function(self, event, ...)
               -- When the event is damage and it's a critical hit.
               if amount > CritMaticData[baseSpellName].highestCrit and amount <= MAX_HIT then
                 CritMaticData[baseSpellName].highestCrit = amount
+                highestCritDuringCombat = amount
+                highestCritSpellName = baseSpellName
                 --PlaySound(888, "SFX")
                 if not Critmatic.db.profile.soundSettings.muteAllSounds then
                   PlaySoundFile(soundCrit)
@@ -474,49 +481,33 @@ f:SetScript("OnEvent", function(self, event, ...)
         SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat, "GUILD")
       end
     end
-    if inInstance and (instanceType == "pvp") and Critmatic.db.profile.social.canSendCritsToBattleGrounds then
-      if highestCritDuringCombat > 0 then
 
-        SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                highestCritDuringCombat, "INSTANCE_CHAT")
+
+
+
+      -- Determine chat type based on game version and group type
+      local chatType
+    if IsInGroup() then
+      if IsPartyLFG and IsPartyLFG() and Critmatic.db.profile.social.canSendCritsToParty or inInstance and
+              (instanceType == "pvp") and Critmatic.db.profile.social.canSendCritsToBattleGrounds then
+        -- For Retail and Wrath with Dungeon Finder
+      chatType = "INSTANCE_CHAT"
+      elseif IsInRaid() then
+        chatType = "RAID"
+      else  -- For Classic Era and regular groups in Retail and Wrath
+      chatType = "PARTY"
+      end
+
+      -- For highest critical hit
+      if highestCritDuringCombat > 0 then
+      SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " .. highestCritDuringCombat, chatType)
       end
       -- For highest critical heal
       if highestCritHealDuringCombat > 0 then
-        SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
-                highestCritHealDuringCombat, "INSTANCE_CHAT")
+      SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat, chatType)
       end
-    else
+end
 
-      if inInstance and (instanceType == "pvp" or instanceType == "arena") then
-        return
-      elseif IsInGroup() and Critmatic.db.profile.social.canSendCritsToParty then
-        -- For highest critical hit
-        if highestCritDuringCombat > 0 then
-
-          SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                  highestCritDuringCombat, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
-        end
-        -- For highest critical heal
-        if highestCritHealDuringCombat > 0 then
-          SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
-                  highestCritHealDuringCombat, IsPartyLFG() and "INSTANCE_CHAT" or "PARTY")
-        end
-      elseif IsInRaid() and Critmatic.db.profile.social.canSendCritsToRaid then
-        if highestCritDuringCombat > 0 then
-          SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " ..
-                  highestCritDuringCombat, "RAID")
-        end
-        -- For highest critical heal
-        if highestCritHealDuringCombat > 0 then
-          SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " ..
-                  highestCritHealDuringCombat, "RAID")
-        end
-
-      end
-      -- For highest critical hit
-
-
-    end
 
 
     highestCritDuringCombat = 0
@@ -526,35 +517,32 @@ f:SetScript("OnEvent", function(self, event, ...)
   end
 end)
 -- Function to process new high values during combat
-function ProcessNewHighs(eventType, baseSpellName, amount, critical)
-  -- Check for healing critical events
+--[[function ProcessNewHighs(eventType, baseSpellName, amount, critical)
+  -- Initialize CritMaticData for the spell if it's not already done
+  if not CritMaticData[baseSpellName] then
+    CritMaticData[baseSpellName] = { highestCrit = 0, highestHealCrit = 0 }
+  end
+
   if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
     if critical then
-      if CritMaticData[baseSpellName].highestHealCrit == 0 then
+      -- Update if it's the first critical heal or a higher critical heal
+      if amount > CritMaticData[baseSpellName].highestHealCrit then
         CritMaticData[baseSpellName].highestHealCrit = amount
-      else
-        if amount > CritMaticData[baseSpellName].highestHealCrit then
         highestCritHealDuringCombat = amount
         highestCritHealSpellName = baseSpellName
-        end
       end
     end
 
-    -- Check for damage critical events
   elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
     if critical then
-
-      if CritMaticData[baseSpellName].highestCrit == 0 then
+      -- Update if it's the first critical hit or a higher critical hit
+      if amount > CritMaticData[baseSpellName].highestCrit then
         CritMaticData[baseSpellName].highestCrit = amount
-      else
-        if amount > CritMaticData[baseSpellName].highestCrit then
-          print("New highest crit hit recorded for " .. baseSpellName .. ": " .. amount)
         highestCritDuringCombat = amount
         highestCritSpellName = baseSpellName
-
-        end
-
       end
+    end
   end
 end
-end
+
+]]
