@@ -13,10 +13,6 @@
     <Include file="Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml"/>
     <Include file="Libs\LibSharedMedia-3.0\lib.xml"/>
     <Include file="Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml"/>
-
-    <!-- Core Addon Script -->
-    <Script file="CritMatic.lua"/>
-
     <!-- Modules -->
     <Script file="Modules\CritMaticDB.lua"/>
     <Script file="Modules\CritMaticSharedMedia.lua"/>
@@ -26,10 +22,15 @@
     <Script file="Modules\optionParts\SocialSettings.lua"/>
     <Script file="Modules\optionParts\ChangeLogSettings.lua"/>
     <Script file="Modules\CritMaticOptions.lua"/>
+    <Script file="Modules\CritLog.lua"/>
+    <!-- Core Addon Script -->
+    <Script file="CritMatic.lua"/>
+
+
 
     <!-- Additional Scripts and Modules -->
     <Script file="MessageFrame.lua"/>
     <Script file="Modules\ChangeLogPopUp.lua"/>
-    <Script file="Modules\CritLog.lua"/>
+
 </Ui>
 

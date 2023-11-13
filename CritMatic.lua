@@ -157,15 +157,9 @@ Critmatic.CreateNewMessageFrame = function()
 
   return f
 end
---[[local function InitializeFrames()
-  -- Initialize your frames here...
-  local db = Critmatic.db.profile.critLogWidgetPos
 
-  death_log_frame.frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.pos_x, db.pos_y)
-  death_log_frame.frame:SetSize(db.size_x, db.size_y)
-end
 
-]]
+
 function Critmatic:OnInitialize()
   -- Initialization code here.
   self.db = LibStub("AceDB-3.0"):New("CritMaticDB14", defaults)
@@ -173,6 +167,7 @@ function Critmatic:OnInitialize()
 
   CritMaticData = _G["CritMaticData"]
   local version = GetAddOnMetadata("CritMatic", "Version")
+  showCritMaticCritLog()
   function Critmatic:OnCommReceived(prefix , message, distribution, sender)
 
     if message and version then
@@ -210,9 +205,6 @@ function Critmatic:OnInitialize()
 
     return false -- versions are equal or indistinguishable
   end
-
-  --InitializeFrames()
-
 
 
   Critmatic.oldVersion = Critmatic.db.profile.oldVersion
@@ -310,10 +302,10 @@ function Critmatic:OpenOptions()
   LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
 end
 function Critmatic:OpenCritLog()
-  Critmatic.showCritLog()
+  showCritMaticCritLog()
 end
 function Critmatic:OpenChangeLog()
-  Critmatic.showChangeLog()
+  self.showChangeLog()
 end
 
 function Critmatic:CritMaticReset()
@@ -380,10 +372,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 
         if IsSpellInSpellbook(baseSpellName) or baseSpellName == "Auto Attack" then
           --print(CombatLogGetCurrentEventInfo())
-        --[[ if amount <= MAX_HIT then
 
-            ProcessNewHighs(eventType, baseSpellName, amount, critical)
-          end]]
 
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
             if critical then
@@ -521,33 +510,3 @@ end
     highestCritHealSpellName = ""
   end
 end)
--- Function to process new high values during combat
---[[function ProcessNewHighs(eventType, baseSpellName, amount, critical)
-  -- Initialize CritMaticData for the spell if it's not already done
-  if not CritMaticData[baseSpellName] then
-    CritMaticData[baseSpellName] = { highestCrit = 0, highestHealCrit = 0 }
-  end
-
-  if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
-    if critical then
-      -- Update if it's the first critical heal or a higher critical heal
-      if amount > CritMaticData[baseSpellName].highestHealCrit then
-        CritMaticData[baseSpellName].highestHealCrit = amount
-        highestCritHealDuringCombat = amount
-        highestCritHealSpellName = baseSpellName
-      end
-    end
-
-  elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
-    if critical then
-      -- Update if it's the first critical hit or a higher critical hit
-      if amount > CritMaticData[baseSpellName].highestCrit then
-        CritMaticData[baseSpellName].highestCrit = amount
-        highestCritDuringCombat = amount
-        highestCritSpellName = baseSpellName
-      end
-    end
-  end
-end
-
-]]
