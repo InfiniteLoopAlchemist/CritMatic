@@ -167,7 +167,7 @@ function Critmatic:OnInitialize()
 
   CritMaticData = _G["CritMaticData"]
   local version = GetAddOnMetadata("CritMatic", "Version")
-  showCritMaticCritLog()
+  toggleCritMaticCritLog()
   function Critmatic:OnCommReceived(prefix , message, distribution, sender)
 
     if message and version then
@@ -255,7 +255,7 @@ function Critmatic:OnInitialize()
   Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
   Critmatic:RegisterChatCommand("cmlog", "OpenChangeLog")
-  Critmatic:RegisterChatCommand("cmcritlog", "OpenCritLog")
+  Critmatic:RegisterChatCommand("cmcritlog", function() toggleCritMaticCritLog() end)
   Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
 
   self:RegisterComm("Critmatic")
@@ -302,7 +302,7 @@ function Critmatic:OpenOptions()
   LibStub("AceConfigDialog-3.0"):Open("CritMaticOptions")
 end
 function Critmatic:OpenCritLog()
-  showCritMaticCritLog()
+  toggleCritMaticCritLog()
 end
 function Critmatic:OpenChangeLog()
   self.showChangeLog()

@@ -1,4 +1,6 @@
-function showCritMaticCritLog()
+function toggleCritMaticCritLog()
+    if not Critmatic.crit_log_frame or not Critmatic.crit_log_frame.frame then
+
 
         local Type, Version = "Deathlog_MiniLog", 30
         local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
@@ -395,15 +397,17 @@ function showCritMaticCritLog()
     end
 
     AceGUI:RegisterWidgetType(Type, Constructor, Version)
+
+            -- Frame creation and initial setup code
+            Critmatic.crit_log_frame = AceGUI:Create("Deathlog_MiniLog")
     local db = Critmatic.db.profile.critLogWidgetPos
-    Critmatic.crit_log_frame = AceGUI:Create("Deathlog_MiniLog")
     Critmatic.crit_log_frame.frame:SetMovable(true)
     Critmatic.crit_log_frame.frame:EnableMouse(true)
     Critmatic.crit_log_frame:SetTitle("CritMatic")
     Critmatic.crit_log_frame:SetLayout("Fill")
     Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", db.pos_x, db.pos_y)
     Critmatic.crit_log_frame.frame:SetSize(db.size_x, db.size_y)
-    Critmatic.crit_log_frame:Show()
+
     local critmatic_icon_frame = CreateFrame("Frame", nil, Critmatic.crit_log_frame.frame)
     critmatic_icon_frame:SetSize(40, 40)
     critmatic_icon_frame:SetMovable(true)
@@ -501,13 +505,6 @@ function showCritMaticCritLog()
         -- AceDB automatically handles saving the position when it is set
     end)
 
-    -- Reset the frame position to the center of the screen
-   --[[ local centerX = UIParent:GetWidth() / 2
-    local centerY = UIParent:GetHeight() / 2
-    db.pos_x = centerX
-    db.pos_y = centerY
-    Critmatic.crit_log_frame.frame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", centerX, centerY)
-    print("CritMatic Debug: Frame position reset to the center of the screen.")]]
     hooksecurefunc(Critmatic.crit_log_frame.frame, "StopMovingOrSizing", function()
         db.size_x = Critmatic.crit_log_frame.frame:GetWidth()
         db.size_y = Critmatic.crit_log_frame.frame:GetHeight()
@@ -516,9 +513,15 @@ function showCritMaticCritLog()
     Critmatic.crit_log_frame.frame:Lower()
 
     -- This is to ensure the frame is visible
-    Critmatic.crit_log_frame.frame:Show()
-    print("CritMatic Debug: Frame should be visible now.")
 
+    print("CritMatic Debug: Frame should be visible now.")
+    else
+        -- Toggle visibility
+        if Critmatic.crit_log_frame.frame:IsShown() then
+            Critmatic.crit_log_frame.frame:Hide()
+        else
+            Critmatic.crit_log_frame.frame:Show()
+        end
 
 end
-
+end
