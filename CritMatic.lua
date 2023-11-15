@@ -167,7 +167,7 @@ function Critmatic:OnInitialize()
 
   CritMaticData = _G["CritMaticData"]
   local version = GetAddOnMetadata("CritMatic", "Version")
-  toggleCritMaticCritLog()
+
   function Critmatic:OnCommReceived(prefix , message, distribution, sender)
 
     if message and version then
@@ -206,6 +206,9 @@ function Critmatic:OnInitialize()
     return false -- versions are equal or indistinguishable
   end
 
+  --if self.db.profile.isCritLogFrameShown then
+    toggleCritMaticCritLog() -- This will show the frame if it was shown before
+  --end
 
   Critmatic.oldVersion = Critmatic.db.profile.oldVersion
   Critmatic.newVersion = tostring(version)

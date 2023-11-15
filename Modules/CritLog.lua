@@ -1,4 +1,6 @@
 function toggleCritMaticCritLog()
+    local db = Critmatic.db.profile
+    local sizePos = Critmatic.db.profile.critLogWidgetPos
     if not Critmatic.crit_log_frame or not Critmatic.crit_log_frame.frame then
 
 
@@ -400,20 +402,19 @@ function toggleCritMaticCritLog()
 
             -- Frame creation and initial setup code
             Critmatic.crit_log_frame = AceGUI:Create("Deathlog_MiniLog")
-    local db = Critmatic.db.profile.critLogWidgetPos
+
     Critmatic.crit_log_frame.frame:SetMovable(true)
     Critmatic.crit_log_frame.frame:EnableMouse(true)
     Critmatic.crit_log_frame:SetTitle("CritMatic")
     Critmatic.crit_log_frame:SetLayout("Fill")
-    Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", db.pos_x, db.pos_y)
-    Critmatic.crit_log_frame.frame:SetSize(db.size_x, db.size_y)
+
 
     local critmatic_icon_frame = CreateFrame("Frame", nil, Critmatic.crit_log_frame.frame)
     critmatic_icon_frame:SetSize(40, 40)
     critmatic_icon_frame:SetMovable(true)
     critmatic_icon_frame:EnableMouse(true)
     critmatic_icon_frame:SetPoint("TOPLEFT", Critmatic.crit_log_frame.frame, "TOPLEFT", -4, 10)
-    critmatic_icon_frame:Show()
+
 
 
 
@@ -440,7 +441,26 @@ function toggleCritMaticCritLog()
     texture_gold_ring:SetHeight(50)
     texture_gold_ring:SetWidth(50)
     texture_gold_ring:SetTexture("Interface\\COMMON\\BlueMenuRing")
+        -- Load the saved state and apply it
+        if Critmatic.db.profile.isCritLogFrameShown then
 
+            print('shown')
+           -- Critmatic.crit_log_frame:ClearAllPoints()
+            print('x'.. sizePos.pos_x)
+            print('y'.. sizePos.pos_y)
+
+
+           Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
+                   .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
+           Critmatic.crit_log_frame.frame:SetSize(Critmatic.db.profile.critLogWidgetPos.size_x, Critmatic.db.profile.critLogWidgetPos.size_y)
+            Critmatic.crit_log_frame.frame:Show()
+            critmatic_icon_frame:Show()
+        else
+            print('hidden')
+            print('x'.. sizePos.pos_x)
+            print('y'.. sizePos.pos_y)
+            Critmatic.crit_log_frame.frame:Hide()
+        end
     critmatic_icon_frame:HookScript("OnShow", function(self, button)
         texture_round_black:Show()
         texture_CritMatic_icon:Show()
@@ -454,24 +474,7 @@ function toggleCritMaticCritLog()
     end)
 
 
-    local WorldMapButton = WorldMapFrame:GetCanvas()
-    local CritMatic_frame = CreateFrame("frame", nil, WorldMapButton)
-    CritMatic_frame:SetAllPoints()
-    CritMatic_frame:SetFrameLevel(15000)
 
-    local texture_CritMatic_frame = CritMatic_frame:CreateTexture(nil, "OVERLAY")
-    texture_CritMatic_frame:SetTexture("Interface\\AddOns\\CritMatic\\Media\\IMGS\\Spell_Holy_WeaponMastery.blp")
-    texture_CritMatic_frame:SetDrawLayer("OVERLAY", 4)
-    texture_CritMatic_frame:SetHeight(25)
-    texture_CritMatic_frame:SetWidth(25)
-    texture_CritMatic_frame:Hide()
-
-    local texture_CritMatic_frame_glow = CritMatic_frame:CreateTexture(nil, "OVERLAY")
-    texture_CritMatic_frame_glow:SetTexture("Interface\\Glues/Models/UI_HUMAN/GenericGlow64")
-    texture_CritMatic_frame_glow:SetDrawLayer("OVERLAY", 3)
-    texture_CritMatic_frame_glow:SetHeight(55)
-    texture_CritMatic_frame_glow:SetWidth(55)
-    texture_CritMatic_frame_glow:Hide()
 
 
 
@@ -499,29 +502,48 @@ function toggleCritMaticCritLog()
         self:StopMovingOrSizing()
         critmatic_icon_frame:StopMovingOrSizing()
         local point, _, _, xOfs, yOfs = self:GetPoint()
-        db.pos_x = xOfs
-        db.pos_y = yOfs
+        sizePos.pos_x = xOfs
+        sizePos.pos_y = yOfs
         print(string.format("CritMatic Debug: Stopped moving death_log_frame. New position: X=%s Y=%s", tostring(xOfs), tostring(yOfs)))
         -- AceDB automatically handles saving the position when it is set
     end)
 
     hooksecurefunc(Critmatic.crit_log_frame.frame, "StopMovingOrSizing", function()
-        db.size_x = Critmatic.crit_log_frame.frame:GetWidth()
-        db.size_y = Critmatic.crit_log_frame.frame:GetHeight()
+        sizePos.size_x = Critmatic.crit_log_frame.frame:GetWidth()
+        sizePos.size_y = Critmatic.crit_log_frame.frame:GetHeight()
     end)
     Critmatic.crit_log_frame.frame:SetFrameStrata("BACKGROUND")
     Critmatic.crit_log_frame.frame:Lower()
 
-    -- This is to ensure the frame is visible
 
-    print("CritMatic Debug: Frame should be visible now.")
+
+
     else
         -- Toggle visibility
+
         if Critmatic.crit_log_frame.frame:IsShown() then
             Critmatic.crit_log_frame.frame:Hide()
+            print(db.isCritLogFrameShown)
+            db.isCritLogFrameShown = false
+
+            print(db.isCritLogFrameShown)
         else
+
+
+            db.isCritLogFrameShown = true
+
+            print('shown2')
+         --  Critmatic.crit_log_frame:ClearAllPoints()
+            print('x'.. sizePos.pos_x)
+            print('y'.. sizePos.pos_y)
+
+
+          --  Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", sizePos.pos_x, sizePos.pos_y)
+          --  Critmatic.crit_log_frame.frame:SetSize(sizePos.size_x, sizePos.size_y)
             Critmatic.crit_log_frame.frame:Show()
+
         end
+        -- Save the visibility state
 
 end
 end

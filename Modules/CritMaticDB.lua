@@ -43,6 +43,7 @@ defaults = {
         fontSize = 15,
       }
     },
+    isCritLogFrameShown = true,
 critLogWidgetPos = {
   pos_x = 470,
   pos_y = -100,
