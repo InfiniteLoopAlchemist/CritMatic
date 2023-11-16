@@ -1,5 +1,5 @@
 function toggleCritMaticCritLog()
-    local db = Critmatic.db.profile
+    local db = Critmatic.db.profile.critLogWidgetPos
     local sizePos = Critmatic.db.profile.critLogWidgetPos
     if not Critmatic.crit_log_frame or not Critmatic.crit_log_frame.frame then
 
@@ -198,23 +198,28 @@ function toggleCritMaticCritLog()
         end,
 
         -- called to set an external table to store status in
+        -- Function to set an external table to store status in
         ["SetStatusTable"] = function(self, status)
             assert(type(status) == "table")
             self.status = status
             self:ApplyStatus()
         end,
 
+        -- Function to apply the status to the frame
         ["ApplyStatus"] = function(self)
-            local status = self.status or self.localstatus
+            local sizePos = Critmatic.db.profile.critLogWidgetPos
             local frame = self.frame
-            self:SetWidth(status.width or 700)
-            self:SetHeight(status.height or 500)
+
+            -- Set the width and height from sizePos or use default values
+            self:SetWidth(sizePos.size_x or 700)
+            self:SetHeight(sizePos.size_y or 500)
+
             frame:ClearAllPoints()
-            if status.top and status.left then
-                frame:SetPoint("TOP", UIParent, "BOTTOM", 0, status.top)
-                frame:SetPoint("LEFT", UIParent, "LEFT", status.left, 0)
-            else
-                frame:SetPoint("CENTER")
+
+            -- If sizePos has position data, use it to set the frame's position
+            if sizePos.pos_x and sizePos.pos_y then
+                frame:SetPoint("CENTER", UIParent, "CENTER", sizePos.pos_x, sizePos.pos_y)
+
             end
         end,
     }
@@ -491,24 +496,30 @@ function toggleCritMaticCritLog()
     -- When you start dragging the main frame, this will be called
     Critmatic.crit_log_frame.frame:SetScript("OnDragStart", function(self)
         if db.lock then return end
+        Critmatic.crit_log_frame.frame:ClearAllPoints()
         self:StartMoving()
         print("CritMatic Debug: Starting to move the frame.")
         critmatic_icon_frame:StartMoving()
+        Critmatic.crit_log_frame.frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
+                                                                                       .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
     end)
 
     -- When you stop dragging the main frame, this will be called
-    Critmatic.crit_log_frame.frame:SetScript("OnDragStop", function(self)
-        if db.lock then return end
-        self:StopMovingOrSizing()
-        critmatic_icon_frame:StopMovingOrSizing()
-        local point, _, _, xOfs, yOfs = self:GetPoint()
-        sizePos.pos_x = xOfs
-        sizePos.pos_y = yOfs
-        print(string.format("CritMatic Debug: Stopped moving death_log_frame. New position: X=%s Y=%s", tostring(xOfs), tostring(yOfs)))
-        -- AceDB automatically handles saving the position when it is set
-    end)
+        Critmatic.crit_log_frame.frame:SetScript("OnDragStop", function(self)
+            if db.lock then return end
+            self:StopMovingOrSizing()
+            local x, y = self:GetCenter()
+            local px = (GetScreenWidth() * UIParent:GetEffectiveScale()) / 2
+            local py = (GetScreenHeight() * UIParent:GetEffectiveScale()) / 2
+            sizePos.pos_x = x - px
+            sizePos.pos_y = y - py
+            Critmatic.crit_log_frame.frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
+                    .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
+            print(string.format("CritMatic Debug: Stopped moving death_log_frame. New position: X=%s Y=%s", tostring(Critmatic.db.profile.critLogWidgetPos.pos_x), tostring(Critmatic.db.profile.critLogWidgetPos.pos_y)))
+        end)
 
-    hooksecurefunc(Critmatic.crit_log_frame.frame, "StopMovingOrSizing", function()
+
+        hooksecurefunc(Critmatic.crit_log_frame.frame, "StopMovingOrSizing", function()
         sizePos.size_x = Critmatic.crit_log_frame.frame:GetWidth()
         sizePos.size_y = Critmatic.crit_log_frame.frame:GetHeight()
     end)
