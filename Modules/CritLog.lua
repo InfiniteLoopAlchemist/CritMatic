@@ -382,6 +382,48 @@ function toggleCritMaticCritLog()
         content:SetPoint("TOPLEFT", 3, -33)
         content:SetPoint("BOTTOMRIGHT", 15, 6)
 
+        local scrollContainer = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
+        scrollContainer:SetSize(180, 100)
+        scrollContainer:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -40)
+
+        local scrollChild = CreateFrame("Frame", nil, scrollContainer)
+        scrollContainer:SetScrollChild(scrollChild)
+        scrollChild:SetSize(180, 200)  -- Adjust height based on content
+
+        local yOffset = 0
+        local spellFrameHeight = 40 -- Height of each spell frame
+
+        for spellName, spellData in pairs(CritMaticData) do
+            if spellData.highestCrit > 0 or spellData.highestNormal > 0 then
+                local _, _, spellIconPath = GetSpellInfo(spellName)
+
+                if spellIconPath then
+                    -- Create a frame for each spell
+                    local spellFrame = CreateFrame("Frame", nil, scrollChild)
+                    spellFrame:SetSize(180, spellFrameHeight)
+                    spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
+
+                    -- Create and set the spell icon
+                    local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
+                    spellIcon:SetSize(30, 30) -- Size of the icon
+                    spellIcon:SetPoint("LEFT", spellFrame, "LEFT", 5, 0)
+                    spellIcon:SetTexture(spellIconPath)
+
+                    -- Create and set the spell text
+                    local spellText = spellFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                    spellText:SetPoint("LEFT", spellIcon, "RIGHT", 5, 0)
+                    spellText:SetText(spellName .. " - Crit: " .. spellData.highestCrit .. " Normal: " .. spellData.highestNormal)
+
+                    -- Update yOffset for the next spell frame
+                    yOffset = yOffset + spellFrameHeight
+                else
+                    -- Handle the case where the spell name might be incorrect or the icon isn't found
+                end
+            end
+        end
+
+        -- Update the scroll child's height to accommodate all the spell frames
+        scrollChild:SetHeight(yOffset)
         local widget = {
             localstatus = {},
             titletext = titletext,
