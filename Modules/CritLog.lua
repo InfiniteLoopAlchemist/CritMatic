@@ -4,7 +4,7 @@ function toggleCritMaticCritLog()
     if not Critmatic.crit_log_frame or not Critmatic.crit_log_frame.frame then
 
 
-        local Type, Version = "Deathlog_MiniLog", 30
+        local Type, Version = "CritMatic_CritLog", 30
         local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
         if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then
             return
@@ -406,7 +406,7 @@ function toggleCritMaticCritLog()
     AceGUI:RegisterWidgetType(Type, Constructor, Version)
 
             -- Frame creation and initial setup code
-            Critmatic.crit_log_frame = AceGUI:Create("Deathlog_MiniLog")
+            Critmatic.crit_log_frame = AceGUI:Create("CritMatic_CritLog")
 
     Critmatic.crit_log_frame.frame:SetMovable(true)
     Critmatic.crit_log_frame.frame:EnableMouse(true)
