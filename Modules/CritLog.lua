@@ -1,5 +1,5 @@
 function toggleCritMaticCritLog()
-    local db = Critmatic.db.profile.critLogWidgetPos
+    local db = Critmatic.db.profile
     local sizePos = Critmatic.db.profile.critLogWidgetPos
     if not Critmatic.crit_log_frame or not Critmatic.crit_log_frame.frame then
 
@@ -459,12 +459,15 @@ function toggleCritMaticCritLog()
                    .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
            Critmatic.crit_log_frame.frame:SetSize(Critmatic.db.profile.critLogWidgetPos.size_x, Critmatic.db.profile.critLogWidgetPos.size_y)
             Critmatic.crit_log_frame.frame:Show()
-            critmatic_icon_frame:Show()
+          --  critmatic_icon_frame:Show()
         else
             print('hidden')
             print('x'.. sizePos.pos_x)
             print('y'.. sizePos.pos_y)
             Critmatic.crit_log_frame.frame:Hide()
+            texture_round_black:Hide()
+            texture_CritMatic_icon:Hide()
+            texture_gold_ring:Hide()
         end
     critmatic_icon_frame:HookScript("OnShow", function(self, button)
         texture_round_black:Show()
@@ -478,15 +481,6 @@ function toggleCritMaticCritLog()
         texture_gold_ring:Hide()
     end)
 
-
-
-
-
-
-
-
-
-
     print("CritMatic Debug: Starting to position the frame.")
 
     -- Make sure the main frame is movable and draggable
@@ -495,7 +489,7 @@ function toggleCritMaticCritLog()
 
     -- When you start dragging the main frame, this will be called
     Critmatic.crit_log_frame.frame:SetScript("OnDragStart", function(self)
-        if db.lock then return end
+        if db.critLogWidgetPos.lock then return end
 
         self:StartMoving()
         print("CritMatic Debug: Starting to move the frame.")
@@ -505,7 +499,7 @@ function toggleCritMaticCritLog()
 
     -- When you stop dragging the main frame, this will be called
         Critmatic.crit_log_frame.frame:SetScript("OnDragStop", function(self)
-            if db.lock then return end
+            if db.critLogWidgetPos.lock then return end
             self:StopMovingOrSizing()
             local x, y = self:GetCenter()
             local px = (GetScreenWidth() * UIParent:GetEffectiveScale()) / 2
@@ -532,6 +526,7 @@ function toggleCritMaticCritLog()
 
         if Critmatic.crit_log_frame.frame:IsShown() then
             Critmatic.crit_log_frame.frame:Hide()
+
             print(db.isCritLogFrameShown)
             db.isCritLogFrameShown = false
 
@@ -539,7 +534,7 @@ function toggleCritMaticCritLog()
         else
 
 
-            db.isCritLogFrameShown = true
+
 
             print('shown2')
          --  Critmatic.crit_log_frame:ClearAllPoints()
@@ -549,8 +544,10 @@ function toggleCritMaticCritLog()
 
           --  Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", sizePos.pos_x, sizePos.pos_y)
           --  Critmatic.crit_log_frame.frame:SetSize(sizePos.size_x, sizePos.size_y)
+            print(db.isCritLogFrameShown)
             Critmatic.crit_log_frame.frame:Show()
-
+            db.isCritLogFrameShown = true
+            print(db.isCritLogFrameShown)
         end
         -- Save the visibility state
 
