@@ -496,12 +496,11 @@ function toggleCritMaticCritLog()
     -- When you start dragging the main frame, this will be called
     Critmatic.crit_log_frame.frame:SetScript("OnDragStart", function(self)
         if db.lock then return end
-        Critmatic.crit_log_frame.frame:ClearAllPoints()
+
         self:StartMoving()
         print("CritMatic Debug: Starting to move the frame.")
         critmatic_icon_frame:StartMoving()
-        Critmatic.crit_log_frame.frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
-                                                                                       .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
+
     end)
 
     -- When you stop dragging the main frame, this will be called
@@ -513,8 +512,7 @@ function toggleCritMaticCritLog()
             local py = (GetScreenHeight() * UIParent:GetEffectiveScale()) / 2
             sizePos.pos_x = x - px
             sizePos.pos_y = y - py
-            Critmatic.crit_log_frame.frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
-                    .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
+
             print(string.format("CritMatic Debug: Stopped moving death_log_frame. New position: X=%s Y=%s", tostring(Critmatic.db.profile.critLogWidgetPos.pos_x), tostring(Critmatic.db.profile.critLogWidgetPos.pos_y)))
         end)
 
