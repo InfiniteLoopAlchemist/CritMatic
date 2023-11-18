@@ -102,7 +102,7 @@ function toggleCritMaticCritLog()
             self:SetStatusText()
             self:ApplyStatus()
             self:Show()
-            self:EnableResize(true)
+            self:EnableResize(false)
         end,
 
         ["OnRelease"] = function(self)
@@ -383,12 +383,13 @@ function toggleCritMaticCritLog()
         content:SetPoint("BOTTOMRIGHT", 15, 6)
 
         local scrollContainer = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
-        scrollContainer:SetSize(180, 100)
-        scrollContainer:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -40)
+        scrollContainer:SetSize(230, 120)
+        scrollContainer:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -20)
 
         local scrollChild = CreateFrame("Frame", nil, scrollContainer)
         scrollContainer:SetScrollChild(scrollChild)
-        scrollChild:SetSize(180, 200)  -- Adjust height based on content
+        scrollChild:SetSize(180, 200)  -- Initial height, adjust as needed
+
 
         local yOffset = 0
         local spellFrameHeight = 40 -- Height of each spell frame
@@ -499,7 +500,7 @@ function toggleCritMaticCritLog()
 
            Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
                    .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
-           Critmatic.crit_log_frame.frame:SetSize(Critmatic.db.profile.critLogWidgetPos.size_x, Critmatic.db.profile.critLogWidgetPos.size_y)
+           Critmatic.crit_log_frame.frame:SetSize(280, 150)
             Critmatic.crit_log_frame.frame:Show()
           --  critmatic_icon_frame:Show()
         else
