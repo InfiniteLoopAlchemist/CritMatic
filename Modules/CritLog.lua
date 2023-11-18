@@ -391,40 +391,59 @@ function toggleCritMaticCritLog()
         scrollChild:SetSize(180, 200)  -- Initial height, adjust as needed
 
 
-        local yOffset = 0
-        local spellFrameHeight = 40 -- Height of each spell frame
 
-        for spellName, spellData in pairs(CritMaticData) do
-            if spellData.highestCrit > 0 or spellData.highestNormal > 0 then
-                local _, _, spellIconPath = GetSpellInfo(spellName)
 
-                if spellIconPath then
-                    -- Create a frame for each spell
-                    local spellFrame = CreateFrame("Frame", nil, scrollChild)
-                    spellFrame:SetSize(180, spellFrameHeight)
-                    spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
 
-                    -- Create and set the spell icon
-                    local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
-                    spellIcon:SetSize(30, 30) -- Size of the icon
-                    spellIcon:SetPoint("LEFT", spellFrame, "LEFT", 5, 0)
-                    spellIcon:SetTexture(spellIconPath)
+        -- Table to keep track of created frames
+        local createdSpellFrames = {}
 
-                    -- Create and set the spell text
-                    local spellText = spellFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                    spellText:SetPoint("LEFT", spellIcon, "RIGHT", 5, 0)
-                    spellText:SetText(spellName .. " - Crit: " .. spellData.highestCrit .. " Normal: " .. spellData.highestNormal)
+        function RedrawCritMaticWidget()
+            local yOffset = 0
+             local spellFrameHeight = 60  -- Adjusted to fit additional text
 
-                    -- Update yOffset for the next spell frame
-                    yOffset = yOffset + spellFrameHeight
-                else
-                    -- Handle the case where the spell name might be incorrect or the icon isn't found
+            -- Hide or delete all previously created frames
+            for _, frame in ipairs(createdSpellFrames) do
+                frame:Hide()
+                frame:SetParent(nil)
+            end
+            -- Clear the table for the next redraw
+            wipe(createdSpellFrames)
+
+            for spellName, spellData in pairs(CritMaticData) do
+                if spellData.highestCrit > 0 or spellData.highestNormal > 0 or spellData.highestHealCrit > 0 or spellData.highestHeal > 0 then
+                    local _, _, spellIconPath = GetSpellInfo(spellName)
+
+                    if spellIconPath then
+                        local spellFrame = CreateFrame("Frame", nil, scrollChild)
+                        spellFrame:SetSize(180, spellFrameHeight)
+                        spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
+
+                        local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
+                        spellIcon:SetSize(30, 30)
+                        spellIcon:SetPoint("LEFT", spellFrame, "LEFT", 5, 0)
+                        spellIcon:SetTexture(spellIconPath)
+
+                        local spellText = spellFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                        spellText:SetJustifyH("LEFT")
+                        spellText:SetPoint("LEFT", spellIcon, "RIGHT", 5, 0)
+                        spellText:SetWidth(175) -- Adjust width to prevent text overflow
+                        local spellInfoText = string.format("%s \nCrit: %s (Old: %s) \n Normal Hit: %s (Old: %s) \n Crit Heal: %s (Old: %s) \n Heal: %s (Old: %s)",
+                                spellName, spellData.highestCrit, spellData.highestCritOld or "0",
+                                spellData.highestNormal, spellData.highestNormalOld or "0", spellData.highestHealCrit,
+                                spellData.highestHealCritOld or "0",
+                                spellData.highestHeal, spellData.highestHealOld or "0")
+                        spellText:SetText(spellInfoText)
+
+                        -- Add the new frame to the table
+                        table.insert(createdSpellFrames, spellFrame)
+
+                        yOffset = yOffset  + spellFrameHeight
+                    end
                 end
             end
         end
+        RedrawCritMaticWidget()
 
-        -- Update the scroll child's height to accommodate all the spell frames
-        scrollChild:SetHeight(yOffset)
         local widget = {
             localstatus = {},
             titletext = titletext,
@@ -595,4 +614,27 @@ function toggleCritMaticCritLog()
         -- Save the visibility state
 
 end
+end
+function RedrawCritMaticWidget()
+    -- Assuming 'scrollChild' is the container inside your scroll frame
+    -- Clear existing content
+    for i = 1, #scrollChild:GetChildren() do
+        local child = select(i, scrollChild:GetChildren())
+        child:Hide()
+        child:SetParent(nil)
+    end
+
+    -- Redraw the content based on updated CritMaticData
+    local yOffset = 0
+    local spellFrameHeight = 60 -- Adjust as necessary
+
+    for spellName, spellData in pairs(CritMaticData) do
+        -- Repeat the process you used to initially create the spell frames
+        -- ...
+        -- Update yOffset for the next spell frame
+        yOffset = yOffset + spellFrameHeight
+    end
+
+    -- Update the scroll child's height
+    scrollChild:SetHeight(yOffset)
 end

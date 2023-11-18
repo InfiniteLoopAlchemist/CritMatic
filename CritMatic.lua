@@ -314,6 +314,7 @@ end
 function Critmatic:CritMaticReset()
   CritMaticData = {}
   Critmatic:Print("|cffff0000Data Reset!|r")
+  RedrawCritMaticWidget()
 end
 function Critmatic:CritMaticDBReset()
 
@@ -367,9 +368,13 @@ f:SetScript("OnEvent", function(self, event, ...)
       if baseSpellName then
         CritMaticData[baseSpellName] = CritMaticData[baseSpellName] or {
           highestCrit = 0,
+          highestCritOld= 0,
           highestNormal = 0,
+          hightestNormalOld = 0,
           highestHealCrit = 0,
+          highestHealCritOld = 0,
           highestHeal = 0,
+          highestHealOld = 0,
 
         }
 
@@ -382,6 +387,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 
               -- When the event is a heal and it's a critical heal.
               if amount > CritMaticData[baseSpellName].highestHealCrit and amount <= MAX_HIT then
+                CritMaticData[baseSpellName].highestHealCritOld = CritMaticData[baseSpellName].highestHealCrit
                 CritMaticData[baseSpellName].highestHealCrit = amount
 
                  highestCritHealDuringCombat = amount
@@ -399,10 +405,11 @@ f:SetScript("OnEvent", function(self, event, ...)
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" .. CritMaticData[baseSpellName].highestHealCrit)
                 end
-
+                RedrawCritMaticWidget()
               end
             elseif not critical then
               if amount > CritMaticData[baseSpellName].highestHeal and amount <= MAX_HIT then
+                CritMaticData[baseSpellName].highestHealOld = CritMaticData[baseSpellName].highestHeal
                 CritMaticData[baseSpellName].highestHeal = amount
 
                 if not Critmatic.db.profile.soundSettings.muteAllSounds then
@@ -418,13 +425,14 @@ f:SetScript("OnEvent", function(self, event, ...)
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHeal)
                 end
-
+                RedrawCritMaticWidget()
               end
             end
           elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
             if critical then
               -- When the event is damage and it's a critical hit.
               if amount > CritMaticData[baseSpellName].highestCrit and amount <= MAX_HIT then
+                CritMaticData[baseSpellName].highestCritOld = CritMaticData[baseSpellName].highestCrit
                 CritMaticData[baseSpellName].highestCrit = amount
                 highestCritDuringCombat = amount
                 highestCritSpellName = baseSpellName
@@ -442,11 +450,12 @@ f:SetScript("OnEvent", function(self, event, ...)
                   print("|cffffd700New highest crit hit for " .. baseSpellName .. ": |r" ..
                           CritMaticData[baseSpellName].highestCrit)
                 end
-
+                RedrawCritMaticWidget()
               end
             elseif not critical then
               -- When the event is damage but it's not a critical hit.
               if amount > CritMaticData[baseSpellName].highestNormal and amount <= MAX_HIT then
+                CritMaticData[baseSpellName].highestNormalOld = CritMaticData[baseSpellName].highestNormal
                 CritMaticData[baseSpellName].highestNormal = amount
                 if not Critmatic.db.profile.soundSettings.muteAllSounds then
                   PlaySoundFile(soundNormal)
@@ -460,7 +469,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestNormal)
                 end
-
+                RedrawCritMaticWidget()
               end
             end
           end
