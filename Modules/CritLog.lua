@@ -427,7 +427,9 @@ function toggleCritMaticCritLog()
                         spellText:SetJustifyH("LEFT")
                         spellText:SetPoint("LEFT", spellIcon, "RIGHT", 5, 0)
                         spellText:SetWidth(175) -- Adjust width to prevent text overflow
-                        local spellInfoText = string.format("%s \nCrit: %s (Old: %s) \n Normal Hit: %s (Old: %s) \n Crit Heal: %s (Old: %s) \n Heal: %s (Old: %s)",
+                        local gold = "|cffffd700"
+                        local gray = "|cffd4d4d4"
+                        local spellInfoText = string.format(gold.."%s \n"..gray.."Crit: %s (Old: %s)\nNormal Hit: %s  (Old: %s)\nCrit Heal: %s (Old: %s)\nHeal: %s (Old: %s)|r",
                                 spellName, spellData.highestCrit, spellData.highestCritOld or "0",
                                 spellData.highestNormal, spellData.highestNormalOld or "0", spellData.highestHealCrit,
                                 spellData.highestHealCritOld or "0",
@@ -614,27 +616,4 @@ function toggleCritMaticCritLog()
         -- Save the visibility state
 
 end
-end
-function RedrawCritMaticWidget()
-    -- Assuming 'scrollChild' is the container inside your scroll frame
-    -- Clear existing content
-    for i = 1, #scrollChild:GetChildren() do
-        local child = select(i, scrollChild:GetChildren())
-        child:Hide()
-        child:SetParent(nil)
-    end
-
-    -- Redraw the content based on updated CritMaticData
-    local yOffset = 0
-    local spellFrameHeight = 60 -- Adjust as necessary
-
-    for spellName, spellData in pairs(CritMaticData) do
-        -- Repeat the process you used to initially create the spell frames
-        -- ...
-        -- Update yOffset for the next spell frame
-        yOffset = yOffset + spellFrameHeight
-    end
-
-    -- Update the scroll child's height
-    scrollChild:SetHeight(yOffset)
 end

@@ -295,7 +295,10 @@ function Critmatic:OnInitialize()
 end
 
 function Critmatic:OnEnable()
-  -- Code to run when the addon is enabled.
+  -- Called when the addon is fully loaded and all saved variables are available.
+  CritMaticData = _G["CritMaticData"]
+  -- Now that we know our data is available, we can safely draw the widget.
+  RedrawCritMaticWidget()
 end
 
 function Critmatic:OnDisable()
