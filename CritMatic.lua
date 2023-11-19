@@ -158,8 +158,6 @@ Critmatic.CreateNewMessageFrame = function()
   return f
 end
 
-
-
 function Critmatic:OnInitialize()
   -- Initialization code here.
   self.db = LibStub("AceDB-3.0"):New("CritMaticDB14", defaults)

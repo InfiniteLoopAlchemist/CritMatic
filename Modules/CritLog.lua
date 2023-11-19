@@ -399,7 +399,7 @@ function toggleCritMaticCritLog()
 
         function RedrawCritMaticWidget()
             local yOffset = 0
-             local spellFrameHeight = 60  -- Adjusted to fit additional text
+            local spellFrameHeight = 60  -- Adjusted to fit additional text
 
             -- Hide or delete all previously created frames
             for _, frame in ipairs(createdSpellFrames) do
@@ -410,41 +410,58 @@ function toggleCritMaticCritLog()
             wipe(createdSpellFrames)
 
             for spellName, spellData in pairs(CritMaticData) do
-                if spellData.highestCrit > 0 or spellData.highestNormal > 0 or spellData.highestHealCrit > 0 or spellData.highestHeal > 0 then
-                    local _, _, spellIconPath = GetSpellInfo(spellName)
+                local _, _, spellIconPath = GetSpellInfo(spellName)
 
-                    if spellIconPath then
-                        local spellFrame = CreateFrame("Frame", nil, scrollChild)
-                        spellFrame:SetSize(180, spellFrameHeight)
-                        spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
+                if spellIconPath and (spellData.highestCrit > 0 or spellData.highestNormal > 0 or spellData.highestHealCrit > 0 or spellData.highestHeal > 0) then
+                    local spellFrame = CreateFrame("Frame", nil, scrollChild)
+                    spellFrame:SetSize(180, spellFrameHeight)
+                    spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
 
-                        local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
-                        spellIcon:SetSize(30, 30)
-                        spellIcon:SetPoint("LEFT", spellFrame, "LEFT", 5, 0)
-                        spellIcon:SetTexture(spellIconPath)
+                    local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
+                    spellIcon:SetSize(30, 30)
+                    spellIcon:SetPoint("LEFT", spellFrame, "LEFT", 5, 0)
+                    spellIcon:SetTexture(spellIconPath)
 
-                        local spellText = spellFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                        spellText:SetJustifyH("LEFT")
-                        spellText:SetPoint("LEFT", spellIcon, "RIGHT", 5, 0)
-                        spellText:SetWidth(175) -- Adjust width to prevent text overflow
-                        local gold = "|cffffd700"
-                        local gray = "|cffd4d4d4"
-                        local spellInfoText = string.format(gold.."%s \n"..gray.."Crit: %s (Old: %s)\nNormal Hit: %s  (Old: %s)\nCrit Heal: %s (Old: %s)\nHeal: %s (Old: %s)|r",
-                                spellName, spellData.highestCrit, spellData.highestCritOld or "0",
-                                spellData.highestNormal, spellData.highestNormalOld or "0", spellData.highestHealCrit,
-                                spellData.highestHealCritOld or "0",
-                                spellData.highestHeal, spellData.highestHealOld or "0")
-                        spellText:SetText(spellInfoText)
+                    local spellText = spellFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                    spellText:SetJustifyH("LEFT")
+                    spellText:SetPoint("LEFT", spellIcon, "RIGHT", 5, 0)
+                    spellText:SetWidth(175) -- Adjust width to prevent text overflow
+                    local gold = "|cffffd700"
+                    local gray = "|cffd4d4d4"
+                    local spellInfoText = gold.."%s|r\n"
 
-                        -- Add the new frame to the table
-                        table.insert(createdSpellFrames, spellFrame)
+                    -- Construct the spell info text based on available data
+                    spellInfoText = string.format(spellInfoText, spellName)
 
-                        yOffset = yOffset  + spellFrameHeight
+                    if spellData.highestCrit and spellData.highestCrit > 0 then
+                        spellInfoText = spellInfoText .. string.format(gray .. "Crit: %s (Old: %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
                     end
+
+                    if spellData.highestNormal and spellData.highestNormal > 0 then
+                        spellInfoText = spellInfoText .. string.format(gray .. "Normal Hit: %s (Old: %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
+                    end
+
+                    if spellData.highestHealCrit and spellData.highestHealCrit > 0 then
+                        spellInfoText = spellInfoText .. string.format(gray .. "Crit Heal: %s (Old: %s)|r\n", spellData.highestHealCrit, spellData.highestHealCritOld or "0")
+                    end
+
+                    if spellData.highestHeal and spellData.highestHeal > 0 then
+                        spellInfoText = spellInfoText .. string.format(gray .. "Heal: %s (Old: %s)|r", spellData.highestHeal, spellData.highestHealOld or "0")
+                    end
+
+                    spellText:SetText(spellInfoText)
+
+                    -- Add the new frame to the table
+                    table.insert(createdSpellFrames, spellFrame)
+
+                    yOffset = yOffset + spellFrameHeight
                 end
             end
         end
+
         RedrawCritMaticWidget()
+        -- A function to update CritMaticData and refresh the widget
+
 
         local widget = {
             localstatus = {},
@@ -513,16 +530,11 @@ function toggleCritMaticCritLog()
         -- Load the saved state and apply it
         if Critmatic.db.profile.isCritLogFrameShown then
 
-            print('shown')
-           -- Critmatic.crit_log_frame:ClearAllPoints()
-            print('x'.. sizePos.pos_x)
-            print('y'.. sizePos.pos_y)
-
-
            Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
                    .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
            Critmatic.crit_log_frame.frame:SetSize(280, 150)
             Critmatic.crit_log_frame.frame:Show()
+            RedrawCritMaticWidget()
           --  critmatic_icon_frame:Show()
         else
             print('hidden')
@@ -545,8 +557,6 @@ function toggleCritMaticCritLog()
         texture_gold_ring:Hide()
     end)
 
-    print("CritMatic Debug: Starting to position the frame.")
-
     -- Make sure the main frame is movable and draggable
     Critmatic.crit_log_frame.frame:SetMovable(true)
     Critmatic.crit_log_frame.frame:RegisterForDrag("LeftButton")
@@ -556,7 +566,6 @@ function toggleCritMaticCritLog()
         if db.critLogWidgetPos.lock then return end
 
         self:StartMoving()
-        print("CritMatic Debug: Starting to move the frame.")
         critmatic_icon_frame:StartMoving()
 
     end)
@@ -571,7 +580,7 @@ function toggleCritMaticCritLog()
             sizePos.pos_x = x - px
             sizePos.pos_y = y - py
 
-            print(string.format("CritMatic Debug: Stopped moving death_log_frame. New position: X=%s Y=%s", tostring(Critmatic.db.profile.critLogWidgetPos.pos_x), tostring(Critmatic.db.profile.critLogWidgetPos.pos_y)))
+
         end)
 
 
@@ -590,28 +599,14 @@ function toggleCritMaticCritLog()
 
         if Critmatic.crit_log_frame.frame:IsShown() then
             Critmatic.crit_log_frame.frame:Hide()
-
-            print(db.isCritLogFrameShown)
             db.isCritLogFrameShown = false
 
-            print(db.isCritLogFrameShown)
+
         else
 
-
-
-
-            print('shown2')
-         --  Critmatic.crit_log_frame:ClearAllPoints()
-            print('x'.. sizePos.pos_x)
-            print('y'.. sizePos.pos_y)
-
-
-          --  Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", sizePos.pos_x, sizePos.pos_y)
-          --  Critmatic.crit_log_frame.frame:SetSize(sizePos.size_x, sizePos.size_y)
-            print(db.isCritLogFrameShown)
             Critmatic.crit_log_frame.frame:Show()
             db.isCritLogFrameShown = true
-            print(db.isCritLogFrameShown)
+            RedrawCritMaticWidget()
         end
         -- Save the visibility state
 
