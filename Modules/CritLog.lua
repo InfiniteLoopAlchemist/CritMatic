@@ -3,152 +3,155 @@ function toggleCritMaticCritLog()
     local sizePos = Critmatic.db.profile.critLogWidgetPos
     if not Critmatic.crit_log_frame or not Critmatic.crit_log_frame.frame then
 
+        --[[
+            Crit Log Widget
+            Note: This widget implementation incorporates certain elements and functionalities
+            that are based on the DeathLog Widget.]]
+                local Type, Version = "CritMatic_CritLog", 30
+                local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
+                if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then
+                    return
+                end
 
-        local Type, Version = "CritMatic_CritLog", 30
-        local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
-        if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then
-            return
-        end
-
-    local main_font = ''
-
-
-    local pairs, assert, type = pairs, assert, type
-    local wipe = table.wipe
-
-
-    local PlaySound = PlaySound
-    local CreateFrame, UIParent = CreateFrame, UIParent
-    local column_types = {
-        "Name",
-        "Guild",
-        "Lvl",
-        "F's",
-        "Race",
-        "Class",
-        "Source",
-        "ColoredName",
-        "Zone",
-        "ClassLogo1",
-        "ClassLogo2",
-        "RaceLogoSquare",
-        "LastWords",
-    }
+            local main_font = ''
 
 
-    local function Button_OnClick(frame)
-        PlaySound(799) -- SOUNDKIT.GS_TITLE_OPTION_EXIT
-        frame.obj:Hide()
-    end
-
-    local function Frame_OnShow(frame)
-        frame.obj:Fire("OnShow")
-    end
-
-    local function Frame_OnClose(frame)
-        frame.obj:Fire("OnClose")
-    end
-
-    local function Frame_OnMouseDown(frame)
-        AceGUI:ClearFocus()
-    end
-
-    local function Title_OnMouseDown(frame)
-        AceGUI:ClearFocus()
-    end
-
-    local function MoverSizer_OnMouseUp(mover)
-        local frame = mover:GetParent()
-        frame:StopMovingOrSizing()
-        local self = frame.obj
-        local status = self.status or self.localstatus
-        status.width = frame:GetWidth()
-        status.height = frame:GetHeight()
-        status.top = frame:GetTop()
-        status.left = frame:GetLeft()
-    end
-
-    local function SizerSE_OnMouseDown(frame)
-        frame:GetParent():StartSizing("BOTTOMRIGHT")
-        AceGUI:ClearFocus()
-    end
-
-    local function SizerS_OnMouseDown(frame)
-        frame:GetParent():StartSizing("BOTTOM")
-        AceGUI:ClearFocus()
-    end
-
-    local function SizerE_OnMouseDown(frame)
-        frame:GetParent():StartSizing("RIGHT")
-        AceGUI:ClearFocus()
-    end
-
-    local function StatusBar_OnEnter(frame)
-        frame.obj:Fire("OnEnterStatusBar")
-    end
-
-    local function StatusBar_OnLeave(frame)
-        frame.obj:Fire("OnLeaveStatusBar")
-    end
+            local pairs, assert, type = pairs, assert, type
+            local wipe = table.wipe
 
 
-    local methods = {
-        ["OnAcquire"] = function(self)
-            self.frame:SetParent(UIParent)
-            self.frame:SetFrameStrata("FULLSCREEN_DIALOG")
-            self.frame:SetFrameLevel(100) -- Lots of room to draw under it
-            self:SetTitle()
-            self:SetSubTitle()
-            self:SetStatusText()
-            self:ApplyStatus()
-            self:Show()
-            self:EnableResize(false)
-        end,
+            local PlaySound = PlaySound
+            local CreateFrame, UIParent = CreateFrame, UIParent
+            local column_types = {
+                "Name",
+                "Guild",
+                "Lvl",
+                "F's",
+                "Race",
+                "Class",
+                "Source",
+                "ColoredName",
+                "Zone",
+                "ClassLogo1",
+                "ClassLogo2",
+                "RaceLogoSquare",
+                "LastWords",
+            }
 
-        ["OnRelease"] = function(self)
-            self.status = nil
-            wipe(self.localstatus)
-        end,
 
-        ["OnWidthSet"] = function(self, width)
-            local content = self.content
-            local contentwidth = width - 34
-            if contentwidth < 0 then
-                contentwidth = 0
+            local function Button_OnClick(frame)
+                PlaySound(799) -- SOUNDKIT.GS_TITLE_OPTION_EXIT
+                frame.obj:Hide()
             end
-            content:SetWidth(contentwidth)
-            content.width = contentwidth
-            self.titlebg:SetWidth(contentwidth - 35)
-        end,
 
-        ["OnHeightSet"] = function(self, height)
-            local content = self.content
-            local contentheight = height
-            if contentheight < 0 then
-                contentheight = 0
+            local function Frame_OnShow(frame)
+                frame.obj:Fire("OnShow")
             end
-            content:SetHeight(contentheight)
-            content.height = contentheight
-        end,
 
-        ["SetTitle"] = function(self, title)
-            self.titletext:SetText(title)
+            local function Frame_OnClose(frame)
+                frame.obj:Fire("OnClose")
+            end
 
-        end,
+            local function Frame_OnMouseDown(frame)
+                AceGUI:ClearFocus()
+            end
 
-        ["SetSubTitle"] = function(self, subtitle_data)
-            local column_offset = 17
-            if subtitle_data == nil then
-                return
+            local function Title_OnMouseDown(frame)
+                AceGUI:ClearFocus()
+            end
+
+            local function MoverSizer_OnMouseUp(mover)
+                local frame = mover:GetParent()
+                frame:StopMovingOrSizing()
+                local self = frame.obj
+                local status = self.status or self.localstatus
+                status.width = frame:GetWidth()
+                status.height = frame:GetHeight()
+                status.top = frame:GetTop()
+                status.left = frame:GetLeft()
+            end
+
+            local function SizerSE_OnMouseDown(frame)
+                frame:GetParent():StartSizing("BOTTOMRIGHT")
+                AceGUI:ClearFocus()
+            end
+
+            local function SizerS_OnMouseDown(frame)
+                frame:GetParent():StartSizing("BOTTOM")
+                AceGUI:ClearFocus()
+            end
+
+            local function SizerE_OnMouseDown(frame)
+                frame:GetParent():StartSizing("RIGHT")
+                AceGUI:ClearFocus()
+            end
+
+            local function StatusBar_OnEnter(frame)
+                frame.obj:Fire("OnEnterStatusBar")
+            end
+
+            local function StatusBar_OnLeave(frame)
+                frame.obj:Fire("OnLeaveStatusBar")
             end
 
 
-            for _, v in ipairs(column_types) do
-                self.subtitletext_tbl[v]:SetText("")
-            end
-            for _, v in ipairs(subtitle_data) do
-                if v[1] == "ClassLogo1" or v[1] == "ClassLogo2" or v[1] == "RaceLogoSquare" then
-                    self.subtitletext_tbl[v[1]]:SetText("")
+            local methods = {
+                ["OnAcquire"] = function(self)
+                    self.frame:SetParent(UIParent)
+                    self.frame:SetFrameStrata("FULLSCREEN_DIALOG")
+                    self.frame:SetFrameLevel(100) -- Lots of room to draw under it
+                    self:SetTitle()
+                    self:SetSubTitle()
+                    self:SetStatusText()
+                    self:ApplyStatus()
+                    self:Show()
+                    self:EnableResize(false)
+                end,
+
+                ["OnRelease"] = function(self)
+                    self.status = nil
+                    wipe(self.localstatus)
+                end,
+
+                ["OnWidthSet"] = function(self, width)
+                    local content = self.content
+                    local contentwidth = width - 34
+                    if contentwidth < 0 then
+                        contentwidth = 0
+                    end
+                    content:SetWidth(contentwidth)
+                    content.width = contentwidth
+                    self.titlebg:SetWidth(contentwidth - 35)
+                end,
+
+                ["OnHeightSet"] = function(self, height)
+                    local content = self.content
+                    local contentheight = height
+                    if contentheight < 0 then
+                        contentheight = 0
+                    end
+                    content:SetHeight(contentheight)
+                    content.height = contentheight
+                end,
+
+                ["SetTitle"] = function(self, title)
+                    self.titletext:SetText(title)
+
+                end,
+
+                ["SetSubTitle"] = function(self, subtitle_data)
+                    local column_offset = 17
+                    if subtitle_data == nil then
+                        return
+                    end
+
+
+                    for _, v in ipairs(column_types) do
+                        self.subtitletext_tbl[v]:SetText("")
+                    end
+                    for _, v in ipairs(subtitle_data) do
+                        if v[1] == "ClassLogo1" or v[1] == "ClassLogo2" or v[1] == "RaceLogoSquare" then
+                            self.subtitletext_tbl[v[1]]:SetText("")
                 else
                     self.subtitletext_tbl[v[1]]:SetText(v[1])
                 end
