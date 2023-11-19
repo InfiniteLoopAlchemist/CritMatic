@@ -257,7 +257,7 @@ function Critmatic:OnInitialize()
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
   Critmatic:RegisterChatCommand("cmlog", "OpenChangeLog")
   Critmatic:RegisterChatCommand("cmcritlog", function() toggleCritMaticCritLog() end)
-  Critmatic:RegisterChatCommand("cmdbreset", "CritMaticDBReset")
+
 
   self:RegisterComm("Critmatic")
   -- Trigger version broadcast when group roster updates
