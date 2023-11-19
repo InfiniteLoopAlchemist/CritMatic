@@ -1,6 +1,6 @@
 # WotLK Classic: v3.4.3  and Classic / Hardcore: v1.14.4
 
-## CritMatic: v0.3.6.2.5
+## CritMatic: v0.3.7
 
 ### CritMatic is a lightweight World of Warcraft addon designed to help players keep track of their highest critical and normal hits (both damage and heal).
 

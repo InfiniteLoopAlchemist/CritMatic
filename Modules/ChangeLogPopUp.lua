@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.7-release] - 11/19/2023
+
+ Added:
+
+ New CritLog wdget, that displays your latest Crits/Normal Hits/CritHeals/Heals. Open it with /cmcritlog that you can macro.
+
+
+
+
+
 [v0.3.6.2.5-release] - 11/12/2023
 
  Fixed:
@@ -227,14 +237,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Configurable options for disabling chat and alert notifications introduced.
-
-
-
-[v0.2.8-release] - 10/21/2023
-
- Added:
-
- Optionality added for tracking autoattacks.
 
 
 ]]
