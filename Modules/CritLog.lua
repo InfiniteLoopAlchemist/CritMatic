@@ -412,56 +412,104 @@ function toggleCritMaticCritLog()
             -- Clear the table for the next redraw
             wipe(createdSpellFrames)
 
+            -- Convert data to a sortable list
+            local sortableData = {}
             for spellName, spellData in pairs(CritMaticData) do
-                local _, _, spellIconPath = GetSpellInfo(spellName)
-
-                if spellIconPath and (spellData.highestCrit > 0 or spellData.highestNormal > 0 or spellData.highestHealCrit > 0 or spellData.highestHeal > 0) then
-                    local spellFrame = CreateFrame("Frame", nil, scrollChild)
-                    spellFrame:SetSize(180, spellFrameHeight)
-                    spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
-
-                    local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
-                    spellIcon:SetSize(30, 30)
-                    spellIcon:SetPoint("LEFT", spellFrame, "LEFT", 5, 0)
-                    spellIcon:SetTexture(spellIconPath)
-
-                    local spellText = spellFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                    spellText:SetJustifyH("LEFT")
-                    spellText:SetPoint("LEFT", spellIcon, "RIGHT", 5, 0)
-                    spellText:SetWidth(175) -- Adjust width to prevent text overflow
-                    local gold = "|cffffd700"
-                    local gray = "|cffd4d4d4"
-                    local spellInfoText = gold.."%s|r\n"
-
-                    -- Construct the spell info text based on available data
-                    spellInfoText = string.format(spellInfoText, spellName)
-
-                    if spellData.highestCrit and spellData.highestCrit > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Crit: %s (Old: %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
-                    end
-
-                    if spellData.highestNormal and spellData.highestNormal > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Normal Hit: %s (Old: %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
-                    end
-
-                    if spellData.highestHealCrit and spellData.highestHealCrit > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Crit Heal: %s (Old: %s)|r\n", spellData.highestHealCrit, spellData.highestHealCritOld or "0")
-                    end
-
-                    if spellData.highestHeal and spellData.highestHeal > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Heal: %s (Old: %s)|r", spellData.highestHeal, spellData.highestHealOld or "0")
-                    end
-
-                    spellText:SetText(spellInfoText)
-
-                    -- Add the new frame to the table
-                    table.insert(createdSpellFrames, spellFrame)
-
-                    yOffset = yOffset + spellFrameHeight
-                end
+                table.insert(sortableData, {name = spellName, data = spellData})
             end
-        end
 
+            -- Sort by timestamp, most recent first
+            table.sort(sortableData, function(a, b)
+                return (a.data.timestamp or 0) > (b.data.timestamp or 0 )end)
+
+
+
+                for _, entry in ipairs(sortableData) do
+                    local spellName = entry.name
+                    local spellData = entry.data
+                    local _, _, spellIconPath = GetSpellInfo(spellName)
+
+                    if spellIconPath and (spellData.highestCrit > 0 or spellData.highestNormal > 0 or spellData.highestHealCrit > 0 or spellData.highestHeal > 0) then
+                        local spellFrame = CreateFrame("Frame", nil, scrollChild)
+                        spellFrame:SetSize(180, spellFrameHeight)
+                        spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
+
+                        local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
+                        spellIcon:SetSize(30, 30)
+                        spellIcon:SetPoint("LEFT", spellFrame, "LEFT", 5, 0)
+                        spellIcon:SetTexture(spellIconPath)
+
+                        local spellText = spellFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                        spellText:SetJustifyH("LEFT")
+                        spellText:SetPoint("LEFT", spellIcon, "RIGHT", 5, 0)
+                        spellText:SetWidth(175) -- Adjust width to prevent text overflow
+                        local gold = "|cffffd700"
+                        local gray = "|cffd4d4d4"
+                        local spellInfoText = gold.."%s|r\n"
+
+                        -- Construct the spell info text based on available data
+                        spellInfoText = string.format(spellInfoText, spellName)
+
+                        if spellData.highestCrit and spellData.highestCrit > 0 then
+                            spellInfoText = spellInfoText .. string.format(gray .. "Crit: %s (Old: %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
+                        end
+
+                        if spellData.highestNormal and spellData.highestNormal > 0 then
+                            spellInfoText = spellInfoText .. string.format(gray .. "Normal Hit: %s (Old: %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
+                        end
+
+                        if spellData.highestHealCrit and spellData.highestHealCrit > 0 then
+                            spellInfoText = spellInfoText .. string.format(gray .. "Crit Heal: %s (Old: %s)|r\n", spellData.highestHealCrit, spellData.highestHealCritOld or "0")
+                        end
+
+                        if spellData.highestHeal and spellData.highestHeal > 0 then
+                            spellInfoText = spellInfoText .. string.format(gray .. "Heal: %s (Old: %s)|r", spellData.highestHeal, spellData.highestHealOld or "0")
+                        end
+
+                        spellText:SetText(spellInfoText)
+
+                        -- Add the new frame to the table
+                        table.insert(createdSpellFrames, spellFrame)
+
+                        yOffset = yOffset + spellFrameHeight
+                    end
+                end
+
+            end
+
+        function RecordEvent(spellName, eventDetails)
+            -- Assuming eventDetails is a table with details of the event
+            eventDetails.timestamp = time() -- Add current time as timestamp
+
+
+            -- Update the spell data in CritMaticData
+            local spellData = CritMaticData[spellName]
+
+            if eventDetails.crit and eventDetails.value > spellData.highestCrit then
+                spellData.highestCrit = eventDetails.value
+                spellData.highestCritOld = spellData.highestCrit
+                -- If you want to keep track of the previous value
+            end
+
+            if not eventDetails.crit and eventDetails.value > spellData.highestNormal then
+                spellData.highestNormal = eventDetails.value
+                spellData.highestNormalOld = spellData.highestNormal  -- If you want to keep track of the previous value
+            end
+
+            if eventDetails.critHeal and eventDetails.value > spellData.highestHealCrit then
+                spellData.highestHealCrit = eventDetails.value
+                spellData.highestHealCritOld = spellData.highestHealCrit  -- If you want to keep track of the previous value
+            end
+
+            if not eventDetails.critHeal and eventDetails.value > spellData.highestHeal then
+                spellData.highestHeal = eventDetails.value
+                spellData.highestHealOld = spellData.highestHeal  -- If you want to keep track of the previous value
+            end
+
+
+            -- Save the timestamp of the latest event for this spell
+            spellData.timestamp = eventDetails.timestamp
+        end
         RedrawCritMaticWidget()
         -- A function to update CritMaticData and refresh the widget
 
