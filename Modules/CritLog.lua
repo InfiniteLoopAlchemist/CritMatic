@@ -540,9 +540,7 @@ function toggleCritMaticCritLog()
             RedrawCritMaticWidget()
           --  critmatic_icon_frame:Show()
         else
-            print('hidden')
-            print('x'.. sizePos.pos_x)
-            print('y'.. sizePos.pos_y)
+
             Critmatic.crit_log_frame.frame:Hide()
             texture_round_black:Hide()
             texture_CritMatic_icon:Hide()
