@@ -2,7 +2,8 @@
 
 ### Added:
 
-- **New CritLog wdget, that displays your latest Crits/Normal Hits/CritHeals/Heals. Open it with /cmcritlog that you can macro.**
+- **New CritLog widget, that displays your latest Crits/Normal Hits/CritHeals/Heals. Open it with /cmcritlog that 
+  you can macro.**
 
 
 
