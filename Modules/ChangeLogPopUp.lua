@@ -35,11 +35,22 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.7.1-release] - 11/20/2023
+
+ Updated:
+
+ Crit Log now sorts by latest Crits/Normal Hits/Crit Heals/Heals.
+
+
+
+
+
 [v0.3.7-release] - 11/19/2023
 
  Added:
 
- New CritLog wdget, that displays your latest Crits/Normal Hits/CritHeals/Heals. Open it with /cmcritlog that you can macro.
+ New CritLog widget, that displays your latest Crits/Normal Hits/CritHeals/Heals. Open it with /cmcritlog that 
+  you can macro.
 
 
 
@@ -225,18 +236,6 @@ Critmatic.showChangeLog = function()
 
  New Slash Commands to open the options menu /cm and /critmatic
  You can Change the Crit and Normal hit / heal sounds.
-
-
-
-[v0.2.9.1-release] - 10/22/2023
-
- Updated:
-
- Hotfix deployed for urgent issues.
-
- Added:
-
- Configurable options for disabling chat and alert notifications introduced.
 
 
 ]]
