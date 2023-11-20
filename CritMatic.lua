@@ -406,7 +406,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" .. CritMaticData[baseSpellName].highestHealCrit)
                 end
-                RecordEvent(baseSpellName, CritMaticData[baseSpellName])
+                RecordEvent(baseSpellName)
                 RedrawCritMaticWidget()
               end
             elseif not critical then
@@ -427,7 +427,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestHeal)
                 end
-                RecordEvent(baseSpellName, CritMaticData[baseSpellName])
+                RecordEvent(baseSpellName)
                 RedrawCritMaticWidget()
               end
             end
@@ -453,7 +453,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                   print("|cffffd700New highest crit hit for " .. baseSpellName .. ": |r" ..
                           CritMaticData[baseSpellName].highestCrit)
                 end
-                RecordEvent(baseSpellName, CritMaticData[baseSpellName])
+                RecordEvent(baseSpellName)
                 RedrawCritMaticWidget()
               end
             elseif not critical then
@@ -473,7 +473,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                   print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[baseSpellName].highestNormal)
                 end
-                RecordEvent(baseSpellName, CritMaticData[baseSpellName])
+                RecordEvent(baseSpellName)
                 RedrawCritMaticWidget()
               end
             end
