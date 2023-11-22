@@ -6,7 +6,7 @@ function toggleCritMaticCritLog()
         --[[
             Crit Log Widget
             Note: This widget implementation incorporates certain elements and functionalities
-            that are based on the DeathLog Widget.]]
+            that are based on the DeathLog Widget going to removed unused code one day..]]
                 local Type, Version = "CritMatic_CritLog", 30
                 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
                 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then
@@ -471,7 +471,13 @@ function toggleCritMaticCritLog()
                         table.insert(createdSpellFrames, spellFrame)
 
                         yOffset = yOffset + spellFrameHeight
+
                     end
+                if scrollContainer and scrollContainer.SetVerticalScroll then
+                    scrollContainer:SetVerticalScroll(0)
+
+                end
+
                 end
 
             end
