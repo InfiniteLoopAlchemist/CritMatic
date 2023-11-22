@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.7.2-release] - 11/22/2023
+
+ Updated:
+
+ If Crit Log scrolled down, it will scroll up when a new crit,normal hit,crit heal or heal happens.
+
+
+
+
+
 [v0.3.7.1-release] - 11/20/2023
 
  Updated:
@@ -227,15 +237,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Included toggle for silencing party notifications.
-
-
-
-[v0.3.0-release] - 10/25/2023
-
- Added:
-
- New Slash Commands to open the options menu /cm and /critmatic
- You can Change the Crit and Normal hit / heal sounds.
 
 
 ]]
