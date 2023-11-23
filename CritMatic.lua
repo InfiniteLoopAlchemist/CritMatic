@@ -12,13 +12,24 @@ local function GetGCD()
 end
 
 
-
-
 local function IsSpellInSpellbook(spellID)
   local name = GetSpellInfo(spellID)
   return name ~= nil
 end
-
+--[[
+local function IsSpellInSpellbook(spellID)
+  local i = 1
+  while true do
+    local spellBookID = select(3, GetSpellBookItemName(i, BOOKTYPE_SPELL))
+    if not spellBookID then break end  -- No more spells in the spellbook
+    if spellBookID == spellID then
+      return true  -- Spell found in the spellbook
+    end
+    i = i + 1
+  end
+  return false  -- Spell not found in the spellbook
+end
+]]
 local function AddHighestHitsToTooltip(self, slot, isSpellBook)
   if (not slot) then
     return
@@ -373,7 +384,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 
         }
 
-        if IsSpellInSpellbook(baseSpellName) or baseSpellName == "Auto Attack" then
+        if IsSpellInSpellbook(spellID) or baseSpellName == "Auto Attack" then
           --print(CombatLogGetCurrentEventInfo())
 
 

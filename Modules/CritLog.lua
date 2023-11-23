@@ -426,6 +426,10 @@ function toggleCritMaticCritLog()
                 local spellName = entry.name
                 local spellData = entry.data
                 local _, _, spellIconPath = GetSpellInfo(spellName)
+                if not spellIconPath then
+                    -- Fallback to a default spell icon (Auto Attack in this case)
+                    _, _, spellIconPath = GetSpellInfo(6603)
+                end
 
                 if spellIconPath then
                     local spellFrame = CreateFrame("Frame", nil, scrollChild)
@@ -471,7 +475,13 @@ function toggleCritMaticCritLog()
                         table.insert(createdSpellFrames, spellFrame)
 
                         yOffset = yOffset + spellFrameHeight
+
                     end
+                if scrollContainer and scrollContainer.SetVerticalScroll then
+                    scrollContainer:SetVerticalScroll(0)
+
+                end
+
                 end
 
             end
