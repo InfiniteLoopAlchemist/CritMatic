@@ -1,6 +1,5 @@
 -- This line should be at the top of your main Lua file, outside any function.
 Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0","AceComm-3.0")
-
 local MAX_HIT = 40000
 
 local function GetGCD()
@@ -13,17 +12,10 @@ local function GetGCD()
 end
 
 
-local function removeImproved(spellName)
-  -- Stripping out "Improved " prefix
-  local baseSpellName = spellName
-  if spellName and string.sub(spellName, 1, 8) == "Improved" then
-    baseSpellName = string.sub(spellName, 10)
-  end
-  return baseSpellName
-end
 
-local function IsSpellInSpellbook(spellName)
-  local name = GetSpellInfo(spellName)
+
+local function IsSpellInSpellbook(spellID)
+  local name = GetSpellInfo(spellID)
   return name ~= nil
 end
 
@@ -31,25 +23,26 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
   if (not slot) then
     return
   end
-  local actionType, id, spellName, castTime
+  local actionType, id, spellID
   if isSpellBook then
     -- Handle spellbook item
-    spellName = GetSpellBookItemName(slot, BOOKTYPE_SPELL)
-    id, _, _, castTime = GetSpellInfo(spellName)
+    spellID = select(3, GetSpellBookItemName(slot, BOOKTYPE_SPELL))
     actionType = "spell"
   else
     -- Handle action bar item
     actionType, id = GetActionInfo(slot)
-    spellName, _, _, castTime = GetSpellInfo(id)
+    if actionType == "spell" then
+      spellID = id
+    end
   end
-  if actionType == "spell" then
+    local localizedSpellName = GetSpellInfo(spellID)
 
-    local baseSpellName = removeImproved(spellName)
-
+    local baseSpellName = localizedSpellName
+  if actionType == "spell" and spellID then
     if CritMaticData[baseSpellName] then
 
-      local cooldown = (GetSpellBaseCooldown(id) or 0) / 1000
-      --TODO: if the action is less than the GCD, use the GCD instead
+      local cooldown = (GetSpellBaseCooldown(spellID) or 0) / 1000
+      local _, _, _, castTime = GetSpellInfo(spellID)
       local effectiveCastTime = castTime > 0 and (castTime / 1000) or GetGCD()
       local effectiveTime = max(effectiveCastTime, cooldown)
 
@@ -125,7 +118,6 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
     end
   end
 end
-
 -- Function to create a new frame based on the template
 Critmatic.CreateNewMessageFrame = function()
   local f = CreateFrame("Frame", nil, UIParent)
@@ -354,7 +346,9 @@ f:SetScript("OnEvent", function(self, event, ...)
       amount, overhealing, _, _, _, absorbed, critical = unpack(eventInfo, 15, 21)
     end
 
-    local baseSpellName = removeImproved(spellName)
+    local localizedSpellName = GetSpellInfo(spellID)
+    local baseSpellName = localizedSpellName
+
 
     if baseSpellName == "Auto Attack" and not Critmatic.db.profile.generalSettings.autoAttacksEnabled then
       return
