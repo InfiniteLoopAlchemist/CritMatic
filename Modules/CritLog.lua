@@ -413,8 +413,8 @@ function toggleCritMaticCritLog()
 
             -- Convert data to a sortable list
             local sortableData = {}
-            for spellName, spellData in pairs(CritMaticData) do
-                table.insert(sortableData, {name = spellName, data = spellData})
+            for spellID, spellData in pairs(CritMaticData) do
+                table.insert(sortableData, {id = spellID, data = spellData})
             end
 
             -- Sort by timestamp, most recent first
@@ -423,9 +423,9 @@ function toggleCritMaticCritLog()
             end)
 
             for _, entry in ipairs(sortableData) do
-                local spellName = entry.name
+                local spellID = entry.id
                 local spellData = entry.data
-                local _, _, spellIconPath = GetSpellInfo(spellName)
+                local _, _, spellIconPath = GetSpellInfo(spellID)
                 if not spellIconPath then
                     -- Fallback to a default spell icon (Auto Attack in this case)
                     _, _, spellIconPath = GetSpellInfo(6603)
@@ -450,7 +450,7 @@ function toggleCritMaticCritLog()
                     local spellInfoText = gold.."%s|r\n"
 
                     -- Construct the spell info text based on available data
-                    spellInfoText = string.format(spellInfoText, spellName)
+                    spellInfoText = string.format(spellInfoText, GetSpellInfo(spellID))
 
                     if spellData.highestCrit and spellData.highestCrit > 0 then
                         spellInfoText = spellInfoText .. string.format(gray .. "Crit: %s (Old: %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
@@ -486,21 +486,21 @@ function toggleCritMaticCritLog()
 
             end
 
-        function RecordEvent(spellName)
+        function RecordEvent(spellID)
             -- Check if the spellName is valid
-            if not spellName then
+            if not spellID then
                 return
             end
 
             -- Initialize spell data if not already present
-            if not CritMaticData[spellName] then
-                CritMaticData[spellName] = {
+            if not CritMaticData[spellID] then
+                CritMaticData[spellID] = {
                     timestamp = 0  -- Initialize the timestamp
                 }
             end
 
             -- Update the timestamp for the spell event
-            CritMaticData[spellName].timestamp = time()
+            CritMaticData[spellID].timestamp = time()
         end
 
         RedrawCritMaticWidget()
