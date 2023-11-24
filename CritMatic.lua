@@ -12,19 +12,21 @@ local function GetGCD()
 end
 
 
-local function IsSpellInSpellbook(spellID)
-  local numSpells = GetNumSpellTabs()
-  for tab = 1, numSpells do
-    local _, _, offset, numEntries = GetSpellTabInfo(tab)
-    for slot = offset + 1, offset + numEntries do
-      local spellBookItemSpellID = select(2, GetSpellBookItemInfo(slot, BOOKTYPE_SPELL))
-      if spellBookItemSpellID == spellID then
+local function IsSpellInSpellbook(spellName)
+  for i = 1, GetNumSpellTabs() do
+    local _, _, offset, numSpells = GetSpellTabInfo(i)
+    for j = offset + 1, offset + numSpells do
+      if GetSpellBookItemName(j, BOOKTYPE_SPELL) == spellName then
         return true
       end
     end
   end
   return false
 end
+
+
+
+
 
 
 local spellDataAggregate = {}
@@ -188,6 +190,18 @@ function Critmatic:OnInitialize()
   CritMaticData = CritMaticData or {}
 
   CritMaticData = _G["CritMaticData"]
+
+  if not Critmatic.db.profile.dataCleared then
+
+      -- Clear CritMaticData
+      wipe(CritMaticData)
+
+
+      Critmatic.db.profile.dataCleared = true
+
+    end
+
+
   local version = GetAddOnMetadata("CritMatic", "Version")
 
   function Critmatic:OnCommReceived(prefix , message, distribution, sender)
@@ -337,7 +351,7 @@ function Critmatic:OpenChangeLog()
 end
 
 function Critmatic:CritMaticReset()
-  CritMaticData = {}
+  wipe(CritMaticData)
   Critmatic:Print("|cffff0000Data Reset!|r")
   RedrawCritMaticWidget()
 end
@@ -408,8 +422,8 @@ f:SetScript("OnEvent", function(self, event, ...)
 
        
           --print(CombatLogGetCurrentEventInfo())
-       -- if IsSpellInSpellbook(spellID) then
-          
+
+      --  if IsSpellInSpellbook(baseSpellName) then
 
 
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then

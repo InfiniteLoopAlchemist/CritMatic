@@ -51,7 +51,8 @@ critLogWidgetPos = {
   size_y = 125,
   lock = false
 },
-    oldVersion = "0.0.0"
+    oldVersion = "0.0.0",
+    dataCleared = false,
   },
 
 }
