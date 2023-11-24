@@ -74,20 +74,26 @@ function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
 end
 
 function Critmatic.ShowNewHealCritMessage(spellName, amount)
-
-  local message = string.upper(string.format("New %s Crit Heal: %d!", spellName, amount))
+  local messageType = "Crit Heal"
+  if string.find(spellName, "Heal$") then
+    messageType = "Crit" -- Remove "Heal" from the message type if the spell name ends with "Heal"
+  end
+  local message = string.upper(string.format("New %s %s: %d!", spellName, messageType, amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)  -- Gold color
-
 end
 
 function Critmatic.ShowNewHealMessage(spellName, amount)
-
-  local message = string.upper(string.format("New %s Heal: %d!", spellName, amount))
+  local messageType = "Heal"
+  if string.find(spellName, "Heal$") then
+    messageType = "" -- Remove "Heal" from the message type if the spell name ends with "Heal"
+  end
+  local message = string.upper(string.format("New %s %s: %d!", spellName, messageType, amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)
-
 end
+
+
 
 function Critmatic.ShowNewCritMessage(spellName, amount)
 
