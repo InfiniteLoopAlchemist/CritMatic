@@ -75,7 +75,7 @@ end
 
 function Critmatic.ShowNewHealCritMessage(spellName, amount)
 
-  local message = string.upper(string.format("New %s crit heal: %d!", spellName, amount))
+  local message = string.upper(string.format("New %s Crit Heal: %d!", spellName, amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)  -- Gold color
 
@@ -83,7 +83,7 @@ end
 
 function Critmatic.ShowNewHealMessage(spellName, amount)
 
-  local message = string.upper(string.format("New %s normal heal record: %d!", spellName, amount))
+  local message = string.upper(string.format("New %s Heal: %d!", spellName, amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 
@@ -91,14 +91,14 @@ end
 
 function Critmatic.ShowNewCritMessage(spellName, amount)
 
-  local message = string.upper(string.format("New %s crit: %d!", spellName, amount))
+  local message = string.upper(string.format("New %s Crit: %d!", spellName, amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 end
 
 function Critmatic.ShowNewNormalMessage(spellName, amount)
 
-  local message = string.upper(string.format("New %s normal hit record: %d!", spellName, amount))
+  local message = string.upper(string.format("New %s Hit: %d!", spellName, amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 

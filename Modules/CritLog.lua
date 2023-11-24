@@ -411,10 +411,33 @@ function toggleCritMaticCritLog()
             end
             wipe(createdSpellFrames)
 
-            -- Convert data to a sortable list
-            local sortableData = {}
+            local spellsByName = {}
             for spellID, spellData in pairs(CritMaticData) do
-                table.insert(sortableData, {id = spellID, data = spellData})
+                local spellName = GetSpellInfo(spellID)
+                if spellName then
+                    if not spellsByName[spellName] then
+                        spellsByName[spellName] = {
+                            ids = {spellID},
+                            data = spellData
+                        }
+                    else
+                        -- Combine data for spells with the same name but different IDs
+                        local existingData = spellsByName[spellName].data
+                        table.insert(spellsByName[spellName].ids, spellID)
+                        -- Merge the data. For example, take the higher crit value:
+                        existingData.highestCrit = math.max(existingData.highestCrit, spellData.highestCrit or 0)
+                        existingData.highestNormal = math.max(existingData.highestNormal, spellData.highestNormal or 0)
+                        existingData.highestHealCrit = math.max(existingData.highestHealCrit, spellData.highestHealCrit or 0)
+                        existingData.highestHeal = math.max(existingData.highestHeal, spellData.highestHeal or 0)
+
+                    end
+                end
+            end
+
+            -- Convert the spell data by name to a sortable list
+            local sortableData = {}
+            for spellName, spellGroup in pairs(spellsByName) do
+                table.insert(sortableData, {name = spellName, data = spellGroup.data, ids = spellGroup.ids})
             end
 
             -- Sort by timestamp, most recent first
@@ -423,13 +446,11 @@ function toggleCritMaticCritLog()
             end)
 
             for _, entry in ipairs(sortableData) do
-                local spellID = entry.id
+                local spellName = entry.name
                 local spellData = entry.data
-                local _, _, spellIconPath = GetSpellInfo(spellID)
-                if not spellIconPath then
-                    -- Fallback to a default spell icon (Auto Attack in this case)
-                    _, _, spellIconPath = GetSpellInfo(6603)
-                end
+                local spellIDs = entry.ids  -- Now you have access to all IDs for this spell name
+                local _, _, spellIconPath = GetSpellInfo(spellIDs[1])
+
 
                 if spellIconPath then
                     local spellFrame = CreateFrame("Frame", nil, scrollChild)
@@ -450,14 +471,14 @@ function toggleCritMaticCritLog()
                     local spellInfoText = gold.."%s|r\n"
 
                     -- Construct the spell info text based on available data
-                    spellInfoText = string.format(spellInfoText, GetSpellInfo(spellID))
+                    spellInfoText = string.format(spellInfoText, GetSpellInfo(spellIDs[1]))
 
                     if spellData.highestCrit and spellData.highestCrit > 0 then
                         spellInfoText = spellInfoText .. string.format(gray .. "Crit: %s (Old: %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
                     end
 
                     if spellData.highestNormal and spellData.highestNormal > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Normal Hit: %s (Old: %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
+                        spellInfoText = spellInfoText .. string.format(gray .. "Hit: %s (Old: %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
                     end
 
                     if spellData.highestHealCrit and spellData.highestHealCrit > 0 then
@@ -483,8 +504,8 @@ function toggleCritMaticCritLog()
                 end
 
                 end
-
-            end
+        end
+--ToDo: track absorbs so you can track things power word shield
 
         function RecordEvent(spellID)
             -- Check if the spellName is valid

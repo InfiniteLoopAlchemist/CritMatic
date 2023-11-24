@@ -16,25 +16,15 @@ local function IsSpellInSpellbook(spellID)
   local name = GetSpellInfo(spellID)
   return name ~= nil
 end
---[[
-local function IsSpellInSpellbook(spellID)
-  local i = 1
-  while true do
-    local spellBookID = select(3, GetSpellBookItemName(i, BOOKTYPE_SPELL))
-    if not spellBookID then break end  -- No more spells in the spellbook
-    if spellBookID == spellID then
-      return true  -- Spell found in the spellbook
-    end
-    i = i + 1
-  end
-  return false  -- Spell not found in the spellbook
-end
-]]
+
+local spellDataAggregate = {}
+
 local function AddHighestHitsToTooltip(self, slot, isSpellBook)
   if (not slot) then
     return
   end
   local actionType, id, spellID
+
   if isSpellBook then
     -- Handle spellbook item
     spellID = select(3, GetSpellBookItemName(slot, BOOKTYPE_SPELL))
@@ -47,30 +37,51 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
     end
   end
     local localizedSpellName = GetSpellInfo(spellID)
+  -- Initialize an empty table for aggregating data by spell name
 
-    local baseSpellName = localizedSpellName
+  -- Loop over all spells in CritMaticData to aggregate data by spell name
+  for sID, data in pairs(CritMaticData) do
+    local sName = GetSpellInfo(sID)
+    -- Initialize the sub-table for each spell name if it doesn't exist
+    if not spellDataAggregate[sName] then
+      spellDataAggregate[sName] = {
+        highestCrit = 0,
+        highestNormal = 0,
+        highestHealCrit = 0,
+        highestHeal = 0,
+      }
+    end
+
+    -- Now aggregate the data
+    spellDataAggregate[sName].highestCrit = math.max(spellDataAggregate[sName].highestCrit, data.highestCrit or 0)
+    spellDataAggregate[sName].highestNormal = math.max(spellDataAggregate[sName].highestNormal, data.highestNormal or 0)
+    spellDataAggregate[sName].highestHealCrit = math.max(spellDataAggregate[sName].highestHealCrit, data.highestHealCrit or 0)
+    spellDataAggregate[sName].highestHeal = math.max(spellDataAggregate[sName].highestHeal, data.highestHeal or 0)
+  end
+
+
   if actionType == "spell" and spellID then
-    if CritMaticData[baseSpellName] then
+    if spellDataAggregate[localizedSpellName] then
 
       local cooldown = (GetSpellBaseCooldown(spellID) or 0) / 1000
       local _, _, _, castTime = GetSpellInfo(spellID)
       local effectiveCastTime = castTime > 0 and (castTime / 1000) or GetGCD()
       local effectiveTime = max(effectiveCastTime, cooldown)
 
-      local critHPS = CritMaticData[baseSpellName].highestHealCrit / effectiveTime
-      local normalHPS = CritMaticData[baseSpellName].highestHeal / effectiveTime
-      local critDPS = CritMaticData[baseSpellName].highestCrit / effectiveTime
-      local normalDPS = CritMaticData[baseSpellName].highestNormal / effectiveTime
+      local critHPS = spellDataAggregate[localizedSpellName].highestHealCrit / effectiveTime
+      local normalHPS = spellDataAggregate[localizedSpellName].highestHeal / effectiveTime
+      local critDPS = spellDataAggregate[localizedSpellName].highestCrit / effectiveTime
+      local normalDPS = spellDataAggregate[localizedSpellName].highestNormal / effectiveTime
 
       local CritMaticHealLeft = "Highest Heal Crit: "
-      local CritMaticHealRight = tostring(CritMaticData[baseSpellName].highestHealCrit) .. " (" .. format("%.1f", critHPS) .. " HPS)"
-      local normalMaticHealLeft = "Highest Heal Normal: "
-      local normalMaticHealRight = tostring(CritMaticData[baseSpellName].highestHeal) .. " (" .. format("%.1f", normalHPS) .. " HPS)"
+      local CritMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHealCrit) .. " (" .. format("%.1f", critHPS) .. "HPS)"
+      local normalMaticHealLeft = "Highest Heal: "
+      local normalMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHeal) .. " (" .. format("%.1f", normalHPS) .. "HPS)"
 
       local CritMaticLeft = "Highest Crit: "
-      local CritMaticRight = tostring(CritMaticData[baseSpellName].highestCrit) .. " (" .. format("%.1f", critDPS) .. " DPS)"
-      local normalMaticLeft = "Highest Normal: "
-      local normalMaticRight = tostring(CritMaticData[baseSpellName].highestNormal) .. " (" .. format("%.1f", normalDPS) .. " DPS)"
+      local CritMaticRight = tostring(spellDataAggregate[localizedSpellName].highestCrit) .. " (" .. format("%.1f", critDPS) .. " DPS)"
+      local normalMaticLeft = "Highest Hit: "
+      local normalMaticRight = tostring(spellDataAggregate[localizedSpellName].highestNormal) .. " (" .. format("%.1f", normalDPS) .. " DPS)"
 
       -- Check if lines are already present in the tooltip.
       local critMaticHealExists = false
@@ -98,13 +109,13 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
         end
       end
 
-      if CritMaticData[baseSpellName].highestHealCrit > 0 then
+      if spellDataAggregate[localizedSpellName].highestHealCrit > 0 then
         if not critMaticHealExists then
           self:AddDoubleLine(CritMaticHealLeft, CritMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white)  right side color (gold)
         end
       end
 
-      if CritMaticData[baseSpellName].highestHeal > 0 then
+      if spellDataAggregate[localizedSpellName].highestHeal > 0 then
 
         if not normalMaticHealExists then
           self:AddDoubleLine(normalMaticHealLeft, normalMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white) right side color (gold)
@@ -112,13 +123,13 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
       end
 
       -- This is a damaging spell
-      if CritMaticData[baseSpellName].highestCrit > 0 then
+      if spellDataAggregate[localizedSpellName].highestCrit > 0 then
         if not critMaticExists then
           self:AddDoubleLine(CritMaticLeft, CritMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white) right side color (gold)
         end
       end
 
-      if CritMaticData[baseSpellName].highestNormal > 0 then
+      if spellDataAggregate[localizedSpellName].highestNormal > 0 then
 
         if not normalMaticExists then
           self:AddDoubleLine(normalMaticLeft, normalMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)-- left side color (white) right side color (gold)
@@ -410,7 +421,8 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700New highest crit heal for " .. baseSpellName .. ": |r" .. CritMaticData[spellID].highestHealCrit)
+                  print("|cffffd700New highest Crit Heal for " .. baseSpellName .. ": |r" .. CritMaticData[spellID]
+                          .highestHealCrit)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -431,7 +443,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("New highest normal heal for " .. baseSpellName .. ": " .. CritMaticData[spellID].highestHeal)
+                  print("New highest Heal for " .. baseSpellName .. ": " .. CritMaticData[spellID].highestHeal)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -456,7 +468,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700New highest crit hit for " .. baseSpellName .. ": |r" ..
+                  print("|cffffd700New highest Crit Hit for " .. baseSpellName .. ": |r" ..
                           CritMaticData[spellID].highestCrit)
                 end
                 RecordEvent(spellID)
@@ -477,7 +489,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("New highest normal hit for " .. baseSpellName .. ": " .. CritMaticData[spellID].highestNormal)
+                  print("New highest Hit for " .. baseSpellName .. ": " .. CritMaticData[spellID].highestNormal)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
