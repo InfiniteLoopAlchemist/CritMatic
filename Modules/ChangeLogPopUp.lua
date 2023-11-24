@@ -35,6 +35,18 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.8-release] - 11/24/2023
+
+ Updated:
+
+ Changed the spell data handling from using spell names to spell IDs. This update enhances localization support, allowing CritMatic to be more compatible with different language settings and paving the way for future international releases.
+
+ Due to this change, existing spell data in CritMatic had to be cleared. We apologize for any inconvenience this may cause and appreciate your understanding.
+
+
+
+
+
 [v0.3.7.1-release] - 11/20/2023
 
  Updated:
@@ -227,15 +239,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Included toggle for silencing party notifications.
-
-
-
-[v0.3.0-release] - 10/25/2023
-
- Added:
-
- New Slash Commands to open the options menu /cm and /critmatic
- You can Change the Crit and Normal hit / heal sounds.
 
 
 ]]
