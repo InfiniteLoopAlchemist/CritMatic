@@ -13,9 +13,19 @@ end
 
 
 local function IsSpellInSpellbook(spellID)
-  local name = GetSpellInfo(spellID)
-  return name ~= nil
+  local numSpells = GetNumSpellTabs()
+  for tab = 1, numSpells do
+    local _, _, offset, numEntries = GetSpellTabInfo(tab)
+    for slot = offset + 1, offset + numEntries do
+      local spellBookItemSpellID = select(2, GetSpellBookItemInfo(slot, BOOKTYPE_SPELL))
+      if spellBookItemSpellID == spellID then
+        return true
+      end
+    end
+  end
+  return false
 end
+
 
 local spellDataAggregate = {}
 
@@ -383,7 +393,7 @@ f:SetScript("OnEvent", function(self, event, ...)
     local soundHealNormal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healNormal)
 
     if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
-      if baseSpellName then
+      if spellID then
         CritMaticData[spellID] = CritMaticData[spellID] or {
           highestCrit = 0,
           highestCritOld= 0,
@@ -396,8 +406,10 @@ f:SetScript("OnEvent", function(self, event, ...)
 
         }
 
-        if IsSpellInSpellbook(spellID) or spellID == 6603 then
+       
           --print(CombatLogGetCurrentEventInfo())
+       -- if IsSpellInSpellbook(spellID) then
+          
 
 
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
@@ -497,9 +509,9 @@ f:SetScript("OnEvent", function(self, event, ...)
             end
           end
 
+       -- end
 
 
-        end
       end
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
