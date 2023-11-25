@@ -54,6 +54,8 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
   -- Loop over all spells in CritMaticData to aggregate data by spell name
   for sID, data in pairs(CritMaticData) do
     local sName = GetSpellInfo(sID)
+
+    if sName then
     -- Initialize the sub-table for each spell name if it doesn't exist
     if not spellDataAggregate[sName] then
       spellDataAggregate[sName] = {
@@ -147,6 +149,7 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
           self:AddDoubleLine(normalMaticLeft, normalMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)-- left side color (white) right side color (gold)
         end
       end
+    end
 
       self:Show()
     end
