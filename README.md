@@ -40,7 +40,7 @@ With CritMatic you'll always know when you've hit a new personal best. Happy Cri
 
 ## Known Issues:
 
-- Some spells have the wrong icon in Crit Log. This is due to the spell not having a unique spell ID. I am working on a
-  solution for this or if anyone has a solution.
+- Some spells have the wrong icon in crit log. This is due to the spell not having a unique spell ID. I am working on a
+  solution for this.
 
 

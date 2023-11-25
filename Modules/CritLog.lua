@@ -412,23 +412,50 @@ function toggleCritMaticCritLog()
             wipe(createdSpellFrames)
 
             local spellsByName = {}
+
             for spellID, spellData in pairs(CritMaticData) do
                 local spellName = GetSpellInfo(spellID)
+
                 if spellName then
                     if not spellsByName[spellName] then
                         spellsByName[spellName] = {
                             ids = {spellID},
-                            data = spellData
+                            data = spellData,
+                            latestTimestamp = spellData.timestamp -- Initialize with the first timestamp
                         }
                     else
-                        -- Combine data for spells with the same name but different IDs
-                        local existingData = spellsByName[spellName].data
-                        table.insert(spellsByName[spellName].ids, spellID)
-                        -- Merge the data. For example, take the higher crit value:
-                        existingData.highestCrit = math.max(existingData.highestCrit, spellData.highestCrit or 0)
-                        existingData.highestNormal = math.max(existingData.highestNormal, spellData.highestNormal or 0)
-                        existingData.highestHealCrit = math.max(existingData.highestHealCrit, spellData.highestHealCrit or 0)
-                        existingData.highestHeal = math.max(existingData.highestHeal, spellData.highestHeal or 0)
+                        local spellGroup = spellsByName[spellName]
+                        local existingData = spellGroup.data
+                        table.insert(spellGroup.ids, spellID)
+
+                        -- Compare and update the timestamp
+                        spellGroup.latestTimestamp = math.max(spellGroup.latestTimestamp, spellData.timestamp or 0)
+
+                        -- Initialize a flag to track if data is updated
+
+
+                        -- Update old values before merging the data
+                        if spellData.highestCrit and spellData.highestCrit > (existingData.highestCrit or 0) then
+                            existingData.highestCritOld = existingData.highestCrit
+                            existingData.highestCrit = spellData.highestCrit
+
+                        end
+                        if spellData.highestNormal and spellData.highestNormal > (existingData.highestNormal or 0) then
+                            existingData.highestNormalOld = existingData.highestNormal
+                            existingData.highestNormal = spellData.highestNormal
+
+                        end
+                        if spellData.highestHealCrit and spellData.highestHealCrit > (existingData.highestHealCrit or 0) then
+                            existingData.highestHealCritOld = existingData.highestHealCrit
+                            existingData.highestHealCrit = spellData.highestHealCrit
+
+                        end
+                        if spellData.highestHeal and spellData.highestHeal > (existingData.highestHeal or 0) then
+                            existingData.highestHealOld = existingData.highestHeal
+                            existingData.highestHeal = spellData.highestHeal
+
+                        end
+
 
                     end
                 end
@@ -437,12 +464,17 @@ function toggleCritMaticCritLog()
             -- Convert the spell data by name to a sortable list
             local sortableData = {}
             for spellName, spellGroup in pairs(spellsByName) do
-                table.insert(sortableData, {name = spellName, data = spellGroup.data, ids = spellGroup.ids})
+                table.insert(sortableData, {
+                    name = spellName,
+                    data = spellGroup.data,
+                    ids = spellGroup.ids,
+                    timestamp = spellGroup.latestTimestamp -- Use the latest timestamp for sorting
+                })
             end
 
-            -- Sort by timestamp, most recent first
+            -- Sort by the latest timestamp, most recent first
             table.sort(sortableData, function(a, b)
-                return (a.data.timestamp or 0) > (b.data.timestamp or 0)
+                return (a.timestamp or 0) > (b.timestamp or 0)
             end)
 
             for _, entry in ipairs(sortableData) do
