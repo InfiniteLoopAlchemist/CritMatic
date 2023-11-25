@@ -1,6 +1,6 @@
 # WotLK Classic: v3.4.3  and Classic / Hardcore: v1.14.4
 
-## CritMatic: v0.3.8.1
+## CritMatic: v0.3.8.2
 
 ### CritMatic is a lightweight World of Warcraft addon designed to help players keep track of their highest critical and normal hits (both damage and heal).
 
@@ -12,6 +12,7 @@
 
 - **Real-time Tracking:** CritMatic monitors your combat logs in real-time and records your highest critical and normal
   hits for each spell you cast. It automatically updates these records when you hit harder.
+
 - **Healing Tracking:** In addition to damage, CritMatic also tracks your healing output, recording the highest heal and
   critical heal for each healing spell you cast.
 
@@ -24,24 +25,22 @@
 
 - **Persistent Data:** CritMatic saves your highest hits data between sessions, so you can log out or switch characters
   without losing your records. You can also reset the data at any time if you want to start fresh.
--
+
 - **Slash Command:** Use  `/critmatic` or `/cm`to open the options.
 - **Slash Command:** Use the `/cmreset` command to reset all your CritMatic saved data.
+- **Slash Command:** Use the `/cmcritlog` command to open and close the change log.
+- **Slash Command:** Use the `/cmlog` Command to open and close the change log.
 
 With CritMatic you'll always know when you've hit a new personal best. Happy Criting!
 
 ## Planned:
 
-- Crit-log by level and ability.
-- Option to disable the Crit/Normal/Heal notification message.
-- Option to disable the CritMatic tooltip information.
-- option to move the CritMatic Crit/Normal/Heal notification message.
+- Remove spells you dont want tracked from Crit Log and Tooltip/Chat/Notification.
+- Translate CritMatic to other languages soon.
 
 ## Known Issues:
 
-- Warlocks Hearthstones don't display in the tooltip or message.
-- pets are not currently tracked in the tooltip or message.
-- Some spells like Killing Spree / Star fall show really low dps.
-
+- Some spells have the wrong icon in crit log. This is due to the spell not having a unique spell ID. I am working on a
+  solution for this.
 
 

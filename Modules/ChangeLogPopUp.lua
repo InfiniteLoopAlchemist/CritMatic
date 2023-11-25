@@ -35,7 +35,7 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
-[v0.3.8.1-release] - 11/25/2023
+[v0.3.8.2-release] - 11/25/2023
 
  Fixed:
 
@@ -49,11 +49,23 @@ Critmatic.showChangeLog = function()
 
 
 
+[v0.3.8-release] - 11/24/2023
+
+ Updated:
+
+ Changed the spell data handling from using spell names to spell IDs. This update enhances localization support, allowing CritMatic to be more compatible with different language settings and paving the way for future international releases.
+
+ Due to this change, existing spell data in CritMatic had to be cleared. We apologize for any inconvenience this may cause and appreciate your understanding.
+
+
+
+
+
 [v0.3.7.1-release] - 11/20/2023
 
  Updated:
 
- Crit Log now sorts by latest Crits/Normal Hits/Crit Heals/Heals.
+ Crit Log now sorts by latest Crits/Hits/Crit Heals/Heals.
 
 
 
@@ -225,22 +237,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Introduced generalized configuration options.
-
-
-
-[v0.3.1-release] - 10/26/2023
-
- Fixed:
-
- Purged residual debug messages inadvertently left in production build.
-
- Updated:
-
- Optimized Party Notifications to exclusively display Critical Hits and Heals, omitting standard events.
-
- Added:
-
- Included toggle for silencing party notifications.
 
 
 ]]
