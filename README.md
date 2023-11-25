@@ -1,4 +1,4 @@
-# WotLK Classic: v3.4.3  and Classic / Hardcore: v1.14.5
+# WotLK Classic: v3.4.3  and Classic / Hardcore: v1.14.4
 
 ## CritMatic: v0.3.8
 
@@ -27,21 +27,19 @@
 -
 - **Slash Command:** Use  `/critmatic` or `/cm`to open the options.
 - **Slash Command:** Use the `/cmreset` command to reset all your CritMatic saved data.
+- **Slash Command:** Use the `/cmcritlog` command to open and close the change log.
+- **Slash Command:** Use the `/cmlog` Command to open and close the change log.
 
 With CritMatic you'll always know when you've hit a new personal best. Happy Criting!
 
 ## Planned:
 
-- Crit-log by level and ability.
-- Option to disable the Crit/Normal/Heal notification message.
-- Option to disable the CritMatic tooltip information.
-- option to move the CritMatic Crit/Normal/Heal notification message.
+- Remove spells you dont want tracked from Crit Log and Tooltip/Chat/Notification.
+- Translate CritMatic to other languages soon.
 
 ## Known Issues:
 
-- Warlocks Hearthstones don't display in the tooltip or message.
-- pets are not currently tracked in the tooltip or message.
-- Some spells like Killing Spree / Star fall show really low dps.
-
+- Some spells have the wrong icon in Crit Log. This is due to the spell not having a unique spell ID. I am working on a
+  solution for this or if anyone has a solution.
 
 

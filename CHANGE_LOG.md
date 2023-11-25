@@ -12,7 +12,7 @@
 
 ### Updated:
 
-- **Crit Log now sorts by latest Crits/Normal Hits/Crit Heals/Heals.**
+- **Crit Log now sorts by latest Crits/Hits/Crit Heals/Heals.**
 
 
 

@@ -583,7 +583,7 @@ function toggleCritMaticCritLog()
     texture_CritMatic_icon:SetDrawLayer("OVERLAY", 3)
     texture_CritMatic_icon:SetHeight(25)
     texture_CritMatic_icon:SetWidth(25)
-    texture_CritMatic_icon:SetTexture("Interface\\AddOns\\CritMatic\\Media\\IMGS\\Spell_Holy_WeaponMastery.blp")
+    texture_CritMatic_icon:SetTexture("Interface\\AddOns\\CritMatic\\Media\\Textures\\icon.blp")
 
     local texture_gold_ring = critmatic_icon_frame:CreateTexture(nil, "OVERLAY")
     texture_gold_ring:SetParent(UIParent)
