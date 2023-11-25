@@ -481,7 +481,8 @@ function toggleCritMaticCritLog()
                 local spellName = entry.name
                 local spellData = entry.data
                 local spellIDs = entry.ids  -- Now you have access to all IDs for this spell name
-                local _, _, spellIconPath = GetSpellInfo(spellIDs[1])
+                local spellIDToUse = #spellIDs > 1 and spellIDs[2] or spellIDs[1]
+                local _, _, spellIconPath = GetSpellInfo(spellIDToUse)
 
 
                 if spellIconPath then
