@@ -35,6 +35,20 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.8.2-release] - 11/25/2023
+
+ Fixed:
+
+ Good news! We've fixed a bug that affected how the crit log displayed information for spells that can both heal and damage. Previously, if a spell had both of these capabilities, the crit log wasn't displaying correctly.
+
+ This issue did not affect spells that were exclusively for healing or damage. With this latest update, you can expect accurate and consistent display for all spells, regardless of whether they heal, damage, or do both.
+
+ Thank you for your continued support and feedback, which helps us improve CritMatic. Enjoy your enhanced gaming experience!
+
+
+
+
+
 [v0.3.8-release] - 11/24/2023
 
  Updated:
@@ -51,7 +65,7 @@ Critmatic.showChangeLog = function()
 
  Updated:
 
- Crit Log now sorts by latest Crits/Normal Hits/Crit Heals/Heals.
+ Crit Log now sorts by latest Crits/Hits/Crit Heals/Heals.
 
 
 
@@ -223,22 +237,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Introduced generalized configuration options.
-
-
-
-[v0.3.1-release] - 10/26/2023
-
- Fixed:
-
- Purged residual debug messages inadvertently left in production build.
-
- Updated:
-
- Optimized Party Notifications to exclusively display Critical Hits and Heals, omitting standard events.
-
- Added:
-
- Included toggle for silencing party notifications.
 
 
 ]]
