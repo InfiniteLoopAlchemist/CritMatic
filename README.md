@@ -12,6 +12,7 @@
 
 - **Real-time Tracking:** CritMatic monitors your combat logs in real-time and records your highest critical and normal
   hits for each spell you cast. It automatically updates these records when you hit harder.
+
 - **Healing Tracking:** In addition to damage, CritMatic also tracks your healing output, recording the highest heal and
   critical heal for each healing spell you cast.
 
@@ -24,7 +25,7 @@
 
 - **Persistent Data:** CritMatic saves your highest hits data between sessions, so you can log out or switch characters
   without losing your records. You can also reset the data at any time if you want to start fresh.
--
+
 - **Slash Command:** Use  `/critmatic` or `/cm`to open the options.
 - **Slash Command:** Use the `/cmreset` command to reset all your CritMatic saved data.
 - **Slash Command:** Use the `/cmcritlog` command to open and close the change log.
