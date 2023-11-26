@@ -1,5 +1,7 @@
 -- This line should be at the top of your main Lua file, outside any function.
 Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0","AceComm-3.0")
+local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
+
 local MAX_HIT = 40000
 
 local function GetGCD()
@@ -82,20 +84,23 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
       local effectiveCastTime = castTime > 0 and (castTime / 1000) or GetGCD()
       local effectiveTime = max(effectiveCastTime, cooldown)
 
-      local critHPS = spellDataAggregate[localizedSpellName].highestHealCrit / effectiveTime
-      local normalHPS = spellDataAggregate[localizedSpellName].highestHeal / effectiveTime
       local critDPS = spellDataAggregate[localizedSpellName].highestCrit / effectiveTime
       local normalDPS = spellDataAggregate[localizedSpellName].highestNormal / effectiveTime
+      local critHPS = spellDataAggregate[localizedSpellName].highestHealCrit / effectiveTime
+      local normalHPS = spellDataAggregate[localizedSpellName].highestHeal / effectiveTime
 
-      local CritMaticHealLeft = "Highest Heal Crit: "
-      local CritMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHealCrit) .. " (" .. format("%.1f", critHPS) .. "HPS)"
-      local normalMaticHealLeft = "Highest Heal: "
-      local normalMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHeal) .. " (" .. format("%.1f", normalHPS) .. "HPS)"
+      local CritMaticLeft = L["action_bar_crit"]
+      local DPS = L["action_bar_dps"]
+      local CritMaticRight = tostring(spellDataAggregate[localizedSpellName].highestCrit) .. " (" .. format("%.1f",
+              critDPS) ..  DPS
+      local normalMaticLeft = L["action_bar_hit"]
+      local normalMaticRight = tostring(spellDataAggregate[localizedSpellName].highestNormal) .. " (" .. format("%.1f", normalDPS) .. DPS
 
-      local CritMaticLeft = "Highest Crit: "
-      local CritMaticRight = tostring(spellDataAggregate[localizedSpellName].highestCrit) .. " (" .. format("%.1f", critDPS) .. " DPS)"
-      local normalMaticLeft = "Highest Hit: "
-      local normalMaticRight = tostring(spellDataAggregate[localizedSpellName].highestNormal) .. " (" .. format("%.1f", normalDPS) .. " DPS)"
+      local CritMaticHealLeft = L["action_bar_crit_heal"]
+      local HPS = L["action_bar_hps"]
+      local CritMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHealCrit) .. " (" .. format("%.1f", critHPS) .. HPS
+      local normalMaticHealLeft = L["action_bar_heal"]
+      local normalMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHeal) .. " (" .. format("%.1f", normalHPS) .. HPS
 
       -- Check if lines are already present in the tooltip.
       local critMaticHealExists = false
@@ -123,19 +128,6 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
         end
       end
 
-      if spellDataAggregate[localizedSpellName].highestHealCrit > 0 then
-        if not critMaticHealExists then
-          self:AddDoubleLine(CritMaticHealLeft, CritMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white)  right side color (gold)
-        end
-      end
-
-      if spellDataAggregate[localizedSpellName].highestHeal > 0 then
-
-        if not normalMaticHealExists then
-          self:AddDoubleLine(normalMaticHealLeft, normalMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white) right side color (gold)
-        end
-      end
-
       -- This is a damaging spell
       if spellDataAggregate[localizedSpellName].highestCrit > 0 then
         if not critMaticExists then
@@ -147,6 +139,19 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
 
         if not normalMaticExists then
           self:AddDoubleLine(normalMaticLeft, normalMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)-- left side color (white) right side color (gold)
+        end
+      end
+
+      if spellDataAggregate[localizedSpellName].highestHealCrit > 0 then
+        if not critMaticHealExists then
+          self:AddDoubleLine(CritMaticHealLeft, CritMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white)  right side color (gold)
+        end
+      end
+
+      if spellDataAggregate[localizedSpellName].highestHeal > 0 then
+
+        if not normalMaticHealExists then
+          self:AddDoubleLine(normalMaticHealLeft, normalMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white) right side color (gold)
         end
       end
     end
@@ -214,7 +219,7 @@ function Critmatic:OnInitialize()
       local isNewerVersion = message > version
 
       if isNewerVersion and not Critmatic.hasDisplayedUpdateMessage then
-        Critmatic:Print("|cffff0000An updated version of CritMatic has been released. We strongly recommend upgrading to the latest version for enhanced features and stability.|r |cff918d86The update is available on CurseForge, Wago .io, and WoW Interface.|r")
+        Critmatic:Print("|cffff0000"..L["new_version_notification"].."|r |cff918d86"..L["new_version_notification_part"].."|r")
         Critmatic.hasDisplayedUpdateMessage = true
       end
     end
@@ -291,13 +296,13 @@ function Critmatic:OnInitialize()
   function Critmatic:GROUP_ROSTER_UPDATE()
     self:BroadcastVersion()
   end
-  -- Register console commands
-  Critmatic:RegisterChatCommand("cmreset", "CritMaticReset")
+
   -- Register the slash commands
-  Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
-  Critmatic:RegisterChatCommand("cm", "OpenOptions")
-  Critmatic:RegisterChatCommand("cmlog", "OpenChangeLog")
-  Critmatic:RegisterChatCommand("cmcritlog", function() toggleCritMaticCritLog() end)
+  Critmatic:RegisterChatCommand(L["slash_critmatic"], "OpenOptions")
+  Critmatic:RegisterChatCommand(L["slash_cm"], "OpenOptions")
+  Critmatic:RegisterChatCommand(L["slash_cmlog"], "OpenChangeLog")
+  Critmatic:RegisterChatCommand(L["slash_cmcritlog"], function() toggleCritMaticCritLog() end)
+  Critmatic:RegisterChatCommand(L["slash_cmreset"], "CritMaticReset")
 
 
   self:RegisterComm("Critmatic")
@@ -310,7 +315,7 @@ function Critmatic:OnInitialize()
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
   function Critmatic:CritMaticLoaded()
-    self:Print("|cffd4d4d4 v|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 Loaded! - Use|cffffd700  /cm|r|cffd4d4d4 for  options - |cffffd700/cmcritlog |r|cffd4d4d4 for crit log. |r - |cffffd700/cmlog|r|cffd4d4d4 for change log. |r")
+    self:Print("|cffd4d4d4 "..L["version_string"] .."|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 "..L["critmatic_loaded"] .."|cffffd700  "..L["critmatic_loaded_2"].."|r|cffd4d4d4 "..L["critmatic_loaded_3"].."|r |cffffd700"..L["critmatic_loaded_4"].."|r|cffd4d4d4 "..L["critmatic_loaded_5"].."|r|cffffd700 "..L["critmatic_loaded_6"].."|r|cffd4d4d4 "..L["critmatic_loaded_7"].."|r")
   end
 
 
@@ -355,12 +360,8 @@ end
 
 function Critmatic:CritMaticReset()
   wipe(CritMaticData)
-  Critmatic:Print("|cffff0000Data Reset!|r")
+  Critmatic:Print("|cffff0000"..L["critmatic_reset"].."|r")
   RedrawCritMaticWidget()
-end
-function Critmatic:CritMaticDBReset()
-
-  Critmatic:Print("|cffff0000Database Reset!|r")
 end
 
 -- Register an event that fires when the player hits an enemy.
@@ -450,8 +451,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700New highest Crit Heal for " .. baseSpellName .. ": |r" .. CritMaticData[spellID]
-                          .highestHealCrit)
+                  print("|cffffd700"..L["chat_crit_heal"] .. baseSpellName.. ": |r" .. CritMaticData[spellID].highestHealCrit)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -472,7 +472,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("New highest Heal for " .. baseSpellName .. ": " .. CritMaticData[spellID].highestHeal)
+                  print(L["chat_heal"] .. baseSpellName .. ": " .. CritMaticData[spellID].highestHeal)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -497,8 +497,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700New highest Crit Hit for " .. baseSpellName .. ": |r" ..
-                          CritMaticData[spellID].highestCrit)
+                  print("|cffffd700"..L["chat_crit"] .. baseSpellName .. ": |r" .. CritMaticData[spellID].highestCrit)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -518,7 +517,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("New highest Hit for " .. baseSpellName .. ": " .. CritMaticData[spellID].highestNormal)
+                  print(L["chat_hit"] .. baseSpellName .. ": " .. CritMaticData[spellID].highestNormal)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -538,11 +537,11 @@ f:SetScript("OnEvent", function(self, event, ...)
     local function sendChat(chatType)
       -- For highest critical hit
       if highestCritDuringCombat > 0 then
-        SendChatMessage("{star}CritMatic: New highest crit hit for " .. highestCritSpellName .. ": " .. highestCritDuringCombat, chatType)
+        SendChatMessage(L["social_crit"] .. highestCritSpellName .. ": " .. highestCritDuringCombat, chatType)
       end
       -- For highest critical heal
       if highestCritHealDuringCombat > 0 then
-        SendChatMessage("{star}CritMatic: New highest crit heal for " .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat, chatType)
+        SendChatMessage(L["social_crit_heal"] .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat, chatType)
       end
     end
 

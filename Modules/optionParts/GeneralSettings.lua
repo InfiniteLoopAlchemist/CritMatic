@@ -1,14 +1,15 @@
 Critmatic = Critmatic or {}
+local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 function Critmatic:GeneralTab_Initialize()
     -- Define your general tab options here
     return {
-        name = "General",
+        name = L["options_general"],
         type = "group",
         order = 1,
         args = {
             autoAttacksEnabled = {
-                name = "Track Auto Attacks",
-                desc = "Do you want to track auto attacks?",
+                name = L["options_auto_attacks"],
+                desc = L["options_auto_attacks_desc"],
                 type = "toggle",
                 order = 1,
                 set = function(_, newVal)
@@ -18,23 +19,12 @@ function Critmatic:GeneralTab_Initialize()
                     return Critmatic.db.profile.generalSettings.autoAttacksEnabled
                 end,
             },
-            chatNotificationsEnabled = {
-                name = "Show Chat Notifications",
-                desc = "Do you want damage / heal chat messages for when you get a higher crit/normal hit/heal?",
+
+            alertNotificationsEnabled = {
+                name = L["options_show_alert_notifications"],
+                desc = L["options_show_alert_notifications_desc"],
                 type = "toggle",
                 order = 2,
-                set = function(_, newVal)
-                    Critmatic.db.profile.generalSettings.chatNotificationsEnabled = newVal
-                end,
-                get = function()
-                    return Critmatic.db.profile.generalSettings.chatNotificationsEnabled
-                end,
-            },
-            alertNotificationsEnabled = {
-                name = "Show Alert Notifications",
-                desc = "Do you want damage / heal alerts messages for when you get a higher crit/normal hit/heal?",
-                type = "toggle",
-                order = 3,
                 set = function(_, newVal)
                     Critmatic.db.profile.generalSettings.alertNotificationsEnabled = newVal
                 end,
@@ -42,9 +32,21 @@ function Critmatic:GeneralTab_Initialize()
                     return Critmatic.db.profile.generalSettings.alertNotificationsEnabled
                 end,
             },
+            chatNotificationsEnabled = {
+                name = L["options_show_chat_notifications"],
+                desc = L["options_show_chat_notifications_desc"],
+                type = "toggle",
+                order = 3,
+                set = function(_, newVal)
+                    Critmatic.db.profile.generalSettings.chatNotificationsEnabled = newVal
+                end,
+                get = function()
+                    return Critmatic.db.profile.generalSettings.chatNotificationsEnabled
+                end,
+            },
             isChangeLogAutoPopUpEnabled = {
-                name = "Show Change Log",
-                desc = "Do you want the change log to auto show when a new version comes out?",
+                name = L["options_show_change_log"],
+                desc = L["options_show_change_log_desc"],
                 type = "toggle",
                 order = 4,
                 set = function(_, newVal)
@@ -55,8 +57,8 @@ function Critmatic:GeneralTab_Initialize()
                 end,
             },
             discordLink = {
-                name = "Help/Suggestions: Copy the CritMatic Discord Link",
-                desc = "Get help or make a suggestion, Just Copy this link to join our Discord server.",
+                name = L["options_discord_link"],
+                desc = L["options_discord_link_desc"],
                 type = "input",
                 order = 5,
                 width = 'full',

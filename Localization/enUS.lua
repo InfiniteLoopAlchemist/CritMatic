@@ -1,0 +1,60 @@
+-- (English) localization file for enUS clients.
+
+local L = LibStub("AceLocale-3.0"):NewLocale("CritMatic", "enUS", true)
+if not L then return end
+--CritMatic.lua
+L["action_bar_crit"] = "Crit: "
+L["action_bar_hit"] = "Hit: "
+L["action_bar_dps"] = " DPS)"
+L["action_bar_crit_heal"] = "Crit Heal: "
+L["action_bar_heal"] = "Heal: "
+L["action_bar_hps"] = " HPS)"
+L["new_version_notification"] = "An updated version of CritMatic has been released. We strongly recommend upgrading to the latest version for enhanced features and stability."
+L["new_version_notification_part"] = "The update is available on CurseForge, Wago .io, and WoW Interface"
+L["slash_critmatic"] = "critmatic"
+L["slash_cm"] = "cm"
+L["slash_cmlog"] = "cmlog"
+L["slash_cmcritlog"] = "cmcritlog"
+L["slash_cmreset"] = "cmreset"
+L["version_string"] = "v"
+L["critmatic_loaded"] = "Loaded! - Use"
+L["critmatic_loaded_2"] = "/cm"
+L["critmatic_loaded_3"] = "for  options -"
+L["critmatic_loaded_4"] = " /cmcritlog"
+L["critmatic_loaded_5"] = "for crit log."
+L["critmatic_loaded_6"] = "/cmlog"
+L["critmatic_loaded_7"] = "for change log."
+L["critmatic_reset"] = "Data Reset!"
+L["chat_crit"] = "New highest Crit for "
+L["chat_hit"] = "New highest Hit for "
+L["chat_crit_heal"] = "New highest Crit Heal for "
+L["chat_heal"] = "New highest Heal for "
+L["social_crit"] = "{star}CritMatic: New highest crit hit for "
+L["social_crit_heal"] = "{star}CritMatic: New highest crit heal for "
+-- messageFrame.lua and CritLog.lua
+L["message_log_crit"] = "Crit"
+L["message_log_hit"] = "Hit"
+L["message_log_heal"] = "Heal"
+L["message_log_new"] = "New "
+L["message_log_old"] = "Old"
+L["message_log_critmatic"] = "CritMatic"
+
+-- CritMaticOptions.lua
+-- General
+L["options_general"] = "General"
+L["options_auto_attacks"] = "Track Auto Attacks"
+L["options_auto_attacks_desc"] = "Do you want to track auto attacks?"
+L["options_show_chat_notifications"] = "Show Chat Notifications"
+L["options_show_chat_notifications_desc"] = "Do you want damage / heal chat messages for when you get a highercrit/hit/heal?"
+L["options_show_alert_notifications"] = "Show Alert Notifications"
+L["options_show_alert_notifications_desc"] = "Do you want damage / heal alerts messages for when you get a higher crit/hit/heal?"
+L["options_show_change_log"] = "Show Change Log"
+L["options_show_change_log_desc"] = "Do you want the change log to auto show when a new version comes out?"
+L["options_discord_link"] = "Help/Suggestions: Copy the CritMatic Discord Link"
+L["options_discord_link_desc"] = "Get help or make a suggestion, Just Copy this link to join our Discord server."
+L["options_discord_link_copy"] = "Copy Discord Link"
+
+-- Alert Font Settings
+L["options_alert_font_settings"] = "Alert Font Settings"
+L["options_alert_font"] = "Font"
+L["options_alert_font_desc"] = "You might have to select the font twice to see all the fonts."

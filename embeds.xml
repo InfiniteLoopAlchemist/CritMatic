@@ -13,7 +13,20 @@
     <Include file="Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml"/>
     <Include file="Libs\LibSharedMedia-3.0\lib.xml"/>
     <Include file="Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml"/>
+
+    <!-- Localization -->
     <Include file="Libs\AceLocale-3.0\AceLocale-3.0.xml"/>
+    <Script file="Localization\enUS.lua"/>
+    <Script file="Localization\deDE.lua"/>
+    <Script file="Localization\esES.lua"/>
+    <Script file="Localization\esMX.lua"/>
+    <Script file="Localization\frFR.lua"/>
+    <Script file="Localization\itIT.lua"/>
+    <Script file="Localization\koKR.lua"/>
+    <Script file="Localization\ptBR.lua"/>
+    <Script file="Localization\ruRU.lua"/>
+    <Script file="Localization\zhCN.lua"/>
+    <Script file="Localization\zhTW.lua"/>
 
     <!-- Core Addon Script -->
     <Script file="CritMatic.lua"/>
@@ -26,11 +39,12 @@
     <Script file="Modules\optionParts\SocialSettings.lua"/>
     <Script file="Modules\optionParts\ChangeLogSettings.lua"/>
     <Script file="Modules\CritMaticOptions.lua"/>
-    <Script file="Modules\CritLog.lua"/>
+
 
 
     <!-- Additional Scripts and Modules -->
     <Script file="MessageFrame.lua"/>
+    <Script file="Modules\CritLog.lua"/>
     <Script file="Modules\ChangeLogPopUp.lua"/>
 
 </Ui>

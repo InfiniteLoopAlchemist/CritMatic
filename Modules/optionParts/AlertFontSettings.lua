@@ -1,19 +1,20 @@
 local LSM = LibStub("LibSharedMedia-3.0")
 Critmatic = Critmatic or {}
+local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 function ResetFontSettingsToDefault()
     Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
 end
 function Critmatic:AlertFontSettings_Initialize()
 
     local alertFontSettings = {
-        name = "Alert Font Settings",
+        name = L["options_alert_font_settings"],
         type = "group",
         order = 2,
         args = {
             font = {
-                name = "Font",
+                name =L["options_alert_font"] ,
                 type = "select",
-                desc = "You might have to select the font twice to see all the fonts.",
+                desc = L["options_alert_font_desc"],
                 dialogControl = "LSM30_Font",
                 values = LSM:HashTable("font"),
                 width = "full",

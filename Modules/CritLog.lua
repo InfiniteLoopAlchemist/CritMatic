@@ -1,3 +1,5 @@
+
+local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 function toggleCritMaticCritLog()
     local db = Critmatic.db.profile
     local sizePos = Critmatic.db.profile.critLogWidgetPos
@@ -481,7 +483,7 @@ function toggleCritMaticCritLog()
                 local spellName = entry.name
                 local spellData = entry.data
                 local spellIDs = entry.ids  -- Now you have access to all IDs for this spell name
-                local spellIDToUse = #spellIDs > 1 and spellIDs[2] or spellIDs[1]
+                local spellIDToUse = #spellIDs > 2 and spellIDs[3] or spellIDs[1]
                 local _, _, spellIconPath = GetSpellInfo(spellIDToUse)
 
 
@@ -506,20 +508,17 @@ function toggleCritMaticCritLog()
                     -- Construct the spell info text based on available data
                     spellInfoText = string.format(spellInfoText, GetSpellInfo(spellIDs[1]))
 
-                    if spellData.highestCrit and spellData.highestCrit > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Crit: %s (Old: %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
+                    if spellData.highestCrit and spellData.highestCrit > 0 then spellInfoText = spellInfoText .. string.format(gray .. L["message_log_crit"]..": %s ("..L["message_log_old"]..": %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
                     end
 
-                    if spellData.highestNormal and spellData.highestNormal > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Hit: %s (Old: %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
+                    if spellData.highestNormal and spellData.highestNormal > 0 then spellInfoText = spellInfoText .. string.format(gray .. L["message_log_hit"]..": %s ("..L["message_log_old"]..": %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
                     end
 
-                    if spellData.highestHealCrit and spellData.highestHealCrit > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Crit Heal: %s (Old: %s)|r\n", spellData.highestHealCrit, spellData.highestHealCritOld or "0")
+                    if spellData.highestHealCrit and spellData.highestHealCrit > 0 then spellInfoText = spellInfoText .. string.format(gray .. L["message_log_crit"].." ".. L["message_log_heal"]..": %s ("..L["message_log_old"] ..": %s)|r\n", spellData.highestHealCrit, spellData.highestHealCritOld or "0")
                     end
 
                     if spellData.highestHeal and spellData.highestHeal > 0 then
-                        spellInfoText = spellInfoText .. string.format(gray .. "Heal: %s (Old: %s)|r", spellData.highestHeal, spellData.highestHealOld or "0")
+                        spellInfoText = spellInfoText .. string.format(gray .. L["message_log_heal"]..": %s ("..L["message_log_old"] ..": %s)|r", spellData.highestHeal, spellData.highestHealOld or "0")
                     end
 
                     spellText:SetText(spellInfoText)
@@ -589,7 +588,7 @@ function toggleCritMaticCritLog()
 
     Critmatic.crit_log_frame.frame:SetMovable(true)
     Critmatic.crit_log_frame.frame:EnableMouse(true)
-    Critmatic.crit_log_frame:SetTitle("CritMatic")
+    Critmatic.crit_log_frame:SetTitle(L["message_log_critmatic"])
     Critmatic.crit_log_frame:SetLayout("Fill")
 
 

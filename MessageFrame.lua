@@ -1,3 +1,4 @@
+local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 local MESSAGE_SPACING = 3
 local MAX_MESSAGES = 4
 local activeMessages = {}
@@ -74,21 +75,21 @@ function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
 end
 
 function Critmatic.ShowNewHealCritMessage(spellName, amount)
-  local messageType = "Crit Heal"
-  if string.find(spellName, "Heal$") then
+  local messageType = L["message_log_crit"] .." "..L["message_log_heal"]
+  if string.find(spellName, L["message_log_heal"].."$") then
     messageType = "Crit" -- Remove "Heal" from the message type if the spell name ends with "Heal"
   end
-  local message = string.upper(string.format("New %s %s: %d!", spellName, messageType, amount))
+  local message = string.upper(string.format(L["message_log_new"].."%s %s: %d!", spellName, messageType, amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)  -- Gold color
 end
 
 function Critmatic.ShowNewHealMessage(spellName, amount)
-  local messageType = "Heal"
-  if string.find(spellName, "Heal$") then
+  local messageType = L["message_log_heal"]
+  if string.find(spellName, L["message_log_heal"].."$") then
     messageType = "" -- Remove "Heal" from the message type if the spell name ends with "Heal"
   end
-  local message = string.upper(string.format("New %s %s: %d!", spellName, messageType, amount))
+  local message = string.upper(string.format(L["message_log_new"].."%s %s: %d!", spellName, messageType, amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 end
@@ -97,14 +98,16 @@ end
 
 function Critmatic.ShowNewCritMessage(spellName, amount)
 
-  local message = string.upper(string.format("New %s Crit: %d!", spellName, amount))
+  local message = string.upper(string.format(L["message_log_new"] .."%s "..L["message_log_crit"]..": %d!", spellName,
+          amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 end
 
 function Critmatic.ShowNewNormalMessage(spellName, amount)
 
-  local message = string.upper(string.format("New %s Hit: %d!", spellName, amount))
+  local message = string.upper(string.format(L["message_log_new"].."%s "..L["message_log_hit"]..": %d!", spellName,
+          amount))
   local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
   Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 
