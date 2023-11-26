@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.8.3-release] - 11/26/2023
+
+ Fixed:
+
+ A bug where spells not in the spellbook caused an error for the action bar tooltip.
+
+
+
+
+
 [v0.3.8.2-release] - 11/25/2023
 
  Fixed:
@@ -225,18 +235,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Introduced versionchecking mechanism to notify users of outdated CritMatic versions.
-
-
-
-[v0.3.2-release] - 10/26/2023
-
- Updated:
-
- Refined various functional and UI elements.
-
- Added:
-
- Introduced generalized configuration options.
 
 
 ]]
