@@ -1,31 +1,18 @@
 local LSM = LibStub("LibSharedMedia-3.0")
 Critmatic = Critmatic or {}
+local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 function ResetSoundsToDefault()
     Critmatic.db.profile.soundSettings = defaults.profile.soundSettings
 end
 
 function Critmatic:SoundSettings_Initialize()
     local soundSettings = {
-        name = "Sound Settings",
+        name = L["options_sound_settings"],
         type = "group",
         order = 3,
         args = {
-            damageNormal = {
-                name = "Normal Damage Sound",
-                type = "select",
-                dialogControl = "LSM30_Sound",
-                values = LSM:HashTable("sound"),
-                width = "full",
-                order = 2,
-                get = function()
-                    return Critmatic.db.profile.soundSettings.damageNormal
-                end,
-                set = function(_, newVal)
-                    Critmatic.db.profile.soundSettings.damageNormal = newVal
-                end,
-            },
             damageCrit = {
-                name = "Critical Damage Sound",
+                name = L["options_sound_crit"],
                 type = "select",
                 dialogControl = "LSM30_Sound",
                 values = LSM:HashTable("sound"),
@@ -38,22 +25,22 @@ function Critmatic:SoundSettings_Initialize()
                     Critmatic.db.profile.soundSettings.damageCrit = newVal
                 end,
             },
-            healNormal = {
-                name = "Normal Heal Sound",
+            damageNormal = {
+                name = L["options_sound_hit"],
                 type = "select",
                 dialogControl = "LSM30_Sound",
                 values = LSM:HashTable("sound"),
                 width = "full",
-                order = 4,
+                order = 2,
                 get = function()
-                    return Critmatic.db.profile.soundSettings.healNormal
+                    return Critmatic.db.profile.soundSettings.damageNormal
                 end,
                 set = function(_, newVal)
-                    Critmatic.db.profile.soundSettings.healNormal = newVal
+                    Critmatic.db.profile.soundSettings.damageNormal = newVal
                 end,
             },
             healCrit = {
-                name = "Critical Heal Sound",
+                name =L["options_sound_crit_heal"] ,
                 type = "select",
                 dialogControl = "LSM30_Sound",
                 values = LSM:HashTable("sound"),
@@ -66,9 +53,24 @@ function Critmatic:SoundSettings_Initialize()
                     Critmatic.db.profile.soundSettings.healCrit = newVal
                 end,
             },
+            healNormal = {
+                name = L["options_sound_heal"],
+                type = "select",
+                dialogControl = "LSM30_Sound",
+                values = LSM:HashTable("sound"),
+                width = "full",
+                order = 4,
+                get = function()
+                    return Critmatic.db.profile.soundSettings.healNormal
+                end,
+                set = function(_, newVal)
+                    Critmatic.db.profile.soundSettings.healNormal = newVal
+                end,
+            },
+
             muteAllSounds = {
-                name = "Mute All Sounds",
-                desc = "Do you want to mute all sounds regardless of settings?",
+                name = L["options_sound_mute_all"],
+                desc =L["options_sound_mute_all_desc"] ,
                 type = "toggle",
                 set = function(_, newVal)
                     Critmatic.db.profile.soundSettings.muteAllSounds = newVal
@@ -78,13 +80,13 @@ function Critmatic:SoundSettings_Initialize()
                 end,
             },
             resetSounds = {
-                name = "Reset Sounds to Default",
-                desc = "Reset all sounds to their default configuration",
+                name = L["options_sound_reset"],
+                desc = L["options_sound_reset_desc"],
                 width = "full",
                 type = "execute",
                 func = ResetSoundsToDefault,
                 confirm = true,
-                confirmText = "Are you sure you want to reset sound settings to their default values?",
+                confirmText = L["options_sound_reset_confirm"],
                 order = 6,
             },
         },

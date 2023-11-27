@@ -1,5 +1,6 @@
 local LSM = LibStub("LibSharedMedia-3.0")
 Critmatic = Critmatic or {}
+local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 function ResetChangeLogFontSettingsToDefault()
     Critmatic.db.profile.changeLogPopUp.fontSettings = defaults.profile.changeLogPopUp.fontSettings
 end
@@ -44,20 +45,20 @@ end
 
 function Critmatic:ChangeLogSettings_Initialize()
     local changeLogPopUp = {
-        name = "Change Log Settings",
+        name = L["options_change_log"],
         type = "group",
         childGroups = "tab",
         order = 5,
         args = {
             fontTab = {
-                name = "Font Settings",
+                name = L["options_change_log_font"],
                 type = "group",
                 order = 1,
                 args = {
                     font = {
-                        name = "Font",
+                        name = L["options_change_log_font"],
                         type = "select",
-                        desc = "You might have to select the font twice to see all the fonts.",
+                        desc = L["options_change_log_font_desc"],
                         dialogControl = "LSM30_Font",
                         values = LSM:HashTable("font"),
                         width = "full",
@@ -70,7 +71,7 @@ function Critmatic:ChangeLogSettings_Initialize()
                         end,
                     },
                     fontSize = {
-                        name = "Font Size",
+                        name = L["options_change_log_font_size"],
                         type = "range",
                         min = 8,
                         max = 32,
@@ -86,8 +87,8 @@ function Critmatic:ChangeLogSettings_Initialize()
                     },
                     fontColor = {
                         type = "color",
-                        name = "Color",
-                        desc = "Choose a color for your Change Log font",
+                        name = L["options_change_log_font_color"],
+                        desc = L["options_change_log_font_color_desc"],
                         order = 3,
                         width = "full",
                         hasAlpha = false,
@@ -100,14 +101,14 @@ function Critmatic:ChangeLogSettings_Initialize()
                         end,
                     },
                     fontOutline = {
-                        name = "Outline",
+                        name = L["options_change_log_font_outline"],
                         type = "select",
                         values = {
-                            [""] = "None",
-                            ["OUTLINE"] = "Outline",
-                            ["OUTLINEMONOCHROME"] = "Outline Monochrome",
-                            ["THICKOUTLINE"] = "Thick Outline",
-                            ["THICKOUTLINEMONOCHROME"] = "Thick Outline Monochrome",
+                            [""] = L["options_change_log_font_none"],
+                            ["OUTLINE"] = L["options_change_log_font_outline"],
+                            ["OUTLINEMONOCHROME"] = L["options_change_log_font_outline_mono"],
+                            ["THICKOUTLINE"] = L["options_change_log_font_outline_thick"],
+                            ["THICKOUTLINEMONOCHROME"] = L["options_change_log_font_outline_thick_mono"],
                         },
                         width = "full",
                         order = 4,
@@ -119,19 +120,19 @@ function Critmatic:ChangeLogSettings_Initialize()
                         end,
                     },
                     resetFontSettings = {
-                        name = "Reset Change Log Font Settings",
-                        desc = "Reset all Change Log Font settings to their default values?",
+                        name = L["options_change_log_reset"],
+                        desc = L["options_change_log_reset_desc"],
                         width = "full",
                         type = "execute",
                         func = ResetChangeLogFontSettingsToDefault,
                         confirm = true,
-                        confirmText = "Are you sure you want to reset change log font settings to their default values?",
+                        confirmText = L["options_change_log_reset_confirm"],
                         order = 5,
                     },
                 },
             },
             borderAndBackgroundTab = {
-                name = "Border and Background Options",
+                name = L["options_change_log_border_and_background"],
                 type = "group",
                 order = 2,
                 args = {
@@ -139,9 +140,9 @@ function Critmatic:ChangeLogSettings_Initialize()
                         type = 'select',
                         width = 'full',
                         dialogControl = 'LSM30_Border',
-                        name = "Border Texture",
+                        name = L["options_change_log_border_and_background_border"],
                         order = 1,
-                        desc = "Choose a border texture from the list. Requires Reload",
+                        desc = L["options_change_log_border_and_background_border_desc"],
                         values = allowedBorderTexturesForConfig,
                         get = function()
                             return Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.borderTexture
@@ -152,8 +153,8 @@ function Critmatic:ChangeLogSettings_Initialize()
                     },
                     borderSize = {
                         type = 'range',
-                        name = "Border Size",
-                        desc = "Set the border size for the border frame. Requires Reload",
+                        name = L["options_change_log_border_and_background_border_size"],
+                        desc = L["options_change_log_border_and_background_border_size_desc"],
                         width = 'full',
                         order = 2,
                         min = 1,
@@ -169,10 +170,10 @@ function Critmatic:ChangeLogSettings_Initialize()
                     backgroundTexture = {
                         type = 'select',
                         dialogControl = 'LSM30_Background',
-                        name = "Background Texture",
+                        name = L["options_change_log_border_and_background_texture"],
                         width = 'full',
                         order = 3,
-                        desc = "Choose a background texture from the list. Requires Reload",
+                        desc = L["options_change_log_border_and_background_texture_desc"],
                         values = filteredBackgrounds,
                         get = function()
                             return Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings.backgroundTexture
@@ -183,13 +184,13 @@ function Critmatic:ChangeLogSettings_Initialize()
                         end,
                     },
                     resetBorderBackgroundSettings = {
-                        name = "Reset Change Log Border and Background Settings",
-                        desc = "Reset all Change Log Border and Background settings to their default values?",
+                        name = L["options_change_log_border_and_background_reset"],
+                        desc = L["options_change_log_border_and_background_reset_desc"],
                         width = "full",
                         type = "execute",
                         func = ResetChangeLogBorderAndBackgroundSettingsToDefault,
                         confirm = true,
-                        confirmText = "Are you sure you want to reset change log border and background settings to their default values?",
+                        confirmText = L["options_change_log_border_and_background_reset_confirm"],
                         order = 4,
                     },
                 },

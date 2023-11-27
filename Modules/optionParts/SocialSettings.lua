@@ -1,13 +1,14 @@
 Critmatic = Critmatic or {}
+local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 function Critmatic:SocialSettings_Initialize()
     local socialSettings = {
-        name = "Social Settings",
+        name = L["options_social"],
         type = "group",
         order = 4,
         args = {
             canSendCritsToParty = {
-                name = "Send Crits to Party",
-                desc = "Do you want to send party chat messages when you Crit? default: Checked ",
+                name = L["options_social_send_crits_toParty"] ,
+                desc = L["options_social_send_crits_toParty_desc"],
                 type = "toggle",
                 order = 1,
                 set = function(_, newVal)
@@ -18,8 +19,8 @@ function Critmatic:SocialSettings_Initialize()
                 end,
             },
             canSendCritsToRaid = {
-                name = "Send Crits to Raid",
-                desc = "Do you want to send raid chat messages when you Crit? Default: Checked",
+                name = L["options_social_send_crits_toRaid"],
+                desc = L["options_social_send_crits_toRaid_desc"],
                 type = "toggle",
                 order = 2,
                 set = function(_, newVal)
@@ -30,8 +31,8 @@ function Critmatic:SocialSettings_Initialize()
                 end,
             },
             canSendCritsToGuild = {
-                name = "Send Crits to Guild",
-                desc = "Do you want to send guild chat messages when you Crit? Default: Un-Checked",
+                name = L["options_social_send_crits_toGuild"],
+                desc = L["options_social_send_crits_toGuild_desc"],
                 type = "toggle",
                 order = 3,
                 set = function(_, newVal)
@@ -42,8 +43,8 @@ function Critmatic:SocialSettings_Initialize()
                 end,
             },
             canSendCritsToBattleGrounds = {
-                name = "Send Crits to Battlegrounds",
-                desc = "Do you want to send Battleground chat messages when you Crit? Default: Checked",
+                name = L["options_social_send_crits_toBattleGrounds"],
+                desc = L["options_social_send_crits_toBattleGrounds_desc"],
                 type = "toggle",
                 order = 4,
                 set = function(_, newVal)

@@ -3,3 +3,7 @@ enable-toc-creation: yes
 manual-changelog:
   filename: ./CHANGE_LOG.md
   markup-type: markdown
+
+locale:
+  enUS.lua: ./Localization/enUS.lua
+  zhTW.lua: ./Localization/zhTW.lua
