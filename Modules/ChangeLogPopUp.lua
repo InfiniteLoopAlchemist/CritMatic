@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.8.4-release] - 11/27/2023
+
+ Added:
+
+ CritMatic was translated to traditional Chinese using Google Translate. So if it made a mistake, let me know on discord. I only speak English. Sorry for any connivence.
+
+
+
+
+
 [v0.3.8.3-release] - 11/26/2023
 
  Fixed:
@@ -227,14 +237,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Implemented options for broadcasting critical events to Raid and Guild channels.
-
-
-
-[v0.3.3-release] - 10/28/2023
-
- Added:
-
- Introduced versionchecking mechanism to notify users of outdated CritMatic versions.
 
 
 ]]
