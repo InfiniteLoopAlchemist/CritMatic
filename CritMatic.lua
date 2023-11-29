@@ -89,17 +89,17 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
       local critHPS = spellDataAggregate[localizedSpellName].highestHealCrit / effectiveTime
       local normalHPS = spellDataAggregate[localizedSpellName].highestHeal / effectiveTime
 
-      local CritMaticLeft = L["action_bar_crit"]
-      local DPS = L["action_bar_dps"]
+      local CritMaticLeft = L["action_bar_crit"]..": "
+      local DPS = L["action_bar_dps"]..") "
       local CritMaticRight = tostring(spellDataAggregate[localizedSpellName].highestCrit) .. " (" .. format("%.1f",
               critDPS) ..  DPS
-      local normalMaticLeft = L["action_bar_hit"]
+      local normalMaticLeft = L["action_bar_hit"]..": "
       local normalMaticRight = tostring(spellDataAggregate[localizedSpellName].highestNormal) .. " (" .. format("%.1f", normalDPS) .. DPS
 
-      local CritMaticHealLeft = L["action_bar_crit_heal"]
-      local HPS = L["action_bar_hps"]
+      local CritMaticHealLeft = L["action_bar_crit_heal"]..": "
+      local HPS = L["action_bar_hps"]..") "
       local CritMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHealCrit) .. " (" .. format("%.1f", critHPS) .. HPS
-      local normalMaticHealLeft = L["action_bar_heal"]
+      local normalMaticHealLeft = L["action_bar_heal"]..": "
       local normalMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHeal) .. " (" .. format("%.1f", normalHPS) .. HPS
 
       -- Check if lines are already present in the tooltip.
@@ -298,8 +298,8 @@ function Critmatic:OnInitialize()
   end
 
   -- Register the slash commands
-  Critmatic:RegisterChatCommand(L["slash_critmatic"], "OpenOptions")
-  Critmatic:RegisterChatCommand(L["slash_cm"], "OpenOptions")
+  Critmatic:RegisterChatCommand("critmatic", "OpenOptions")
+  Critmatic:RegisterChatCommand("cm", "OpenOptions")
   Critmatic:RegisterChatCommand(L["slash_cmlog"], "OpenChangeLog")
   Critmatic:RegisterChatCommand(L["slash_cmcritlog"], function() toggleCritMaticCritLog() end)
   Critmatic:RegisterChatCommand(L["slash_cmreset"], "CritMaticReset")
@@ -315,7 +315,7 @@ function Critmatic:OnInitialize()
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
   function Critmatic:CritMaticLoaded()
-    self:Print("|cffd4d4d4 "..L["version_string"] .."|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 "..L["critmatic_loaded"] .."|cffffd700  "..L["critmatic_loaded_2"].."|r|cffd4d4d4 "..L["critmatic_loaded_3"].."|r |cffffd700"..L["critmatic_loaded_4"].."|r|cffd4d4d4 "..L["critmatic_loaded_5"].."|r|cffffd700 "..L["critmatic_loaded_6"].."|r|cffd4d4d4 "..L["critmatic_loaded_7"].."|r")
+    self:Print("|cffd4d4d4 "..L["version_string"] .."|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 "..L["critmatic_loaded"] .."|cffffd700  /cm|r|cffd4d4d4 "..L["critmatic_loaded_3"].."|r |cffffd700"..L["critmatic_loaded_4"].."|r|cffd4d4d4 "..L["critmatic_loaded_5"].."|r|cffffd700 "..L["critmatic_loaded_6"].."|r|cffd4d4d4 "..L["critmatic_loaded_7"].."|r")
   end
 
 
@@ -537,11 +537,11 @@ f:SetScript("OnEvent", function(self, event, ...)
     local function sendChat(chatType)
       -- For highest critical hit
       if highestCritDuringCombat > 0 then
-        SendChatMessage(L["social_crit"] .. highestCritSpellName .. ": " .. highestCritDuringCombat, chatType)
+        SendChatMessage("{star}CritMatic: "..L["social_crit"] .. highestCritSpellName .. ": " .. highestCritDuringCombat, chatType)
       end
       -- For highest critical heal
       if highestCritHealDuringCombat > 0 then
-        SendChatMessage(L["social_crit_heal"] .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat, chatType)
+        SendChatMessage("{star}CritMatic: "..L["social_crit_heal"] .. highestCritHealSpellName .. ": " .. highestCritHealDuringCombat, chatType)
       end
     end
 

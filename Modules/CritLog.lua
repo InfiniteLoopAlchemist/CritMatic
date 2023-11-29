@@ -588,7 +588,7 @@ function toggleCritMaticCritLog()
 
     Critmatic.crit_log_frame.frame:SetMovable(true)
     Critmatic.crit_log_frame.frame:EnableMouse(true)
-    Critmatic.crit_log_frame:SetTitle(L["message_log_critmatic"])
+    Critmatic.crit_log_frame:SetTitle("CritMatic")
     Critmatic.crit_log_frame:SetLayout("Fill")
 
 
