@@ -212,6 +212,8 @@ function Critmatic:OnInitialize()
 
   local version = GetAddOnMetadata("CritMatic", "Version")
 
+
+
   function Critmatic:OnCommReceived(prefix , message, distribution, sender)
 
     if message and version then
@@ -302,6 +304,60 @@ function Critmatic:OnInitialize()
   Critmatic:RegisterChatCommand("cm", "OpenOptions")
   Critmatic:RegisterChatCommand(L["slash_cmlog"], "OpenChangeLog")
   Critmatic:RegisterChatCommand(L["slash_cmcritlog"], function() toggleCritMaticCritLog() end)
+
+  local function capitalizeFirstLetterOfEachWord(str)
+    return (str:gsub("(%a)([%w_']*)", function(first, rest)
+      return first:upper() .. rest:lower()
+    end))
+  end
+  -- Function to handle the slash command input
+  local function ignoredSpellSlashCommand(input)
+    if not input or input:trim() == "" then
+      print("Please provide a spell name.")
+      return
+    end
+
+    local capitalizedInput = capitalizeFirstLetterOfEachWord(input)
+
+    -- Add the spell name to the ignoredSpells table
+    Critmatic.ignoredSpells[capitalizedInput:lower()] = true
+    print("|cffffd700"..capitalizedInput .. "|r ".."added to ".."|cffff0000".."ignored".."|r spells.")
+    RedrawCritMaticWidget()
+  end
+  local function ListIgnoredSpells()
+    if not Critmatic.ignoredSpells or next(Critmatic.ignoredSpells) == nil then
+      print("|cffff0000".."No spells are currently being ignored.".."|r")
+      return
+    end
+
+    print("|cffff0000".."Ignored".."|r ".."Spells:")
+    for spellName, _ in pairs(Critmatic.ignoredSpells) do
+      print("- |cffffd700" .. capitalizeFirstLetterOfEachWord(spellName).."|r")
+    end
+  end
+
+  local function RemoveIgnoredSpell(input)
+    if not input or input:trim() == "" then
+      print("|cffff0000".."Please provide a spell name.".."|r")
+      return
+    end
+
+    local spellName = input:lower()  -- assuming spell names are stored in lowercase
+    if Critmatic.ignoredSpells and Critmatic.ignoredSpells[spellName] then
+      Critmatic.ignoredSpells[spellName] = nil
+      print("|cffffd700" .. capitalizeFirstLetterOfEachWord(spellName).."|r|cffff0000" .. " has been removed from ignored spells.".."|r")
+      RedrawCritMaticWidget()
+    else
+      print("|cffff0000".."Spell not found in ignored spells.".."|r")
+    end
+  end
+
+  -- Register the slash command
+  Critmatic:RegisterChatCommand("cmremoveignoredspell", RemoveIgnoredSpell)
+  -- Register the slash command
+  Critmatic:RegisterChatCommand("cmignoredspells", ListIgnoredSpells)
+  -- Register the slash command
+  Critmatic:RegisterChatCommand(L["slash_cmignore"], ignoredSpellSlashCommand)
   Critmatic:RegisterChatCommand(L["slash_cmreset"], "CritMaticReset")
 
 
@@ -341,6 +397,8 @@ end
 function Critmatic:OnEnable()
   -- Called when the addon is fully loaded and all saved variables are available.
   CritMaticData = _G["CritMaticData"]
+  CritMatic_ignoredSpells = CritMatic_ignoredSpells or {}
+  Critmatic.ignoredSpells = CritMatic_ignoredSpells
   -- Now that we know our data is available, we can safely draw the widget.
   RedrawCritMaticWidget()
 end
@@ -411,6 +469,8 @@ f:SetScript("OnEvent", function(self, event, ...)
     local soundHealNormal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healNormal)
 
     if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
+
+
       if spellID then
         CritMaticData[spellID] = CritMaticData[spellID] or {
           highestCrit = 0,
@@ -424,10 +484,15 @@ f:SetScript("OnEvent", function(self, event, ...)
 
         }
 
-       
+       if Critmatic.ignoredSpells then
+         for spellName, _ in pairs(Critmatic.ignoredSpells) do
+           if spellName:lower() == baseSpellName:lower() then
+             return
+           end
+         end
+         end
           --print(CombatLogGetCurrentEventInfo())
 
-      --  if IsSpellInSpellbook(baseSpellName) then
 
 
           if eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then

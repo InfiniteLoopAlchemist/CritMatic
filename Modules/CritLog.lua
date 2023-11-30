@@ -397,7 +397,13 @@ function toggleCritMaticCritLog()
 
 
 
-
+        if Critmatic.ignoredSpells then
+            for spellName, _ in pairs(Critmatic.ignoredSpells) do
+                if spellName:lower() == baseSpellName:lower() then
+                    return
+                end
+            end
+        end
 
         -- Table to keep track of created frames
         local createdSpellFrames = {}
@@ -482,8 +488,12 @@ function toggleCritMaticCritLog()
             for _, entry in ipairs(sortableData) do
                 local spellName = entry.name
                 local spellData = entry.data
+                -- Check if the spell is ignored
+                if not Critmatic.ignoredSpells or not Critmatic.ignoredSpells[spellName:lower()] then
+
+
                 local spellIDs = entry.ids  -- Now you have access to all IDs for this spell name
-                local spellIDToUse = #spellIDs > 2 and spellIDs[3] or spellIDs[1]
+                local spellIDToUse = #spellIDs > 1 and spellIDs[2] or spellIDs[1]
                 local _, _, spellIconPath = GetSpellInfo(spellIDToUse)
 
 
@@ -530,14 +540,14 @@ function toggleCritMaticCritLog()
                         yOffset = yOffset + spellFrameHeight
 
                     end
-                if scrollContainer and scrollContainer.SetVerticalScroll then
+                    if scrollContainer and scrollContainer.SetVerticalScroll then
                     scrollContainer:SetVerticalScroll(0)
 
+                    end
                 end
-
-                end
+            end
         end
---ToDo: track absorbs so you can track things power word shield
+
 
         function RecordEvent(spellID)
             -- Check if the spellName is valid
