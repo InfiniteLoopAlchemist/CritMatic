@@ -388,22 +388,12 @@ function toggleCritMaticCritLog()
         content:SetPoint("BOTTOMRIGHT", 15, 6)
 
         local scrollContainer = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
-        scrollContainer:SetSize(230, 120)
+        scrollContainer:SetSize(250, 120)
         scrollContainer:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -20)
 
         local scrollChild = CreateFrame("Frame", nil, scrollContainer)
         scrollContainer:SetScrollChild(scrollChild)
-        scrollChild:SetSize(180, 200)  -- Initial height, adjust as needed
-
-
-
-        if Critmatic.ignoredSpells then
-            for spellName, _ in pairs(Critmatic.ignoredSpells) do
-                if spellName:lower() == baseSpellName:lower() then
-                    return
-                end
-            end
-        end
+        scrollChild:SetSize(180 ,200)  -- Initial height, adjust as needed
 
         -- Table to keep track of created frames
         local createdSpellFrames = {}
@@ -499,7 +489,7 @@ function toggleCritMaticCritLog()
 
                 if spellIconPath then
                     local spellFrame = CreateFrame("Frame", nil, scrollChild)
-                    spellFrame:SetSize(180, spellFrameHeight)
+                    spellFrame:SetSize(198, spellFrameHeight)
                     spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
 
                     local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
@@ -639,7 +629,7 @@ function toggleCritMaticCritLog()
 
            Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
                    .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
-           Critmatic.crit_log_frame.frame:SetSize(280, 150)
+           Critmatic.crit_log_frame.frame:SetSize(300, 153)
             Critmatic.crit_log_frame.frame:Show()
             RedrawCritMaticWidget()
           --  critmatic_icon_frame:Show()

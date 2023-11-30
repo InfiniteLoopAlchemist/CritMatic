@@ -313,17 +313,33 @@ function Critmatic:OnInitialize()
   -- Function to handle the slash command input
   local function ignoredSpellSlashCommand(input)
     if not input or input:trim() == "" then
-      print("Please provide a spell name.")
+      print("|cffff0000Please provide a spell name!|r")
       return
     end
 
     local capitalizedInput = capitalizeFirstLetterOfEachWord(input)
+    local inputSpellName = capitalizedInput:lower() -- Standardize for comparison
+
+    local spellFound = false
+    for spellID, _ in pairs(CritMaticData) do
+      local spellName = GetSpellInfo(spellID)
+      if spellName and spellName:lower() == inputSpellName then
+        spellFound = true
+        break
+      end
+    end
+
+    if not spellFound then
+      print("|cffff0000" .. capitalizedInput .. "|r is not a tracked spell currently")
+      return
+    end
 
     -- Add the spell name to the ignoredSpells table
-    Critmatic.ignoredSpells[capitalizedInput:lower()] = true
-    print("|cffffd700"..capitalizedInput .. "|r ".."added to ".."|cffff0000".."ignored".."|r spells.")
+    Critmatic.ignoredSpells[inputSpellName] = true
+    print("|cffffd700" .. capitalizedInput .. "|r added to |cffff0000ignored|r spells.")
     RedrawCritMaticWidget()
   end
+
   local function ListIgnoredSpells()
     if not Critmatic.ignoredSpells or next(Critmatic.ignoredSpells) == nil then
       print("|cffff0000".."No spells are currently being ignored.".."|r")
@@ -351,12 +367,32 @@ function Critmatic:OnInitialize()
       print("|cffff0000".."Spell not found in ignored spells.".."|r")
     end
   end
+  -- Function to wipe all ignored spells
+  local function WipeIgnoredSpells()
+    if not Critmatic.ignoredSpells or next(Critmatic.ignoredSpells) == nil then
+      print("|cffff0000".."The ignored spells list is already empty!".."|r")
+      return
+    end
 
-  -- Register the slash command
+    wipe(Critmatic.ignoredSpells)  -- Clear the table
+    print("|cffff0000".."All ignored spells have been removed." .. "|r")
+    RedrawCritMaticWidget()
+  end
+
+  Critmatic:RegisterChatCommand("cmhelp", function()
+    print("|cffffd700CritMatic Commands:|r")
+    print("|cffffd700/cm|r - Open the CritMatic options menu.")
+    print("|cffffd700/cmlog|r - Open the CritMatic changelog.")
+    print("|cffffd700/cmcritlog|r - Open the CritMatic crit log.")
+    print("|cffffd700/cmreset|r - Reset all CritMatic data.")
+    print("|cffffd700/cmignoredspells|r - List all ignored spells.")
+    print("|cffffd700/cmremoveignoredspell|r - Remove a spell from the ignored spells list.")
+    print("|cffffd700/cmwipeignoredspells|r - Remove all spells from the ignored spells list.")
+    print("|cffffd700/cmignore|r - Ignore a spell.")
+  end)
+  Critmatic:RegisterChatCommand("cmwipeignoredspells", WipeIgnoredSpells)
   Critmatic:RegisterChatCommand("cmremoveignoredspell", RemoveIgnoredSpell)
-  -- Register the slash command
   Critmatic:RegisterChatCommand("cmignoredspells", ListIgnoredSpells)
-  -- Register the slash command
   Critmatic:RegisterChatCommand(L["slash_cmignore"], ignoredSpellSlashCommand)
   Critmatic:RegisterChatCommand(L["slash_cmreset"], "CritMaticReset")
 
@@ -371,7 +407,7 @@ function Critmatic:OnInitialize()
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
   function Critmatic:CritMaticLoaded()
-    self:Print("|cffd4d4d4 "..L["version_string"] .."|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 "..L["critmatic_loaded"] .."|cffffd700  /cm|r|cffd4d4d4 "..L["critmatic_loaded_3"].."|r |cffffd700"..L["critmatic_loaded_4"].."|r|cffd4d4d4 "..L["critmatic_loaded_5"].."|r|cffffd700 "..L["critmatic_loaded_6"].."|r|cffd4d4d4 "..L["critmatic_loaded_7"].."|r")
+    self:Print("|cffd4d4d4 "..L["version_string"] .."|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 "..L["critmatic_loaded"] .."|cffffd700  /cm|r|cffd4d4d4 "..L["critmatic_loaded_3"].."|r |cffffd700"..L["critmatic_loaded_4"].."|r|cffd4d4d4 "..L["critmatic_loaded_5"].."|r")
   end
 
 
