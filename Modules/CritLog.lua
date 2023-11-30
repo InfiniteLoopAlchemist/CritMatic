@@ -427,7 +427,7 @@ function toggleCritMaticCritLog()
                         table.insert(spellGroup.ids, spellID)
 
                         -- Compare and update the timestamp
-                        spellGroup.latestTimestamp = math.max(spellGroup.latestTimestamp, spellData.timestamp or 0)
+                        spellGroup.latestTimestamp = math.max(spellGroup.latestTimestamp or 0, spellData.timestamp or 0)
 
                         -- Initialize a flag to track if data is updated
 
