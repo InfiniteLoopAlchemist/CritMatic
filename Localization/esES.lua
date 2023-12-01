@@ -1,5 +1,5 @@
 -- (Spanish) Localization file for esES clients.
-
+--[[
 local debug = false
 --@debug@ debug = true --@end-debug@
 local L = LibStub("AceLocale-3.0"):NewLocale("CritMatic", "esES", false, debug)
@@ -127,3 +127,4 @@ L["options_change_log_border_and_background_texture_desc"] = true
 L["options_change_log_border_and_background_reset"] = true
 L["options_change_log_border_and_background_reset_desc"] = true
 L["options_change_log_border_and_background_reset_confirm"] =true
+]]
