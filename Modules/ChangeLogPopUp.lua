@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.3.9.6-release] - 12/1/2023
+
+ Fixed:
+
+ Removed localization for everything but English for now, because it was causing bugs.
+
+
+
+
+
 [v0.3.9.5-release] - 11/30/2023
 
  Fixed:
