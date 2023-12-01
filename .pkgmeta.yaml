@@ -6,4 +6,4 @@ manual-changelog:
 
 locale:
   enUS.lua: ./Localization/enUS.lua
-  zhTW.lua: ./Localization/zhTW.lua
+

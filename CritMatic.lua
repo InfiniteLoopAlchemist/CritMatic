@@ -443,9 +443,10 @@ function Critmatic:OpenChangeLog()
 end
 
 function Critmatic:CritMaticReset()
-  wipe(CritMaticData)
+  CritMaticData = {}
   Critmatic:Print("|cffff0000"..L["critmatic_reset"].."|r")
   RedrawCritMaticWidget()
+
 end
 
 -- Register an event that fires when the player hits an enemy.

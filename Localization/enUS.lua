@@ -1,8 +1,7 @@
 -- (English) localization file for enUS clients.
-local debug = false
---@debug@ debug = true --@end-debug@
-local L = LibStub("AceLocale-3.0"):NewLocale("CritMatic", "enUS", true, debug)
---@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat")@
+
+local L = LibStub("AceLocale-3.0"):NewLocale("CritMatic", "enUS", true)
+
 
 if not L then return end
 --CritMatic.lua
@@ -23,7 +22,7 @@ L["critmatic_loaded"] = "Loaded! - Use"
 L["critmatic_loaded_3"] = "for  options -"
 L["critmatic_loaded_4"] = " /cmhelp"
 L["critmatic_loaded_5"] = "for all slash commands"
-L["critmatic_reset"] = "Data Reset!"
+L["critmatic_reset"] = "Data Reset! Requires Reload to clear the action bar/ spellbook data."
 L["chat_crit"] = "New highest Crit for "
 L["chat_hit"] = "New highest Hit for "
 L["chat_crit_heal"] = "New highest Crit Heal for "
