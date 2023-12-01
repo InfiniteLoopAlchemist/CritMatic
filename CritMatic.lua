@@ -303,7 +303,7 @@ function Critmatic:OnInitialize()
   -- Function to handle the slash command input
   local function ignoredSpellSlashCommand(input)
     if not input or input:trim() == "" then
-      print("|cffff0000Please provide a spell name!|r")
+      Critmatic:Print("|cffff0000Please provide a spell name!|r")
       return
     end
 
@@ -320,65 +320,66 @@ function Critmatic:OnInitialize()
     end
 
     if not spellFound then
-      print("|cffff0000" .. capitalizedInput .. "|r is not a tracked spell currently")
+      Critmatic:Print("|cffff0000" .. capitalizedInput .. "|r is not a tracked spell currently")
       return
     end
 
     -- Add the spell name to the ignoredSpells table
     Critmatic.ignoredSpells[inputSpellName] = true
-    print("|cffffd700" .. capitalizedInput .. "|r added to |cffff0000ignored|r spells.")
+    Critmatic:Print("|cffffd700" .. capitalizedInput .. "|r added to |cffff0000ignored|r spells.")
     RedrawCritMaticWidget()
   end
 
   local function ListIgnoredSpells()
     if not Critmatic.ignoredSpells or next(Critmatic.ignoredSpells) == nil then
-      print("|cffff0000".."No spells are currently being ignored.".."|r")
+      Critmatic:Print("|cffff0000".."No spells are currently being ignored.".."|r")
       return
     end
 
     print("|cffff0000".."Ignored".."|r ".."Spells:")
     for spellName, _ in pairs(Critmatic.ignoredSpells) do
-      print("- |cffffd700" .. capitalizeFirstLetterOfEachWord(spellName).."|r")
+      Critmatic:Print("- |cffffd700" .. capitalizeFirstLetterOfEachWord(spellName).."|r")
     end
   end
 
   local function RemoveIgnoredSpell(input)
     if not input or input:trim() == "" then
-      print("|cffff0000".."Please provide a spell name.".."|r")
+      Critmatic:Print("|cffff0000".."Please provide a spell name.".."|r")
       return
     end
 
     local spellName = input:lower()  -- assuming spell names are stored in lowercase
     if Critmatic.ignoredSpells and Critmatic.ignoredSpells[spellName] then
       Critmatic.ignoredSpells[spellName] = nil
-      print("|cffffd700" .. capitalizeFirstLetterOfEachWord(spellName).."|r|cffff0000" .. " has been removed from ignored spells.".."|r")
+      Critmatic:Print("|cffffd700" .. capitalizeFirstLetterOfEachWord(spellName).."|r|cffff0000" .. " has been removed from ignored spells.".."|r")
       RedrawCritMaticWidget()
     else
-      print("|cffff0000".."Spell not found in ignored spells.".."|r")
+      Critmatic:Print("|cffff0000".."Spell not found in ignored spells.".."|r")
     end
   end
   -- Function to wipe all ignored spells
   local function WipeIgnoredSpells()
     if not Critmatic.ignoredSpells or next(Critmatic.ignoredSpells) == nil then
-      print("|cffff0000".."The ignored spells list is already empty!".."|r")
+      Critmatic:Print("|cffff0000".."The ignored spells list is already empty!".."|r")
       return
     end
 
     wipe(Critmatic.ignoredSpells)  -- Clear the table
-    print("|cffff0000".."All ignored spells have been removed." .. "|r")
+    Critmatic:Print("|cffff0000".."All ignored spells have been removed." .. "|r")
     RedrawCritMaticWidget()
   end
 
   Critmatic:RegisterChatCommand("cmhelp", function()
-    print("|cffffd700CritMatic Commands:|r")
+    self:Print("|cffffd700 Commands:|r")
     print("|cffffd700/cm|r - Open the CritMatic options menu.")
     print("|cffffd700/cmlog|r - Open the CritMatic changelog.")
     print("|cffffd700/cmcritlog|r - Open the CritMatic crit log.")
     print("|cffffd700/cmreset|r - Reset all CritMatic data.")
+    print("|cffffd700/cmignore  spell name|r - Ignore a spell.")
     print("|cffffd700/cmignoredspells|r - List all ignored spells.")
-    print("|cffffd700/cmremoveignoredspell|r - Remove a spell from the ignored spells list.")
+    print("|cffffd700/cmremoveignoredspell spell name|r - Remove a spell from the ignored spells list.")
     print("|cffffd700/cmwipeignoredspells|r - Remove all spells from the ignored spells list.")
-    print("|cffffd700/cmignore|r - Ignore a spell.")
+
   end)
   Critmatic:RegisterChatCommand("cmwipeignoredspells", WipeIgnoredSpells)
   Critmatic:RegisterChatCommand("cmremoveignoredspell", RemoveIgnoredSpell)
@@ -543,7 +544,8 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700"..L["chat_crit_heal"] .. baseSpellName.. ": |r" .. CritMaticData[spellID].highestHealCrit)
+                  print("|cffffd700CritMatic: "..L["chat_crit_heal"] .. baseSpellName.. ": |r" ..
+                          CritMaticData[spellID].highestHealCrit)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -564,7 +566,8 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print(L["chat_heal"] .. baseSpellName .. ": " .. CritMaticData[spellID].highestHeal)
+                  print("|cffffd700CritMatic: |r"..L["chat_heal"] .. baseSpellName .. ": " ..
+                          CritMaticData[spellID].highestHeal)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -589,7 +592,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700"..L["chat_crit"] .. baseSpellName .. ": |r" .. CritMaticData[spellID].highestCrit)
+                  print("|cffffd700CritMatic: "..L["chat_crit"] .. baseSpellName .. ": |r" .. CritMaticData[spellID].highestCrit)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -609,7 +612,8 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print(L["chat_hit"] .. baseSpellName .. ": " .. CritMaticData[spellID].highestNormal)
+                  print("|cffffd700CritMatic: |r"..L["chat_hit"] .. baseSpellName .. ": " ..
+                          CritMaticData[spellID].highestNormal)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -655,6 +659,7 @@ f:SetScript("OnEvent", function(self, event, ...)
           sendChat("PARTY")
         end
       end
+
 end
 
 
