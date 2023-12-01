@@ -199,16 +199,6 @@ function Critmatic:OnInitialize()
 
   CritMaticData = _G["CritMaticData"]
 
-  if not Critmatic.db.profile.dataCleared then
-
-      -- Clear CritMaticData
-      wipe(CritMaticData)
-
-
-      Critmatic.db.profile.dataCleared = true
-
-    end
-
 
   local version = GetAddOnMetadata("CritMatic", "Version")
 
