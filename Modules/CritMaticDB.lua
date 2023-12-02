@@ -45,8 +45,10 @@ defaults = {
     },
     isCritLogFrameShown = true,
 critLogWidgetPos = {
-  pos_x = 470,
-  pos_y = -100,
+  anchor = "RIGHT",
+  anchor2 = "RIGHT",
+  pos_x = -90.8942287109375,
+  pos_y = -114.91058349609,
   size_x = 255,
   size_y = 125,
   lock = false

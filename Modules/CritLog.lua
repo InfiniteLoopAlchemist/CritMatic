@@ -601,11 +601,12 @@ function toggleCritMaticCritLog()
             local defaultPos = defaults.profile.critLogWidgetPos -- Adjust path if needed
 
             frame:ClearAllPoints()
-            frame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", defaultPos.pos_x, defaultPos.pos_y)
+            frame:SetPoint("RIGHT", UIParent, "RIGHT", defaultPos.pos_x, defaultPos.pos_y)
             Critmatic.db.profile.critLogWidgetPos.pos_x = defaultPos.pos_x
             Critmatic.db.profile.critLogWidgetPos.pos_y = defaultPos.pos_y
-            ReloadUI()
+
         end
+
 
         AceConsole:RegisterChatCommand("cmcritlogdefaultpos", CritLogDefaultPosFrame)
 
@@ -644,8 +645,9 @@ function toggleCritMaticCritLog()
         -- Load the saved state and apply it
         if Critmatic.db.profile.isCritLogFrameShown then
 
-           Critmatic.crit_log_frame:SetPoint("CENTER", UIParent, "CENTER", Critmatic.db.profile.critLogWidgetPos
-                   .pos_x, Critmatic.db.profile.critLogWidgetPos.pos_y)
+           Critmatic.crit_log_frame.frame:ClearAllPoints()
+            Critmatic.crit_log_frame.frame:SetPoint(sizePos.anchor, UIParent,sizePos.anchor2, sizePos.pos_x, sizePos
+                    .pos_y)
            Critmatic.crit_log_frame.frame:SetSize(300, 153)
             Critmatic.crit_log_frame.frame:Show()
             RedrawCritMaticWidget()
@@ -686,14 +688,14 @@ function toggleCritMaticCritLog()
         Critmatic.crit_log_frame.frame:SetScript("OnDragStop", function(self)
             if db.critLogWidgetPos.lock then return end
             self:StopMovingOrSizing()
-            local x, y = self:GetCenter()
-            local px = (GetScreenWidth() * UIParent:GetEffectiveScale()) / 2
-            local py = (GetScreenHeight() * UIParent:GetEffectiveScale()) / 2
-            sizePos.pos_x = x - px
-            sizePos.pos_y = y - py
+            local anchor, _, anchor2, xOfs, yOfs = self:GetPoint()  -- Get the current anchor point and offsets
 
-
+            sizePos.anchor = anchor
+            sizePos.anchor2 = anchor2-- Save the anchor point
+            sizePos.pos_x = xOfs
+            sizePos.pos_y = yOfs
         end)
+
 
 
         hooksecurefunc(Critmatic.crit_log_frame.frame, "StopMovingOrSizing", function()
