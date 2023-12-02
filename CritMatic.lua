@@ -380,6 +380,7 @@ function Critmatic:OnInitialize()
 
   Critmatic:RegisterChatCommand("cmhelp", function()
     self:Print(CritMaticBrown.."Commands:|r")
+    print(CritMaticBrown.."There can be is a short calibration period, if you you dont have any crit data, level up or have multiple new gear upgrades".."|r")
     print(CritMaticGoldYellow.."/cm".."|r "..CritMaticGray.."- Open the CritMatic options menu.".."|r")
     print(CritMaticGoldYellow.."/cmlog".."|r "..CritMaticGray.."- Open the CritMatic changelog.".."|r")
     print(CritMaticGoldYellow.."/cmcritlog".."|r "..CritMaticGray.."- Open the CritMatic crit log.".."|r")
