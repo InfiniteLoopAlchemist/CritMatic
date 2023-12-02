@@ -1,5 +1,7 @@
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
+local AceConsole = LibStub("AceConsole-3.0")
+
 function toggleCritMaticCritLog()
     local db = Critmatic.db.profile
     local sizePos = Critmatic.db.profile.critLogWidgetPos
@@ -591,6 +593,21 @@ function toggleCritMaticCritLog()
     Critmatic.crit_log_frame:SetTitle("CritMatic")
     Critmatic.crit_log_frame:SetLayout("Fill")
 
+
+
+
+        local function CritLogDefaultPosFrame()
+            local frame = Critmatic.crit_log_frame
+            local defaultPos = defaults.profile.critLogWidgetPos -- Adjust path if needed
+
+            frame:ClearAllPoints()
+            frame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", defaultPos.pos_x, defaultPos.pos_y)
+            Critmatic.db.profile.critLogWidgetPos.pos_x = defaultPos.pos_x
+            Critmatic.db.profile.critLogWidgetPos.pos_y = defaultPos.pos_y
+            ReloadUI()
+        end
+
+        AceConsole:RegisterChatCommand("cmcritlogdefaultpos", CritLogDefaultPosFrame)
 
     local critmatic_icon_frame = CreateFrame("Frame", nil, Critmatic.crit_log_frame.frame)
     critmatic_icon_frame:SetSize(40, 40)

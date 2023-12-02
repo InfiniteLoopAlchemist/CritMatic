@@ -1,10 +1,12 @@
 local CritMaticGoldYellow = "|cffffd700"
-local CritMaticGold = "|cffdea60b"
+local CritMaticGold = "|cffed9d09"
 local CritMaticWhite = "|cffe8e7e3"
 local CritMaticGray = "|cffc2bfb6"
 local CritMaticRed = "|cffd41313"
+local CritMaticBrown = "|cffada27f"
 
-Critmatic = LibStub("AceAddon-3.0"):NewAddon(CritMaticGold.."CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0",
+Critmatic = LibStub("AceAddon-3.0"):NewAddon(CritMaticGold.."CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,
+        "AceEvent-3.0",
 "AceComm-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
@@ -377,15 +379,16 @@ function Critmatic:OnInitialize()
   end
 
   Critmatic:RegisterChatCommand("cmhelp", function()
-    self:Print("|cffffd700 Commands:|r")
-    print(CritMaticGoldYellow.."/cm".."|r - "..CritMaticGray.."Open the CritMatic options menu.".."|r")
-    print(CritMaticGoldYellow.."/cmlog".."|r - "..CritMaticGray.."Open the CritMatic changelog.".."|r")
-    print(CritMaticGoldYellow.."/cmcritlog".."|r - "..CritMaticGray.."Open the CritMatic crit log.".."|r")
-    print(CritMaticGoldYellow.."/cmreset".."|r - "..CritMaticGray.."Reset all CritMatic data.".."|r")
-    print(CritMaticGoldYellow.."/cmignore  spell name".."|r - "..CritMaticGray.."Ignore a spell.".."|r")
-    print(CritMaticGoldYellow.."/cmignoredspells".."|r - "..CritMaticGray.."List all ignored spells.".."|r")
-    print(CritMaticGoldYellow.."/cmremoveignoredspell spell name".."|r - "..CritMaticGray.."Remove a spell from the ignored spells list.".."|r")
-    print(CritMaticGoldYellow.."/cmwipeignoredspells".."|r - "..CritMaticGray.."Remove all spells from the ignored spells list.".."|r")
+    self:Print(CritMaticBrown.."Commands:|r")
+    print(CritMaticGoldYellow.."/cm".."|r "..CritMaticGray.."- Open the CritMatic options menu.".."|r")
+    print(CritMaticGoldYellow.."/cmlog".."|r "..CritMaticGray.."- Open the CritMatic changelog.".."|r")
+    print(CritMaticGoldYellow.."/cmcritlog".."|r "..CritMaticGray.."- Open the CritMatic crit log.".."|r")
+    print(CritMaticGoldYellow.."/cmcritlogdefaultpos".."|r "..CritMaticGray.."- Resets the Crit Log position. Causes a Reload.".."|r")
+    print(CritMaticGoldYellow.."/cmreset".."|r "..CritMaticGray.."- Reset all CritMatic data.".."|r")
+    print(CritMaticGoldYellow.."/cmignore  spell name".."|r "..CritMaticGray.."- Ignore a spell.".."|r")
+    print(CritMaticGoldYellow.."/cmignoredspells".."|r "..CritMaticGray.."- List all ignored spells.".."|r")
+    print(CritMaticGoldYellow.."/cmremoveignoredspell spell name".."|r  "..CritMaticGray.."- Remove a spell from the ignored spells list.".."|r")
+    print(CritMaticGoldYellow.."/cmwipeignoredspells".."|r  "..CritMaticGray.."- Remove all spells from the ignored spells list.".."|r")
 
   end)
   Critmatic:RegisterChatCommand("cmwipeignoredspells", WipeIgnoredSpells)
