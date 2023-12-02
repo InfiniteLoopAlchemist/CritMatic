@@ -1,8 +1,15 @@
--- This line should be at the top of your main Lua file, outside any function.
-Critmatic = LibStub("AceAddon-3.0"):NewAddon("|cffffd700CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0","AceComm-3.0")
+local CritMaticGoldYellow = "|cffffd700"
+local CritMaticGold = "|cffdea60b"
+local CritMaticWhite = "|cffe8e7e3"
+local CritMaticGray = "|cffc2bfb6"
+local CritMaticRed = "|cffd41313"
+
+Critmatic = LibStub("AceAddon-3.0"):NewAddon(CritMaticGold.."CritMatic|r", "AceConsole-3.0", "AceTimer-3.0" ,"AceEvent-3.0",
+"AceComm-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
 local MAX_HIT = 40000
+
 
 local function GetGCD()
   local _, gcdDuration = GetSpellCooldown(78) -- 78 is the spell ID for Warrior's Heroic Strike
@@ -211,7 +218,7 @@ function Critmatic:OnInitialize()
       local isNewerVersion = message > version
 
       if isNewerVersion and not Critmatic.hasDisplayedUpdateMessage then
-        Critmatic:Print("|cffff0000"..L["new_version_notification"].."|r |cff918d86"..L["new_version_notification_part"].."|r")
+        Critmatic:Print(CritMaticRed..L["new_version_notification"].."|r"..CritMaticGray..L["new_version_notification_part"].."|r")
         Critmatic.hasDisplayedUpdateMessage = true
       end
     end
@@ -303,7 +310,7 @@ function Critmatic:OnInitialize()
   -- Function to handle the slash command input
   local function ignoredSpellSlashCommand(input)
     if not input or input:trim() == "" then
-      Critmatic:Print("|cffff0000Please provide a spell name!|r")
+      Critmatic:Print(CritMaticRed.."Please provide a spell name!".."|r")
       return
     end
 
@@ -320,65 +327,65 @@ function Critmatic:OnInitialize()
     end
 
     if not spellFound then
-      Critmatic:Print("|cffff0000" .. capitalizedInput .. "|r is not a tracked spell currently")
+      Critmatic:Print(CritMaticRed .. capitalizedInput .. "|r"..CritMaticWhite.." is not a tracked spell currently".."|r")
       return
     end
 
     -- Add the spell name to the ignoredSpells table
     Critmatic.ignoredSpells[inputSpellName] = true
-    Critmatic:Print("|cffffd700" .. capitalizedInput .. "|r added to |cffff0000ignored|r spells.")
+    Critmatic:Print(CritMaticGoldYellow .. capitalizedInput .. "|r"..CritMaticWhite.. " added to "..CritMaticRed.. "ignored" .."|r "..CritMaticWhite.."spells.".."|r")
     RedrawCritMaticWidget()
   end
 
   local function ListIgnoredSpells()
     if not Critmatic.ignoredSpells or next(Critmatic.ignoredSpells) == nil then
-      Critmatic:Print("|cffff0000".."No spells are currently being ignored.".."|r")
+      Critmatic:Print(CritMaticRed.."No spells are currently being ignored.".."|r")
       return
     end
 
     print("|cffff0000".."Ignored".."|r ".."Spells:")
     for spellName, _ in pairs(Critmatic.ignoredSpells) do
-      Critmatic:Print("- |cffffd700" .. capitalizeFirstLetterOfEachWord(spellName).."|r")
+      Critmatic:Print(CritMaticGoldYellow.."- " .. capitalizeFirstLetterOfEachWord(spellName).."|r")
     end
   end
 
   local function RemoveIgnoredSpell(input)
     if not input or input:trim() == "" then
-      Critmatic:Print("|cffff0000".."Please provide a spell name.".."|r")
+      Critmatic:Print(CritMaticRed.."Please provide a spell name.".."|r")
       return
     end
 
     local spellName = input:lower()  -- assuming spell names are stored in lowercase
     if Critmatic.ignoredSpells and Critmatic.ignoredSpells[spellName] then
       Critmatic.ignoredSpells[spellName] = nil
-      Critmatic:Print("|cffffd700" .. capitalizeFirstLetterOfEachWord(spellName).."|r|cffff0000" .. " has been removed from ignored spells.".."|r")
+      Critmatic:Print(CritMaticGoldYellow .. capitalizeFirstLetterOfEachWord(spellName).."|r"..CritMaticRed .. " has been removed from ignored spells.".."|r")
       RedrawCritMaticWidget()
     else
-      Critmatic:Print("|cffff0000".."Spell not found in ignored spells.".."|r")
+      Critmatic:Print(CritMaticRed.."Spell not found in ignored spells.".."|r")
     end
   end
   -- Function to wipe all ignored spells
   local function WipeIgnoredSpells()
     if not Critmatic.ignoredSpells or next(Critmatic.ignoredSpells) == nil then
-      Critmatic:Print("|cffff0000".."The ignored spells list is already empty!".."|r")
+      Critmatic:Print(CritMaticRed.."The ignored spells list is already empty!".."|r")
       return
     end
 
     wipe(Critmatic.ignoredSpells)  -- Clear the table
-    Critmatic:Print("|cffff0000".."All ignored spells have been removed." .. "|r")
+    Critmatic:Print(CritMaticRed.."All ignored spells have been removed." .. "|r")
     RedrawCritMaticWidget()
   end
 
   Critmatic:RegisterChatCommand("cmhelp", function()
     self:Print("|cffffd700 Commands:|r")
-    print("|cffffd700/cm|r - Open the CritMatic options menu.")
-    print("|cffffd700/cmlog|r - Open the CritMatic changelog.")
-    print("|cffffd700/cmcritlog|r - Open the CritMatic crit log.")
-    print("|cffffd700/cmreset|r - Reset all CritMatic data.")
-    print("|cffffd700/cmignore  spell name|r - Ignore a spell.")
-    print("|cffffd700/cmignoredspells|r - List all ignored spells.")
-    print("|cffffd700/cmremoveignoredspell spell name|r - Remove a spell from the ignored spells list.")
-    print("|cffffd700/cmwipeignoredspells|r - Remove all spells from the ignored spells list.")
+    print(CritMaticGoldYellow.."/cm".."|r - "..CritMaticGray.."Open the CritMatic options menu.".."|r")
+    print(CritMaticGoldYellow.."/cmlog".."|r - "..CritMaticGray.."Open the CritMatic changelog.".."|r")
+    print(CritMaticGoldYellow.."/cmcritlog".."|r - "..CritMaticGray.."Open the CritMatic crit log.".."|r")
+    print(CritMaticGoldYellow.."/cmreset".."|r - "..CritMaticGray.."Reset all CritMatic data.".."|r")
+    print(CritMaticGoldYellow.."/cmignore  spell name".."|r - "..CritMaticGray.."Ignore a spell.".."|r")
+    print(CritMaticGoldYellow.."/cmignoredspells".."|r - "..CritMaticGray.."List all ignored spells.".."|r")
+    print(CritMaticGoldYellow.."/cmremoveignoredspell spell name".."|r - "..CritMaticGray.."Remove a spell from the ignored spells list.".."|r")
+    print(CritMaticGoldYellow.."/cmwipeignoredspells".."|r - "..CritMaticGray.."Remove all spells from the ignored spells list.".."|r")
 
   end)
   Critmatic:RegisterChatCommand("cmwipeignoredspells", WipeIgnoredSpells)
@@ -398,7 +405,7 @@ function Critmatic:OnInitialize()
   hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
   function Critmatic:CritMaticLoaded()
-    self:Print("|cffd4d4d4 "..L["version_string"] .."|r|cfff2f2f2 " .. version .. "|r|cffd4d4d4 "..L["critmatic_loaded"] .."|cffffd700  /cm|r|cffd4d4d4 "..L["critmatic_loaded_3"].."|r |cffffd700"..L["critmatic_loaded_4"].."|r|cffd4d4d4 "..L["critmatic_loaded_5"].."|r")
+    self:Print(CritMaticGray.." "..L["version_string"] .."|r"..CritMaticWhite.." " .. version .. "|r "..CritMaticGray..L["critmatic_loaded"] ..CritMaticGoldYellow.."  /cm".."|r"..CritMaticGray.." "..L["critmatic_loaded_3"].."|r "..CritMaticGoldYellow..L["critmatic_loaded_4"].."|r ".. CritMaticGray..L["critmatic_loaded_5"].."|r")
   end
 
 
@@ -445,7 +452,7 @@ end
 
 function Critmatic:CritMaticReset()
   CritMaticData = {}
-  Critmatic:Print("|cffff0000"..L["critmatic_reset"].."|r")
+  Critmatic:Print(CritMaticRed..L["critmatic_reset"].."|r")
   RedrawCritMaticWidget()
 
 end
@@ -544,7 +551,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700CritMatic: "..L["chat_crit_heal"] .. baseSpellName.. ": |r" ..
+                  Critmatic:Print(CritMaticGoldYellow..L["chat_crit_heal"] .. baseSpellName.. ": |r" ..
                           CritMaticData[spellID].highestHealCrit)
                 end
                 RecordEvent(spellID)
@@ -566,8 +573,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700CritMatic: |r"..L["chat_heal"] .. baseSpellName .. ": " ..
-                          CritMaticData[spellID].highestHeal)
+                  Critmatic:Print(" "..CritMaticWhite..L["chat_heal"] .. baseSpellName .. ": " .. CritMaticData[spellID].highestHeal.."|r")
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -592,7 +598,8 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700CritMatic: "..L["chat_crit"] .. baseSpellName .. ": |r" .. CritMaticData[spellID].highestCrit)
+                  Critmatic:Print(CritMaticGoldYellow..L["chat_crit"] .. baseSpellName .. ": |r" ..
+                          CritMaticData[spellID].highestCrit)
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
@@ -612,8 +619,8 @@ f:SetScript("OnEvent", function(self, event, ...)
                 end
 
                 if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
-                  print("|cffffd700CritMatic: |r"..L["chat_hit"] .. baseSpellName .. ": " ..
-                          CritMaticData[spellID].highestNormal)
+                  Critmatic:Print(CritMaticWhite..L["chat_hit"] .. baseSpellName .. ": " ..
+                          CritMaticData[spellID].highestNormal.."|r")
                 end
                 RecordEvent(spellID)
                 RedrawCritMaticWidget()
