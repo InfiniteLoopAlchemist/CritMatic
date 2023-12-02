@@ -310,6 +310,34 @@ function Critmatic:OnInitialize()
     end))
   end
   -- Function to handle the slash command input
+  local function resetSingleSpellDataSlashCommand(input)
+    if not input or input:trim() == "" then
+      Critmatic:Print(CritMaticRed.."Please provide a spell name!".."|r")
+      return
+    end
+
+    local capitalizedInput = capitalizeFirstLetterOfEachWord(input)
+    local inputSpellName = capitalizedInput:lower() -- Standardize for comparison
+
+    local spellFound = false
+    for spellID, _ in pairs(CritMaticData) do
+      local spellName = GetSpellInfo(spellID)
+      if spellName and spellName:lower() == inputSpellName then
+        -- Reset data for the found spell
+        CritMaticData[spellID] = nil -- or reset to initial state if needed
+        spellFound = true
+        Critmatic:Print(CritMaticGoldYellow .. capitalizedInput .. "|r"..CritMaticRed.." data has been reset.".."|r")
+        RedrawCritMaticWidget()
+        break
+      end
+    end
+
+    if not spellFound then
+      Critmatic:Print(CritMaticGoldYellow .. capitalizedInput .. "|r"..CritMaticRed.." is not a tracked spell currently".."|r")
+    end
+
+  end
+
   local function ignoredSpellSlashCommand(input)
     if not input or input:trim() == "" then
       Critmatic:Print(CritMaticRed.."Please provide a spell name!".."|r")
@@ -345,7 +373,7 @@ function Critmatic:OnInitialize()
       return
     end
 
-    print("|cffff0000".."Ignored".."|r ".."Spells:")
+    Critmatic:Print(CritMaticRed.."Ignored".."|r ".."Spells:")
     for spellName, _ in pairs(Critmatic.ignoredSpells) do
       Critmatic:Print(CritMaticGoldYellow.."- " .. capitalizeFirstLetterOfEachWord(spellName).."|r")
     end
@@ -385,6 +413,7 @@ function Critmatic:OnInitialize()
     print(CritMaticGoldYellow.."/cmlog".."|r "..CritMaticGray.."- Open the CritMatic changelog.".."|r")
     print(CritMaticGoldYellow.."/cmcritlog".."|r "..CritMaticGray.."- Open the CritMatic crit log.".."|r")
     print(CritMaticGoldYellow.."/cmcritlogdefaultpos".."|r "..CritMaticGray.."- Resets the Crit Log position. Causes a Reload.".."|r")
+    print(CritMaticGoldYellow.."/cmdeletespelldata spell name".."|r "..CritMaticGray.."- Reset a single spell's data.".."|r")
     print(CritMaticGoldYellow.."/cmreset".."|r "..CritMaticGray.."- Reset all CritMatic data.".."|r")
     print(CritMaticGoldYellow.."/cmignore  spell name".."|r "..CritMaticGray.."- Ignore a spell.".."|r")
     print(CritMaticGoldYellow.."/cmignoredspells".."|r "..CritMaticGray.."- List all ignored spells.".."|r")
@@ -392,6 +421,7 @@ function Critmatic:OnInitialize()
     print(CritMaticGoldYellow.."/cmwipeignoredspells".."|r  "..CritMaticGray.."- Remove all spells from the ignored spells list.".."|r")
 
   end)
+  Critmatic:RegisterChatCommand("cmdeletespelldata", resetSingleSpellDataSlashCommand)
   Critmatic:RegisterChatCommand("cmwipeignoredspells", WipeIgnoredSpells)
   Critmatic:RegisterChatCommand("cmremoveignoredspell", RemoveIgnoredSpell)
   Critmatic:RegisterChatCommand("cmignoredspells", ListIgnoredSpells)
