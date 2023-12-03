@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.4.1-release] - 12/3/2023
+
+ Updated:
+
+ When you use /cmcritlogdefaultpos it will now show if its currently hidden.
+
+
+
+
+
 [v0.4.0-release] - 12/2/2023
 
  Fixed:
