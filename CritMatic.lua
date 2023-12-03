@@ -526,11 +526,6 @@ f:SetScript("OnEvent", function(self, event, ...)
     local localizedSpellName = GetSpellInfo(spellID)
     local baseSpellName = localizedSpellName
 
-
-    if spellID == 6603 and not Critmatic.db.profile.generalSettings.autoAttacksEnabled then
-      return
-    end
-
     local LSM = LibStub("LibSharedMedia-3.0")
     local soundCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageCrit)
     local soundNormal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageNormal)

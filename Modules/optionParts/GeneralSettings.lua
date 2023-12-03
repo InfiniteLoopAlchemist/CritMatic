@@ -7,18 +7,6 @@ function Critmatic:GeneralTab_Initialize()
         type = "group",
         order = 1,
         args = {
-            autoAttacksEnabled = {
-                name = L["options_auto_attacks"],
-                desc = L["options_auto_attacks_desc"],
-                type = "toggle",
-                order = 1,
-                set = function(_, newVal)
-                    Critmatic.db.profile.generalSettings.autoAttacksEnabled = newVal
-                end,
-                get = function()
-                    return Critmatic.db.profile.generalSettings.autoAttacksEnabled
-                end,
-            },
 
             alertNotificationsEnabled = {
                 name = L["options_show_alert_notifications"],

@@ -3,7 +3,6 @@ defaults = {
   profile = {
     generalSettings = {
       alertNotificationsEnabled = true,
-      autoAttacksEnabled = true,
       chatNotificationsEnabled = true,
       isChangeLogAutoPopUpEnabled = true
 

@@ -40,8 +40,6 @@ L["message_log_old"] = "Old"
 -- CritMaticOptions.lua
 -- General
 L["options_general"] = "General"
-L["options_auto_attacks"] = "Track Auto Attacks"
-L["options_auto_attacks_desc"] = "Do you want to track auto attacks?"
 L["options_show_chat_notifications"] = "Show Chat Notifications"
 L["options_show_chat_notifications_desc"] = "Do you want damage / heal chat messages for when you get a highercrit/hit/heal?"
 L["options_show_alert_notifications"] = "Show Alert Notifications"
