@@ -35,13 +35,26 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.4.2-release] - 12/4/2023
+
+ Updated:
+
+ Removed Auto Attack from options. You can use /cmignore spell name to ignore Auto Attack
+
+
+ Added:
+
+ You can now customize the alert notification message. Use /cm Its under Alert.
+
+
+
+
+
 [v0.4.1-release] - 12/3/2023
 
  Updated:
 
  When you use /cmcritlogdefaultpos it will now show if its currently hidden.
-
-
 
 
 
@@ -51,12 +64,10 @@ Critmatic.showChangeLog = function()
 
  Fixed issue where Crit Log shifts right on Reload/Logout.
 
-
  Added:
 
- To reset specific spell data, use the command /cmdeletespelldata spell name This avoids the need to clear all data with /cmreset.
-
-
+ To reset specific spell data, use the command /cmdeletespelldata spell name This avoids the need to clear all data
+  with /cmreset.
 
 
 
@@ -64,14 +75,12 @@ Critmatic.showChangeLog = function()
 
  Added:
 
- Added a new slash command to reset the position of Crit Log if it goes off screen. Use /cmcritlogdefaultpos Causes a ReloadUI.
-
-
+ Added a new slash command to reset the position of Crit Log if it goes off screen. Use /cmcritlogdefaultpos Causes a
+  ReloadUI.
 
 
 
 [v0.3.9.7-release] - 12/1/2023
-
 
 
 
@@ -83,8 +92,6 @@ Critmatic.showChangeLog = function()
 
 
 
-
-
 [v0.3.9.5-release] - 11/30/2023
 
  Fixed:
@@ -92,7 +99,6 @@ Critmatic.showChangeLog = function()
  Resolved issue with /cmcritlog slash command not functioning as expected.
 
  Additional slash commands have been tested and confirmed operational.
-
 
  Updated:
 
@@ -102,18 +108,14 @@ Critmatic.showChangeLog = function()
 
 
 
-
-
-
 [v0.3.8.8-release] - 11/29/2023
 
  Updated:
 
- We need your help translating CritMatic to other languages just visit the localization tab on https://legacy.curseforge.com/wow/addons/critmatic to start.
+ We need your help translating CritMatic to other languages just visit the localization tab
+  on https://legacy.curseforge.com/wow/addons/critmatic to start.
 
  You will translation credit in the addon and on CurseForge.
-
-
 
 
 
@@ -125,19 +127,18 @@ Critmatic.showChangeLog = function()
 
 
 
-
-
 [v0.3.8.2-release] - 11/25/2023
 
  Fixed:
 
- Good news! We've fixed a bug that affected how the crit log displayed information for spells that can both heal and damage. Previously, if a spell had both of these capabilities, the crit log wasn't displaying correctly.
+ Good news! We've fixed a bug that affected how the crit log displayed information for spells that can both heal and
+  damage. Previously, if a spell had both of these capabilities, the crit log wasn't displaying correctly.
 
- This issue did not affect spells that were exclusively for healing or damage. With this latest update, you can expect accurate and consistent display for all spells, regardless of whether they heal, damage, or do both.
+ This issue did not affect spells that were exclusively for healing or damage. With this latest update, you can
+  expect accurate and consistent display for all spells, regardless of whether they heal, damage, or do both.
 
- Thank you for your continued support and feedback, which helps us improve CritMatic. Enjoy your enhanced gaming experience!
-
-
+ Thank you for your continued support and feedback, which helps us improve CritMatic. Enjoy your enhanced gaming
+  experience!
 
 
 
@@ -145,11 +146,12 @@ Critmatic.showChangeLog = function()
 
  Updated:
 
- Changed the spell data handling from using spell names to spell IDs. This update enhances localization support, allowing CritMatic to be more compatible with different language settings and paving the way for future international releases.
+ Changed the spell data handling from using spell names to spell IDs. This update enhances localization support,
+  allowing CritMatic to be more compatible with different language settings and paving the way for future international
+  releases.
 
- Due to this change, existing spell data in CritMatic had to be cleared. We apologize for any inconvenience this may cause and appreciate your understanding.
-
-
+ Due to this change, existing spell data in CritMatic had to be cleared. We apologize for any inconvenience this may
+  cause and appreciate your understanding.
 
 
 
@@ -161,16 +163,12 @@ Critmatic.showChangeLog = function()
 
 
 
-
-
 [v0.3.7-release] - 11/19/2023
 
  Added:
 
- New CritLog widget, that displays your latest Crits/Normal Hits/CritHeals/Heals. Open it with /cmcritlog that 
+ New CritLog widget, that displays your latest Crits/Normal Hits/CritHeals/Heals. Open it with /cmcritlog that
   you can macro.
-
-
 
 
 
@@ -182,15 +180,15 @@ Critmatic.showChangeLog = function()
 
 
 
-
-
 [v0.3.6.2.4-release] - 11/12/2023
 
  Fixed:
 
- Addressed the issue where critical hits (crits) were not consistently displayed correctly in the CritMatic addon, a bug fix has been implemented. This should resolve the intermittent inaccuracies in the alerts and chat crit display.
+ Addressed the issue where critical hits (crits) were not consistently displayed correctly in the CritMatic addon, a
+  bug fix has been implemented. This should resolve the intermittent inaccuracies in the alerts and chat crit display.
 
- a bug has been fixed that was preventing new critical hits (crits) from being announced in battlegrounds, raids, and parties. This update ensures that crit announcements are correctly broadcasted in these group environments.
+ a bug has been fixed that was preventing new critical hits (crits) from being announced in battlegrounds, raids, and
+  parties. This update ensures that crit announcements are correctly broadcasted in these group environments.
 
 
 ]]
