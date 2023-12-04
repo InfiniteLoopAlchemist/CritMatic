@@ -2,8 +2,9 @@
 
 local L = LibStub("AceLocale-3.0"):NewLocale("CritMatic", "enUS", true)
 
-
-if not L then return end
+if not L then
+    return
+end
 --CritMatic.lua
 L["action_bar_crit"] = "Crit"
 L["action_bar_hit"] = "Hit"
@@ -112,7 +113,6 @@ L["options_change_log_font_outline_thick_mono"] = "Thick Outline Monochrome"
 L["options_change_log_reset"] = "Reset Change Log Font Settings"
 L["options_change_log_reset_desc"] = "Reset all Change Log Font settings to their default values?"
 L["options_change_log_reset_confirm"] = "Are you sure you want to reset change log font settings to their default values?"
-
 
 L["options_change_log_border_and_background"] = "Border and Background"
 L["options_change_log_border_and_background_border"] = "Border Texture"

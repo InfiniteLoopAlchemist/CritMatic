@@ -41,7 +41,6 @@
     <Script file="Modules\CritMaticOptions.lua"/>
 
 
-
     <!-- Additional Scripts and Modules -->
     <Script file="MessageFrame.lua"/>
     <Script file="Modules\CritLog.lua"/>

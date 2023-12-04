@@ -7,7 +7,7 @@ function Critmatic:SocialSettings_Initialize()
         order = 4,
         args = {
             canSendCritsToParty = {
-                name = L["options_social_send_crits_toParty"] ,
+                name = L["options_social_send_crits_toParty"],
                 desc = L["options_social_send_crits_toParty_desc"],
                 type = "toggle",
                 order = 1,

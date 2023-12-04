@@ -3,26 +3,26 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 Critmatic = Critmatic or {}
 
 function Critmatic:CreateOptionsTable()
-  local general_tab = Critmatic:GeneralTab_Initialize()
-  local alertFont_Tab = Critmatic:AlertFontSettings_Initialize()
-  local sound_tab = Critmatic:SoundSettings_Initialize()
-  local social_tab = Critmatic:SocialSettings_Initialize()
-  local changeLog_tab = Critmatic:ChangeLogSettings_Initialize()
+    local general_tab = Critmatic:GeneralTab_Initialize()
+    local alertFont_Tab = Critmatic:AlertFontSettings_Initialize()
+    local sound_tab = Critmatic:SoundSettings_Initialize()
+    local social_tab = Critmatic:SocialSettings_Initialize()
+    local changeLog_tab = Critmatic:ChangeLogSettings_Initialize()
 
-  return {
-    name = "CritMatic Options",
-    type = "group",
+    return {
+        name = "CritMatic Options",
+        type = "group",
 
-    args = {
+        args = {
 
-      general_tab = general_tab,
-      alertFont_Tab = alertFont_Tab,
-      sound_tab = sound_tab,
-      social_tab = social_tab,
-      changeLog_tab = changeLog_tab
+            general_tab = general_tab,
+            alertFont_Tab = alertFont_Tab,
+            sound_tab = sound_tab,
+            social_tab = social_tab,
+            changeLog_tab = changeLog_tab
 
-    },
-  }
+        },
+    }
 
 end
 -- Register the options table
@@ -33,9 +33,9 @@ local blizzPanel = AceConfigDialog:AddToBlizOptions("CritMaticOptions", "CritMat
 
 -- Hook into the Blizzard options panel.
 hooksecurefunc("InterfaceOptionsList_DisplayPanel", function(frame)
-  if frame == blizzPanel then
-    --
-  end
+    if frame == blizzPanel then
+        --
+    end
 end)
 
 

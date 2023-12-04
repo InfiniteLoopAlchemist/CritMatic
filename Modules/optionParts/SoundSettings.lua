@@ -40,7 +40,7 @@ function Critmatic:SoundSettings_Initialize()
                 end,
             },
             healCrit = {
-                name =L["options_sound_crit_heal"] ,
+                name = L["options_sound_crit_heal"],
                 type = "select",
                 dialogControl = "LSM30_Sound",
                 values = LSM:HashTable("sound"),
@@ -70,7 +70,7 @@ function Critmatic:SoundSettings_Initialize()
 
             muteAllSounds = {
                 name = L["options_sound_mute_all"],
-                desc =L["options_sound_mute_all_desc"] ,
+                desc = L["options_sound_mute_all_desc"],
                 type = "toggle",
                 set = function(_, newVal)
                     Critmatic.db.profile.soundSettings.muteAllSounds = newVal
