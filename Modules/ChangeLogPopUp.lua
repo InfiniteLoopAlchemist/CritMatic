@@ -35,6 +35,18 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.4.2.5-release] - 12/6/2023
+
+ Added:
+
+ Added alert notification preview feature in options under Alert
+
+ Chat customization is coming next.
+
+
+
+
+
 [v0.4.2.1-release] - 12/4/2023
 
  Updated:
