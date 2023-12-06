@@ -7,6 +7,9 @@ end
 function ResetFontSettingsToDefault()
     Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
 end
+function alertNotificationConstructor(message,spell_name,amount)
+
+end
 function Critmatic:AlertFontSettings_Initialize()
 
     local alertFontSettings = {
@@ -16,13 +19,14 @@ function Critmatic:AlertFontSettings_Initialize()
         childGroups = "tab",
         args = {
             messageTab = {
-                name = "Alert Notification Format",
+                name = L["options_alert_notification_format"],
                 type = "group",
                 order = 1,
+                desc = L["options_alert_notification_format_desc"],
                 args = {
                     isUpper = {
-                        name = "Uppercase",
-                        desc = "Check this box to make all notifications uppercase.",
+                        name = L["options_alert_notification_format_upper"],
+                        desc = L["options_alert_notification_format_upper_desc"],
                         type = "toggle",
                         order = 1,
                         set = function(_, newVal)
@@ -34,8 +38,8 @@ function Critmatic:AlertFontSettings_Initialize()
                     },
                     critAlertNotificationFormat = {
                         type = "input",
-                        name = "Crit Alert",
-                        desc = "Enter your custom Crit notification format. Use %s for spell name and %d for amount.",
+                        name = L["options_alert_notification_format_crit"],
+                        desc = L["options_alert_notification_format_crit_desc"],
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
@@ -46,10 +50,19 @@ function Critmatic:AlertFontSettings_Initialize()
                         end,
                         order = 2 -- Adjust the order as needed
                     },
+                    runFunctionButton = {
+                        name = "Run Function",
+                        desc = "Click to run the function",
+                        type = "execute",
+                        func = function()
+                            -- Place your function call here
+                        end,
+                        order = 8, -- Adjust the order as needed
+                    },
                     hitAlertNotificationFormat = {
                         type = "input",
-                        name = "Hit Alert",
-                        desc = "Enter your custom Hit notification format. Use %s for spell name and %d for amount.",
+                        name = L["options_alert_notification_format_hit"],
+                        desc = L["options_alert_notification_format_hit_desc"],
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
@@ -60,10 +73,19 @@ function Critmatic:AlertFontSettings_Initialize()
                         end,
                         order = 3 -- Adjust the order as needed
                     },
+                    runFunctionButton = {
+                        name = "Run Function",
+                        desc = "Click to run the function",
+                        type = "execute",
+                        func = function()
+                            -- Place your function call here
+                        end,
+                        order = 8, -- Adjust the order as needed
+                    },
                     critHealAlertNotificationFormat = {
                         type = "input",
-                        name = "Crit Heal Alert",
-                        desc = "Enter your custom Crit Heal notification format. Use %s for spell name and %d for amount.",
+                        name = L["options_alert_notification_format_crit_heal"],
+                        desc = L["options_alert_notification_format_crit_heal_desc"],
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
@@ -74,10 +96,19 @@ function Critmatic:AlertFontSettings_Initialize()
                         end,
                         order = 4 -- Adjust the order as needed
                     },
+                    runFunctionButton = {
+                        name = "Run Function",
+                        desc = "Click to run the function",
+                        type = "execute",
+                        func = function()
+                            -- Place your function call here
+                        end,
+                        order = 8, -- Adjust the order as needed
+                    },
                     healAlertNotificationFormat = {
                         type = "input",
-                        name = "Heal Alert",
-                        desc = "Enter your custom Heal notification format. Use %s for spell name and %d for amount.",
+                        name = L["options_alert_notification_format_heal"],
+                        desc = L["options_alert_notification_format_heal_desc"],
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
@@ -88,14 +119,23 @@ function Critmatic:AlertFontSettings_Initialize()
                         end,
                         order = 5
                     },
+                    runFunctionButton = {
+                        name = "Run Function",
+                        desc = "Click to run the function",
+                        type = "execute",
+                        func = function()
+                            -- Place your function call here
+                        end,
+                        order = 8, -- Adjust the order as needed
+                    },
                     resetAlertSettings = {
-                        name = "Reset Alert Settings",
-                        desc = "Reset all alert settings to default.",
+                        name = L["options_alert_notification_format_reset"],
+                        desc = L["options_alert_notification_format_reset_desc"],
                         width = "full",
                         type = "execute",
                         func = ResetAlertSettingsToDefault,
                         confirm = true,
-                        confirmText = "Are you sure you want to reset all alert settings to default?",
+                        confirmText = L["options_alert_notification_format_reset_confirm"],
                         order = 7,
                     },
                 },

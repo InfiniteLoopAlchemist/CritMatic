@@ -429,7 +429,7 @@ function Critmatic:OnInitialize()
     hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
     function Critmatic:CritMaticLoaded()
-        self:Print(CritMaticGray .. " " .. L["version_string"] .. "|r" .. CritMaticWhite .. " " .. version .. "|r " .. CritMaticGray .. L["critmatic_loaded"] .. CritMaticGoldYellow .. "  /cm" .. "|r" .. CritMaticGray .. " " .. L["critmatic_loaded_3"] .. "|r " .. CritMaticGoldYellow .. L["critmatic_loaded_4"] .. "|r " .. CritMaticGray .. L["critmatic_loaded_5"] .. "|r")
+        self:Print(CritMaticGray .. " " .. L["version_string"] .. "|r" .. CritMaticWhite .. " " .. version .. "|r " .. CritMaticGray .. L["critmatic_loaded"] .. CritMaticGoldYellow .. "  /cm" .. "|r" .. CritMaticGray .. " " .. L["critmatic_loaded_for_options"] .. "|r " .. CritMaticGoldYellow .. L["critmatic_loaded_cmhelp"] .. "|r " .. CritMaticGray .. L["critmatic_loaded_for_all_slash_commands"] .. "|r ")
     end
 
     local f = Critmatic.CreateNewMessageFrame()

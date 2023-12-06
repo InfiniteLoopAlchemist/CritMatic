@@ -503,19 +503,19 @@ function toggleCritMaticCritLog()
                             spellInfoText = string.format(spellInfoText, GetSpellInfo(spellIDs[1]))
 
                             if spellData.highestCrit and spellData.highestCrit > 0 then
-                                spellInfoText = spellInfoText .. string.format(gray .. L["message_log_crit"] .. ": %s (" .. L["message_log_old"] .. ": %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
+                                spellInfoText = spellInfoText .. string.format(gray .. L["crit_log_crit"] .. ": %s (" .. L["crit_log_old"] .. ": %s)|r\n", spellData.highestCrit, spellData.highestCritOld or "0")
                             end
 
                             if spellData.highestNormal and spellData.highestNormal > 0 then
-                                spellInfoText = spellInfoText .. string.format(gray .. L["message_log_hit"] .. ": %s (" .. L["message_log_old"] .. ": %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
+                                spellInfoText = spellInfoText .. string.format(gray .. L["crit_log_hit"] .. ": %s (" .. L["crit_log_old"] .. ": %s)|r\n", spellData.highestNormal, spellData.highestNormalOld or "0")
                             end
 
                             if spellData.highestHealCrit and spellData.highestHealCrit > 0 then
-                                spellInfoText = spellInfoText .. string.format(gray .. L["message_log_crit"] .. " " .. L["message_log_heal"] .. ": %s (" .. L["message_log_old"] .. ": %s)|r\n", spellData.highestHealCrit, spellData.highestHealCritOld or "0")
+                                spellInfoText = spellInfoText .. string.format(gray .. L["crit_log_crit"] .. " " .. L["crit_log_heal"] .. ": %s (" .. L["crit_log_old"] .. ": %s)|r\n", spellData.highestHealCrit, spellData.highestHealCritOld or "0")
                             end
 
                             if spellData.highestHeal and spellData.highestHeal > 0 then
-                                spellInfoText = spellInfoText .. string.format(gray .. L["message_log_heal"] .. ": %s (" .. L["message_log_old"] .. ": %s)|r", spellData.highestHeal, spellData.highestHealOld or "0")
+                                spellInfoText = spellInfoText .. string.format(gray .. L["crit_log_heal"] .. ": %s (" .. L["crit_log_old"] .. ": %s)|r", spellData.highestHeal, spellData.highestHealOld or "0")
                             end
 
                             spellText:SetText(spellInfoText)
