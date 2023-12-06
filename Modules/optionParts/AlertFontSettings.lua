@@ -1,14 +1,101 @@
 local LSM = LibStub("LibSharedMedia-3.0")
 Critmatic = Critmatic or {}
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
+
+LSM = LibStub("LibSharedMedia-3.0")
+local soundCrit, soundHit, soundCritHeal, soundHeal
+
+-- Coroutine to fetch sound settings
+local co = coroutine.create(function()
+    while true do
+        if Critmatic and Critmatic.db then
+            soundCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageCrit)
+            soundHit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageNormal)
+            soundCritHeal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healCrit)
+            soundHeal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healNormal)
+            break
+        else
+            coroutine.yield()
+        end
+    end
+end)
+
+-- Function to resume the coroutine
+local function fetchSoundSettings()
+    if coroutine.status(co) ~= 'dead' then
+        coroutine.resume(co)
+        -- If Critmatic or Critmatic.db is not ready, delay the execution
+        C_Timer.After(1, fetchSoundSettings)
+    end
+end
+
+-- Call the function to start fetching sound settings
+fetchSoundSettings()
 function ResetAlertSettingsToDefault()
     Critmatic.db.profile.alertNotificationFormat = defaults.profile.alertNotificationFormat
 end
 function ResetFontSettingsToDefault()
     Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
 end
-function alertNotificationConstructor(message,spell_name,amount)
+local function alertNotificationConstructor(message, isDamage, isCrit, sound)
+    -- Define a local table with 15 different spell names
+    local spellNames = {}
+    local r, g, b
+    if isDamage then
+        spellNames = {
+            "Fireball",
+            "Shadow Bolt",
+            "Chain Lightning",
+            "Death Coil",
+            "Starfire",
+            "Eviscerate",
+            "Mind Blast",
+            "Heroic Strike",
+            "Arcane Shot",
+            "Blade Flurry",
+            "Judgment",
+            "Shadowflame",
+            "Stormstrike",
+            "Mutilate",
+            "Hammer of Wrath"
+        }
+    else
+        spellNames = {
+            "Circle of Healing",
+            "Rejuvenation",
+            "Flash Heal",
+            "Lay on Hands",
+            "Renew",
+            "Riptide",
+            "Holy Light",
+            "Lifebloom",
+            "Chain Heal",
+            "Healing Rain",
+            "Soothing Mist",
+            "Penance",
+            "Greater Heal",
+            "Wild Growth",
+            "Prayer of Healing"
+        }
+    end
 
+
+    -- Select a random spell name
+    local spellName = spellNames[math.random(#spellNames)]
+
+    -- Generate a random number between 3000 and 8000 for amount
+    local amount = math.random(500, 8000)
+
+    local string = string.upper(string.format(message, spellName, amount))
+    if isCrit then
+        r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
+    else
+        r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
+    end
+    Critmatic.MessageFrame:CreateMessage(string, r, g, b)
+    if not Critmatic.db.profile.soundSettings.muteAllSounds then
+        PlaySoundFile(sound)
+    end
 end
 function Critmatic:AlertFontSettings_Initialize()
 
@@ -50,14 +137,15 @@ function Critmatic:AlertFontSettings_Initialize()
                         end,
                         order = 2 -- Adjust the order as needed
                     },
-                    runFunctionButton = {
-                        name = "Run Function",
-                        desc = "Click to run the function",
+                    runCritButton = {
+                        name = "Preview Crit",
+                        desc = " Preview Crit Alert Notification",
                         type = "execute",
                         func = function()
-                            -- Place your function call here
+                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat
+                                                                  .critAlertNotificationFormat, true, true, soundCrit)
                         end,
-                        order = 8, -- Adjust the order as needed
+                        order = 3, -- Adjust the order as needed
                     },
                     hitAlertNotificationFormat = {
                         type = "input",
@@ -71,16 +159,17 @@ function Critmatic:AlertFontSettings_Initialize()
                         set = function(_, val)
                             Critmatic.db.profile.alertNotificationFormat.hitAlertNotificationFormat = val
                         end,
-                        order = 3 -- Adjust the order as needed
+                        order = 4 -- Adjust the order as needed
                     },
-                    runFunctionButton = {
-                        name = "Run Function",
-                        desc = "Click to run the function",
+                    runHitButton = {
+                        name = "Preview Hit",
+                        desc = " Preview Hit Alert Notification",
                         type = "execute",
                         func = function()
-                            -- Place your function call here
+                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat
+                                                                  .hitAlertNotificationFormat, true, false, soundHit)
                         end,
-                        order = 8, -- Adjust the order as needed
+                        order = 5, -- Adjust the order as needed
                     },
                     critHealAlertNotificationFormat = {
                         type = "input",
@@ -94,16 +183,18 @@ function Critmatic:AlertFontSettings_Initialize()
                         set = function(_, val)
                             Critmatic.db.profile.alertNotificationFormat.critHealAlertNotificationFormat = val
                         end,
-                        order = 4 -- Adjust the order as needed
+                        order = 6 -- Adjust the order as needed
                     },
-                    runFunctionButton = {
-                        name = "Run Function",
-                        desc = "Click to run the function",
+                    runCritHealButton = {
+                        name = "Preview Crit Heal",
+                        desc = " Preview Crit Heal Alert Notification",
                         type = "execute",
                         func = function()
-                            -- Place your function call here
+                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat
+                                                                  .critHealAlertNotificationFormat, false, true,
+                                    soundCritHeal)
                         end,
-                        order = 8, -- Adjust the order as needed
+                        order = 7, -- Adjust the order as needed
                     },
                     healAlertNotificationFormat = {
                         type = "input",
@@ -117,16 +208,18 @@ function Critmatic:AlertFontSettings_Initialize()
                         set = function(_, val)
                             Critmatic.db.profile.alertNotificationFormat.healAlertNotificationFormat = val
                         end,
-                        order = 5
+                        order = 8
                     },
-                    runFunctionButton = {
-                        name = "Run Function",
-                        desc = "Click to run the function",
+                    runHealButton = {
+                        name = "Preview Heal",
+                        desc = " Preview Heal Alert Notification",
                         type = "execute",
                         func = function()
-                            -- Place your function call here
+                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat
+                                                                  .healAlertNotificationFormat, false, false,
+                                    soundHeal)
                         end,
-                        order = 8, -- Adjust the order as needed
+                        order = 9, -- Adjust the order as needed
                     },
                     resetAlertSettings = {
                         name = L["options_alert_notification_format_reset"],
@@ -136,7 +229,7 @@ function Critmatic:AlertFontSettings_Initialize()
                         func = ResetAlertSettingsToDefault,
                         confirm = true,
                         confirmText = L["options_alert_notification_format_reset_confirm"],
-                        order = 7,
+                        order = 10,
                     },
                 },
             },
