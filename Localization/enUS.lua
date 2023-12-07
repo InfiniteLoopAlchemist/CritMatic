@@ -51,7 +51,7 @@ L["options_discord_link"] = "Help/Suggestions: Copy the CritMatic Discord Link"
 L["options_discord_link_desc"] = "Get help or make a suggestion, Just Copy this link to join our Discord server."
 L["options_discord_link_copy"] = "Copy Discord Link"
 -- Alert Notification Format Settings
-L["options_alert_notification_format"] = "Alert Notification Format"
+L["options_alert_notification_format"] = "Alert Notification"
 L["options_alert_notification_format_desc"] = "Choose the format for your alert notifications."
 L["options_alert_notification_format_upper"] = "Uppercase"
 L["options_alert_notification_format_upper_desc"] = "Check this box to make all notifications uppercase. default:checked"

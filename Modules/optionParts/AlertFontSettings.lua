@@ -63,17 +63,14 @@ local function alertNotificationConstructor(message, isDamage, isCrit, sound)
         spellNames = {
             "Circle of Healing",
             "Rejuvenation",
-            "Flash Heal",
             "Lay on Hands",
             "Renew",
             "Riptide",
             "Holy Light",
             "Lifebloom",
-            "Chain Heal",
             "Healing Rain",
             "Soothing Mist",
             "Penance",
-            "Greater Heal",
             "Wild Growth",
             "Prayer of Healing"
         }
@@ -82,11 +79,18 @@ local function alertNotificationConstructor(message, isDamage, isCrit, sound)
 
     -- Select a random spell name
     local spellName = spellNames[math.random(#spellNames)]
-
+    local string = ""
     -- Generate a random number between 3000 and 8000 for amount
     local amount = math.random(500, 8000)
+    if Critmatic.db.profile.alertNotificationFormat.isUpper then
+        -- If spellName does not end with 'Heal', use the format string as is
+        string = string.upper(string.format(message, spellName, amount))
+    else
+        string = string.format(message, spellName,
+                amount)
 
-    local string = string.upper(string.format(message, spellName, amount))
+    end
+
     if isCrit then
         r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
     else

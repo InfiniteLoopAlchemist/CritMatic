@@ -124,6 +124,7 @@ function Critmatic.ShowNewHealMessage(spellName, amount)
         if Critmatic.db.profile.alertNotificationFormat.isUpper then
             message = string.upper(string.format(formatString, spellName, amount))
         else
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
             message = string.format(formatString, spellName, amount)
 
         end
