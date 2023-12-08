@@ -32,7 +32,7 @@ end
 -- Call the function to start fetching sound settings
 fetchSoundSettings()
 function ResetAlertSettingsToDefault()
-    Critmatic.db.profile.alertNotificationFormat = defaults.profile.alertNotificationFormat
+    Critmatic.db.profile.alertNotificationFormat = defaults.profile.alertNotificationFormat.strings
 end
 function ResetFontSettingsToDefault()
     Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
@@ -102,17 +102,101 @@ local function alertNotificationConstructor(message, isDamage, isCrit, sound)
     end
 end
 function Critmatic:AlertFontSettings_Initialize()
-
+    local generalWidth = "300"
     local alertFontSettings = {
         name = L["options_alert_font_settings"],
         type = "group",
         order = 2,
         childGroups = "tab",
         args = {
-            messageTab = {
-                name = L["options_alert_notification_format"],
+            generalTab = {
+                name = "General",
                 type = "group",
                 order = 1,
+                args = {
+                    maxMessages = {
+                        name = "Max Messages",
+                        desc = "Set the maximum number of messages",
+                        type = "range",
+                        min = 2,
+                        max = 8,
+                        step = 1,
+                        order = 1,
+                        width = generalWidth,
+                        get = function()
+                            return Critmatic.db.profile.alertNotificationFormat.global.maxMessages
+                        end,
+                        set = function(_, newVal)
+                            Critmatic.db.profile.alertNotificationFormat.global.maxMessages = newVal
+                        end,
+                    },
+                    resetMaxMessages = {
+                        name = "Reset Max Messages",
+                        type = "execute",
+                        order = 2,
+                        width = generalWidth,
+                        func = function()
+                            Critmatic.db.profile.alertNotificationFormat.global.maxMessages = 4  -- replace with default value
+                        end,
+                    },
+                    startDelay = {
+                        name = "Delay",
+                        desc = "Set the notification delay (How long does it last on screen)",
+                        type = "range",
+                        min = 1,
+                        max = 10,
+                        step = 0.5,
+                        order = 3,
+                        width = generalWidth,
+                        get = function()
+                            return Critmatic.db.profile.alertNotificationFormat.global.startDelay
+                        end,
+                        set = function(_, newVal)
+                            Critmatic.db.profile.alertNotificationFormat.global.startDelay = newVal
+                        end,
+                    },
+                    resetStartDelay = {
+                        name = "Reset Start Delay",
+                        type = "execute",
+                        order = 4,
+                        width = generalWidth,
+                        func = function()
+                            Critmatic.db.profile.alertNotificationFormat.global.startDelay = 7.5  -- replace with default value
+                        end,
+                    },
+                    fadeTime = {
+                        name = "Fade Time",
+                        desc = "Set the fade time",
+                        type = "range",
+                        min = 0,
+                        max = 10,
+                        step = 0.1,
+                        order = 5,
+                        width = generalWidth,
+                        get = function()
+                            return Critmatic.db.profile.alertNotificationFormat.global.fadeTime
+                        end,
+                        set = function(_, newVal)
+                            Critmatic.db.profile.alertNotificationFormat.global.fadeTime = newVal
+                        end,
+                    },
+                    resetFadeTime = {
+                        name = "Reset Fade Time",
+                        type = "execute",
+                        order = 6,
+                        width = generalWidth,
+                        func = function()
+                            Critmatic.db.profile.alertNotificationFormat.global.fadeTime = 0.5  -- replace with default value
+                        end,
+                    },
+                },
+            },
+
+            messageTab = {
+
+                name = L["options_alert_notification_format"],
+                type = "group",
+                order = 2,
                 desc = L["options_alert_notification_format_desc"],
                 args = {
                     isUpper = {
@@ -121,10 +205,10 @@ function Critmatic:AlertFontSettings_Initialize()
                         type = "toggle",
                         order = 1,
                         set = function(_, newVal)
-                            Critmatic.db.profile.alertNotificationFormat.isUpper = newVal
+                            Critmatic.db.profile.alertNotificationFormat.global.isUpper = newVal
                         end,
                         get = function()
-                            return Critmatic.db.profile.alertNotificationFormat.isUpper
+                            return Critmatic.db.profile.alertNotificationFormat.global.isUpper
                         end,
                     },
                     critAlertNotificationFormat = {
@@ -134,10 +218,10 @@ function Critmatic:AlertFontSettings_Initialize()
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
-                            return Critmatic.db.profile.alertNotificationFormat.critAlertNotificationFormat
+                            return Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat
                         end,
                         set = function(_, val)
-                            Critmatic.db.profile.alertNotificationFormat.critAlertNotificationFormat = val
+                            Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat = val
                         end,
                         order = 2 -- Adjust the order as needed
                     },
@@ -146,8 +230,7 @@ function Critmatic:AlertFontSettings_Initialize()
                         desc = " Preview Crit Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat
-                                                                  .critAlertNotificationFormat, true, true, soundCrit)
+                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat, true, true, soundCrit)
                         end,
                         order = 3, -- Adjust the order as needed
                     },
@@ -158,10 +241,10 @@ function Critmatic:AlertFontSettings_Initialize()
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
-                            return Critmatic.db.profile.alertNotificationFormat.hitAlertNotificationFormat
+                            return Critmatic.db.profile.alertNotificationFormat.strings.hitAlertNotificationFormat
                         end,
                         set = function(_, val)
-                            Critmatic.db.profile.alertNotificationFormat.hitAlertNotificationFormat = val
+                            Critmatic.db.profile.alertNotificationFormat.strings.hitAlertNotificationFormat = val
                         end,
                         order = 4 -- Adjust the order as needed
                     },
@@ -170,7 +253,7 @@ function Critmatic:AlertFontSettings_Initialize()
                         desc = " Preview Hit Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat
+                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
                                                                   .hitAlertNotificationFormat, true, false, soundHit)
                         end,
                         order = 5, -- Adjust the order as needed
@@ -182,10 +265,10 @@ function Critmatic:AlertFontSettings_Initialize()
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
-                            return Critmatic.db.profile.alertNotificationFormat.critHealAlertNotificationFormat
+                            return Critmatic.db.profile.alertNotificationFormat.strings.critHealAlertNotificationFormat
                         end,
                         set = function(_, val)
-                            Critmatic.db.profile.alertNotificationFormat.critHealAlertNotificationFormat = val
+                            Critmatic.db.profile.alertNotificationFormat.strings.critHealAlertNotificationFormat = val
                         end,
                         order = 6 -- Adjust the order as needed
                     },
@@ -194,7 +277,7 @@ function Critmatic:AlertFontSettings_Initialize()
                         desc = " Preview Crit Heal Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat
+                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
                                                                   .critHealAlertNotificationFormat, false, true,
                                     soundCritHeal)
                         end,
@@ -207,10 +290,10 @@ function Critmatic:AlertFontSettings_Initialize()
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
-                            return Critmatic.db.profile.alertNotificationFormat.healAlertNotificationFormat
+                            return Critmatic.db.profile.alertNotificationFormat.strings.healAlertNotificationFormat
                         end,
                         set = function(_, val)
-                            Critmatic.db.profile.alertNotificationFormat.healAlertNotificationFormat = val
+                            Critmatic.db.profile.alertNotificationFormat.strings.healAlertNotificationFormat = val
                         end,
                         order = 8
                     },
@@ -219,7 +302,7 @@ function Critmatic:AlertFontSettings_Initialize()
                         desc = " Preview Heal Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat
+                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
                                                                   .healAlertNotificationFormat, false, false,
                                     soundHeal)
                         end,
@@ -238,7 +321,7 @@ function Critmatic:AlertFontSettings_Initialize()
                 },
             },
             fontTab = {
-                name = "Font Settings",
+                name = "Font",
                 type = "group",
                 order = 2,
                 args = {

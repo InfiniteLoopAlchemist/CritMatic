@@ -1,6 +1,6 @@
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 local MESSAGE_SPACING = 3
-local MAX_MESSAGES = 4
+
 local activeMessages = {}
 --/run CritMatic.ShowNewCritMessage("Killing Spree", 300)CritMatic.ShowNewNormalMessage("Killing Spree",435)
 
@@ -25,13 +25,14 @@ local function RemoveOldestMessage()
     -- Hide the message frame and perform any necessary cleanup
     if oldestMessage then
         oldestMessage:Hide()
-        -- Any additional cleanup logic, if needed
+
     end
 end
 
 Critmatic.MessageFrame = {}
 
 function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
+    local MAX_MESSAGES = Critmatic.db.profile.alertNotificationFormat.global.maxMessages
     local delayInSeconds = 0.45
     local function delayedExecution()
         -- Replace frame creation with a call to CreateNewMessageFrame()
@@ -46,8 +47,8 @@ function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
         local fade = f.fadeOut:CreateAnimation("Alpha")
         fade:SetFromAlpha(1)
         fade:SetToAlpha(0)
-        fade:SetDuration(0.5)
-        fade:SetStartDelay(7.5)
+        fade:SetDuration(Critmatic.db.profile.alertNotificationFormat.global.fadeTime)
+        fade:SetStartDelay(Critmatic.db.profile.alertNotificationFormat.global.startDelay)
         f.fadeOut:SetScript("OnFinished", function()
             f:Hide()
         end)
@@ -75,11 +76,13 @@ function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
 end
 local message = ""
 function Critmatic.ShowNewCritMessage(spellName, amount)
-    if Critmatic.db.profile.alertNotificationFormat.isUpper then
+    if Critmatic.db.profile.alertNotificationFormat.global.isUpper then
         -- If spellName does not end with 'Heal', use the format string as is
-        message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.critAlertNotificationFormat, spellName, amount))
+        message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.strings
+                                                      .critAlertNotificationFormat, spellName, amount))
     else
-        message = string.format(Critmatic.db.profile.alertNotificationFormat.critAlertNotificationFormat, spellName, amount)
+        message = string.format(Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat,
+                spellName, amount)
 
     end
 
@@ -88,24 +91,27 @@ function Critmatic.ShowNewCritMessage(spellName, amount)
 end
 
 function Critmatic.ShowNewNormalMessage(spellName, amount)
-    if Critmatic.db.profile.alertNotificationFormat.isUpper then
+    if Critmatic.db.profile.alertNotificationFormat.global.isUpper then
 
-        message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.hitAlertNotificationFormat, spellName, amount))
+        message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.strings
+                                                      .hitAlertNotificationFormat, spellName, amount))
     else
-        message = string.format(Critmatic.db.profile.alertNotificationFormat.hitAlertNotificationFormat, spellName, amount)
+        message = string.format(Critmatic.db.profile.alertNotificationFormat.strings.hitAlertNotificationFormat,
+                spellName, amount)
 
     end
-    local message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.hitAlertNotificationFormat, spellName, amount))
     local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
     Critmatic.MessageFrame:CreateMessage(message, r, g, b)
 
 end
 function Critmatic.ShowNewHealCritMessage(spellName, amount)
-    if Critmatic.db.profile.alertNotificationFormat.isUpper then
+    if Critmatic.db.profile.alertNotificationFormat.global.isUpper then
         -- If spellName does not end with 'Heal', use the format string as is
-        message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.critHealAlertNotificationFormat, spellName, amount))
+        message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.strings
+                                                      .critHealAlertNotificationFormat, spellName, amount))
     else
-        message = string.format(Critmatic.db.profile.alertNotificationFormat.critHealAlertNotificationFormat, spellName, amount)
+        message = string.format(Critmatic.db.profile.alertNotificationFormat.strings.critHealAlertNotificationFormat,
+                spellName, amount)
 
     end
     local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
@@ -117,23 +123,24 @@ function Critmatic.ShowNewHealMessage(spellName, amount)
 
     if string.sub(spellName, -4):lower() == "heal" then
         -- Remove the redundant 'Heal' from the format string
-        local formatString = Critmatic.db.profile.alertNotificationFormat.healAlertNotificationFormat
+        local formatString = Critmatic.db.profile.alertNotificationFormat.strings.healAlertNotificationFormat
         formatString = string.gsub(formatString, "%%s Heal", "%%s")
         formatString = string.gsub(formatString, "%%s heal", "%%s")
         formatString = string.gsub(formatString, "%%s HEAL", "%%s")
-        if Critmatic.db.profile.alertNotificationFormat.isUpper then
+        if Critmatic.db.profile.alertNotificationFormat.global.isUpper then
             message = string.upper(string.format(formatString, spellName, amount))
         else
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
             message = string.format(formatString, spellName, amount)
 
         end
     else
-        if Critmatic.db.profile.alertNotificationFormat.isUpper then
+        if Critmatic.db.profile.alertNotificationFormat.global.isUpper then
             -- If spellName does not end with 'Heal', use the format string as is
-            message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.healAlertNotificationFormat, spellName, amount))
+            message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.strings
+                                                          .healAlertNotificationFormat, spellName, amount))
         else
-            message = string.format(Critmatic.db.profile.alertNotificationFormat.healAlertNotificationFormat, spellName, amount)
+            message = string.format(Critmatic.db.profile.alertNotificationFormat.strings.healAlertNotificationFormat, spellName, amount)
 
         end
     end

@@ -8,11 +8,19 @@ defaults = {
 
         },
         alertNotificationFormat = {
-            isUpper = true,
-            critAlertNotificationFormat = "New %s Crit: %d!",
-            hitAlertNotificationFormat = "New %s Hit: %d!",
-            critHealAlertNotificationFormat = "New %s Crit Heal: %d!",
-            healAlertNotificationFormat = "New %s Heal: %d!",
+            global = {
+                isUpper = true,
+                maxMessages = 4,
+                startDelay = 7.5,
+                fadeTime = 0.5,
+            },
+            strings = {
+                critAlertNotificationFormat = "New %s Crit: %d!",
+                hitAlertNotificationFormat = "New %s Hit: %d!",
+                critHealAlertNotificationFormat = "New %s Crit Heal: %d!",
+                healAlertNotificationFormat = "New %s Heal: %d!",
+            }
+
         },
         fontSettings = {
             font = "Anton",

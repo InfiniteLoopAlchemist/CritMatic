@@ -29,17 +29,18 @@
     <Script file="Localization\zhTW.lua"/>
 
     <Script file="Modules\CritMaticSharedMedia.lua"/>
+    <Script file="Modules\CritMaticDB.lua"/>
+
+    <!-- Core Addon Script -->
+    <Script file="CritMatic.lua"/>
+    <!-- Modules -->
     <Script file="Modules\optionParts\GeneralSettings.lua"/>
     <Script file="Modules\optionParts\AlertFontSettings.lua"/>
     <Script file="Modules\optionParts\SoundSettings.lua"/>
     <Script file="Modules\optionParts\SocialSettings.lua"/>
     <Script file="Modules\optionParts\ChangeLogSettings.lua"/>
     <Script file="Modules\CritMaticOptions.lua"/>
-    <!-- Core Addon Script -->
-    <Script file="CritMatic.lua"/>
-    <!-- Modules -->
 
-    <Script file="Modules\CritMaticDB.lua"/>
     <Script file="MessageFrame.lua"/>
 
 
