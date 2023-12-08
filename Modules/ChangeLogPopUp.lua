@@ -35,6 +35,16 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
+[v0.4.2.7-release] - 12/6/2023
+
+ Added:
+
+ Added options for maxMessages, startDelay, and fadeTime settings also a way to reset them.
+
+
+
+
+
 [v0.4.2.5-release] - 12/6/2023
 
  Added:
