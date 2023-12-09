@@ -1,43 +1,22 @@
-local LSM = LibStub("LibSharedMedia-3.0")
-Critmatic = Critmatic or {}
+local notification_constructor = Critmatic:NewModule("notification_constructor")
+
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
-LSM = LibStub("LibSharedMedia-3.0")
-local soundCrit, soundHit, soundCritHeal, soundHeal
-
--- Coroutine to fetch sound settings
-local co = coroutine.create(function()
-    while true do
-        if Critmatic and Critmatic.db then
-            soundCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageCrit)
-            soundHit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageNormal)
-            soundCritHeal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healCrit)
-            soundHeal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healNormal)
-            break
-        else
-            coroutine.yield()
-        end
-    end
-end)
-
--- Function to resume the coroutine
-local function fetchSoundSettings()
-    if coroutine.status(co) ~= 'dead' then
-        coroutine.resume(co)
-        -- If Critmatic or Critmatic.db is not ready, delay the execution
-        C_Timer.After(1, fetchSoundSettings)
-    end
-end
-
--- Call the function to start fetching sound settings
-fetchSoundSettings()
 function ResetAlertSettingsToDefault()
     Critmatic.db.profile.alertNotificationFormat = defaults.profile.alertNotificationFormat.strings
 end
 function ResetFontSettingsToDefault()
     Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
 end
-local function alertNotificationConstructor(message, isDamage, isCrit, sound)
+function notification_constructor:OnInitialize()
+
+end
+
+function notification_constructor:OnEnable()
+end
+
+function notification_constructor:formatConstructor(message, isDamage, isCrit, sound_string)
+    local LSM = LibStub("LibSharedMedia-3.0")
     -- Define a local table with 15 different spell names
     local spellNames = {}
     local r, g, b
@@ -76,6 +55,10 @@ local function alertNotificationConstructor(message, isDamage, isCrit, sound)
         }
     end
 
+    local soundCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageCrit)
+    local soundHit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageNormal)
+    local soundCritHeal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healCrit)
+    local soundHeal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healNormal)
 
     -- Select a random spell name
     local spellName = spellNames[math.random(#spellNames)]
@@ -98,11 +81,23 @@ local function alertNotificationConstructor(message, isDamage, isCrit, sound)
     end
     Critmatic.MessageFrame:CreateMessage(string, r, g, b)
     if not Critmatic.db.profile.soundSettings.muteAllSounds then
-        PlaySoundFile(sound)
+
+        if sound_string == "soundCrit" then
+            PlaySoundFile(soundCrit)
+        elseif sound_string == "soundHit" then
+            PlaySoundFile(soundHit)
+        elseif sound_string == "soundCritHeal" then
+            PlaySoundFile(soundCritHeal)
+        elseif sound_string == "soundHeal" then
+            PlaySoundFile(soundHeal)
+        end
     end
 end
+
 function Critmatic:AlertFontSettings_Initialize()
+    local LSM = LibStub("LibSharedMedia-3.0")
     local generalWidth = "300"
+
     local alertFontSettings = {
         name = L["options_alert_font_settings"],
         type = "group",
@@ -201,7 +196,7 @@ function Critmatic:AlertFontSettings_Initialize()
                 args = {
                     isUpper = {
                         name = L["options_alert_chat_notification_format_upper"],
-                        desc = L["options_alert_chat_notification_format_upper_desc"],
+                        desc = L["options_alert_notification_format_upper_desc"],
                         type = "toggle",
                         order = 1,
                         set = function(_, newVal)
@@ -230,7 +225,8 @@ function Critmatic:AlertFontSettings_Initialize()
                         desc = " Preview Crit Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat, true, true, soundCrit)
+                            notification_constructor:formatConstructor(Critmatic.db.profile.alertNotificationFormat.strings
+                                                                                .critAlertNotificationFormat, true, true, "soundCrit")
                         end,
                         order = 3, -- Adjust the order as needed
                     },
@@ -253,8 +249,8 @@ function Critmatic:AlertFontSettings_Initialize()
                         desc = " Preview Hit Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
-                                                                  .hitAlertNotificationFormat, true, false, soundHit)
+                            notification_constructor:formatConstructor(Critmatic.db.profile.alertNotificationFormat.strings
+                                                                                .hitAlertNotificationFormat, true, false, "soundHit")
                         end,
                         order = 5, -- Adjust the order as needed
                     },
@@ -277,9 +273,9 @@ function Critmatic:AlertFontSettings_Initialize()
                         desc = " Preview Crit Heal Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
-                                                                  .critHealAlertNotificationFormat, false, true,
-                                    soundCritHeal)
+                            notification_constructor:formatConstructor(Critmatic.db.profile.alertNotificationFormat.strings
+                                                                                .critHealAlertNotificationFormat, false, true,
+                                    "soundCritHeal")
                         end,
                         order = 7, -- Adjust the order as needed
                     },
@@ -302,9 +298,9 @@ function Critmatic:AlertFontSettings_Initialize()
                         desc = " Preview Heal Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
-                                                                  .healAlertNotificationFormat, false, false,
-                                    soundHeal)
+                            notification_constructor:formatConstructor(Critmatic.db.profile.alertNotificationFormat.strings
+                                                                                .healAlertNotificationFormat, false, false,
+                                    "soundHeal")
                         end,
                         order = 9, -- Adjust the order as needed
                     },

@@ -22,6 +22,18 @@ defaults = {
             }
 
         },
+        chatNotificationFormat = {
+            global = {
+                isUpper = false,
+            },
+            strings = {
+                critChatNotificationFormat = "New highest %s Crit: %d!",
+                hitChatNotificationFormat = "New highest %s Hit: %d!",
+                critHealChatNotificationFormat = "New highest %s Crit Heal: %d!",
+                healChatNotificationFormat = "New highest %s Heal: %d!",
+            }
+
+        },
         fontSettings = {
             font = "Anton",
             fontOutline = "OUTLINEMONOCHROME",

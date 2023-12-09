@@ -1,108 +1,15 @@
-local LSM = LibStub("LibSharedMedia-3.0")
-Critmatic = Critmatic or {}
+local notification_constructor = Critmatic:GetModule("notification_constructor")
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
-LSM = LibStub("LibSharedMedia-3.0")
-local soundCrit, soundHit, soundCritHeal, soundHeal
-
--- Coroutine to fetch sound settings
-local co = coroutine.create(function()
-    while true do
-        if Critmatic and Critmatic.db then
-            soundCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageCrit)
-            soundHit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageNormal)
-            soundCritHeal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healCrit)
-            soundHeal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healNormal)
-            break
-        else
-            coroutine.yield()
-        end
-    end
-end)
-
--- Function to resume the coroutine
-local function fetchSoundSettings()
-    if coroutine.status(co) ~= 'dead' then
-        coroutine.resume(co)
-        -- If Critmatic or Critmatic.db is not ready, delay the execution
-        C_Timer.After(1, fetchSoundSettings)
-    end
-end
-
--- Call the function to start fetching sound settings
-fetchSoundSettings()
 function ResetAlertSettingsToDefault()
     Critmatic.db.profile.alertNotificationFormat = defaults.profile.alertNotificationFormat.strings
 end
 function ResetFontSettingsToDefault()
     Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
 end
-local function alertNotificationConstructor(message, isDamage, isCrit, sound)
-    -- Define a local table with 15 different spell names
-    local spellNames = {}
-    local r, g, b
-    if isDamage then
-        spellNames = {
-            "Fireball",
-            "Shadow Bolt",
-            "Chain Lightning",
-            "Death Coil",
-            "Starfire",
-            "Eviscerate",
-            "Mind Blast",
-            "Heroic Strike",
-            "Arcane Shot",
-            "Blade Flurry",
-            "Judgment",
-            "Shadowflame",
-            "Stormstrike",
-            "Mutilate",
-            "Hammer of Wrath"
-        }
-    else
-        spellNames = {
-            "Circle of Healing",
-            "Rejuvenation",
-            "Lay on Hands",
-            "Renew",
-            "Riptide",
-            "Holy Light",
-            "Lifebloom",
-            "Healing Rain",
-            "Soothing Mist",
-            "Penance",
-            "Wild Growth",
-            "Prayer of Healing"
-        }
-    end
 
-
-    -- Select a random spell name
-    local spellName = spellNames[math.random(#spellNames)]
-    local string = ""
-    -- Generate a random number between 3000 and 8000 for amount
-    local amount = math.random(500, 8000)
-    if Critmatic.db.profile.alertNotificationFormat.isUpper then
-        -- If spellName does not end with 'Heal', use the format string as is
-        string = string.upper(string.format(message, spellName, amount))
-    else
-        string = string.format(message, spellName,
-                amount)
-
-    end
-
-    if isCrit then
-        r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
-    else
-        r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
-    end
-    Critmatic.MessageFrame:CreateMessage(string, r, g, b)
-    if not Critmatic.db.profile.soundSettings.muteAllSounds then
-        PlaySoundFile(sound)
-    end
-end
 function Critmatic:ChatSettings_Initialize()
-    local generalWidth = "300"
+    local LSM = LibStub("LibSharedMedia-3.0")
     local ChatSettings = {
         name = "Chat",
         type = "group",
@@ -117,8 +24,8 @@ function Critmatic:ChatSettings_Initialize()
                 desc = L["options_alert_notification_format_desc"],
                 args = {
                     isUpper = {
-                        name = L["options_alert_notification_format_upper"],
-                        desc = L["options_alert_notification_format_upper_desc"],
+                        name = L["options_alert_chat_notification_format_upper"],
+                        desc = L["options_chat_notification_format_upper_desc"],
                         type = "toggle",
                         order = 1,
                         set = function(_, newVal)
@@ -128,17 +35,17 @@ function Critmatic:ChatSettings_Initialize()
                             return Critmatic.db.profile.alertNotificationFormat.global.isUpper
                         end,
                     },
-                    critAlertNotificationFormat = {
+                    critChatNotificationFormat = {
                         type = "input",
-                        name = L["options_alert_notification_format_crit"],
-                        desc = L["options_alert_notification_format_crit_desc"],
+                        name = L["options_alert_chat_notification_format_crit"],
+                        desc = L["options_alert_chat_notification_format_crit_desc"],
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
-                            return Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat
+                            return Critmatic.db.profile.chatNotificationFormat.strings.critChatNotificationFormat
                         end,
                         set = function(_, val)
-                            Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat = val
+                            Critmatic.db.profile.chatNotificationFormat.strings.critChatNotificationFormat = val
                         end,
                         order = 2 -- Adjust the order as needed
                     },
@@ -147,14 +54,17 @@ function Critmatic:ChatSettings_Initialize()
                         desc = " Preview Crit Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat, true, true, soundCrit)
+                            notification_constructor:formatConstructor(Critmatic.db.profile.chatNotificationFormat
+                                                                                .strings
+                                                                                .critChatNotificationFormat, true, true,
+                                    "soundCrit")
                         end,
                         order = 3, -- Adjust the order as needed
                     },
-                    hitAlertNotificationFormat = {
+                    hitChatNotificationFormat = {
                         type = "input",
-                        name = L["options_alert_notification_format_hit"],
-                        desc = L["options_alert_notification_format_hit_desc"],
+                        name = L["options_alert_chat_notification_format_hit"],
+                        desc = L["options_alert_chat_notification_format_hit_desc"],
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
@@ -170,15 +80,17 @@ function Critmatic:ChatSettings_Initialize()
                         desc = " Preview Hit Alert Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
-                                                                  .hitAlertNotificationFormat, true, false, soundHit)
+                            notification_constructor:formatConstructor(Critmatic.db.profile.chatNotificationFormat
+                                                                                .strings
+                                                                                .hitChatNotificationFormat, true, false,
+                                    "soundHit")
                         end,
                         order = 5, -- Adjust the order as needed
                     },
-                    critHealAlertNotificationFormat = {
+                    critHealChatNotificationFormat = {
                         type = "input",
-                        name = L["options_alert_notification_format_crit_heal"],
-                        desc = L["options_alert_notification_format_crit_heal_desc"],
+                        name = L["options_alert_chat_notification_format_crit_heal"],
+                        desc = L["options_alert_chat_notification_format_crit_heal_desc"],
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
@@ -191,19 +103,21 @@ function Critmatic:ChatSettings_Initialize()
                     },
                     runCritHealButton = {
                         name = "Preview Crit Heal",
-                        desc = " Preview Crit Heal Alert Notification",
+                        desc = " Preview Crit Heal Chat Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
-                                                                  .critHealAlertNotificationFormat, false, true,
-                                    soundCritHeal)
+                            notification_constructor:formatConstructor(Critmatic.db.profile.chatNotificationFormat
+                                                                                .strings
+                                                                                .critHealChatNotificationFormat, false,
+                                    true,
+                                    "soundCritHeal")
                         end,
                         order = 7, -- Adjust the order as needed
                     },
-                    healAlertNotificationFormat = {
+                    healChatNotificationFormat = {
                         type = "input",
-                        name = L["options_alert_notification_format_heal"],
-                        desc = L["options_alert_notification_format_heal_desc"],
+                        name = L["options_alert_chat_notification_format_heal"],
+                        desc = L["options_alert_chat_notification_format_heal_desc"],
                         multiline = false, -- Set to true to increase the height of the input box
                         width = "full",
                         get = function()
@@ -216,12 +130,14 @@ function Critmatic:ChatSettings_Initialize()
                     },
                     runHealButton = {
                         name = "Preview Heal",
-                        desc = " Preview Heal Alert Notification",
+                        desc = " Preview Heal Chat Notification",
                         type = "execute",
                         func = function()
-                            alertNotificationConstructor(Critmatic.db.profile.alertNotificationFormat.strings
-                                                                  .healAlertNotificationFormat, false, false,
-                                    soundHeal)
+                            notification_constructor:formatConstructor(Critmatic.db.profile.chatNotificationFormat
+                                                                                .strings
+                                                                                .healChatNotificationFormat, false,
+                                    false,
+                                    "soundHeal")
                         end,
                         order = 9, -- Adjust the order as needed
                     },
@@ -367,7 +283,7 @@ function Critmatic:ChatSettings_Initialize()
                         end,
                     },
                     resetFontSettings = {
-                        name = L["options_alert_font_reset"],
+                        name = "Reset Chat Font Settings",
                         desc = L["options_alert_font_reset_desc"],
                         width = "full",
                         type = "execute",
