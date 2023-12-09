@@ -50,24 +50,33 @@ L["options_show_change_log_desc"] = "Do you want the change log to auto show whe
 L["options_discord_link"] = "Help/Suggestions: Copy the CritMatic Discord Link"
 L["options_discord_link_desc"] = "Get help or make a suggestion, Just Copy this link to join our Discord server."
 L["options_discord_link_copy"] = "Copy Discord Link"
+-- Chat and Alert Notification Settings
+L["options_alert_chat_notification_format_upper"] = "Uppercase"
+L["options_alert_chat_notification_format_upper_desc"] = "Check this box to make all notifications uppercase.default:checked"
+L["options_alert_chat_notification_format_crit"] = "Crit"
+L["options_alert_chat_notification_format_crit_desc"] = "Enter your custom Crit notification format. Use %s for spell name and %d for amount."
+L["options_alert_chat_notification_format_hit"] = "Hit"
+L["options_alert_chat_notification_format_hit_desc"] = "Enter your custom Hit notification format. Use %s for spell name and %d for amount."
+L["options_alert_chat_notification_format_crit_heal"] = "Crit Heal"
+L["options_alert_chat_notification_format_crit_heal_desc"] = "Enter your custom Crit Heal notification format. Use %s for spell name and %d for amount."
+L["options_alert_chat_notification_format_heal"] = "Heal"
+L["options_alert_chat_notification_format_heal_desc"] = "Enter your custom Heal notification format. Use %s for spell name and %d for amount."
+
 -- Alert Notification Format Settings
 L["options_alert_notification_format"] = "Alert Notification"
 L["options_alert_notification_format_desc"] = "Choose the format for your alert notifications."
-L["options_alert_notification_format_upper"] = "Uppercase"
-L["options_alert_notification_format_upper_desc"] = "Check this box to make all notifications uppercase. default:checked"
-L["options_alert_notification_format_crit"] = "Crit Alert"
-L["options_alert_notification_format_crit_desc"] = "Enter your custom Crit notification format. Use %s for spell name and %d for amount."
-L["options_alert_notification_format_hit"] = "Hit Alert"
-L["options_alert_notification_format_hit_desc"] = "Enter your custom Hit notification format. Use %s for spell name and %d for amount."
-L["options_alert_notification_format_crit_heal"] = "Crit Heal Alert"
-L["options_alert_notification_format_crit_heal_desc"] = "Enter your custom Crit Heal notification format. Use %s for spell name and %d for amount."
-L["options_alert_notification_format_heal"] = "Heal Alert"
-L["options_alert_notification_format_heal_desc"] = "Enter your custom Heal notification format. Use %s for spell name and %d for amount."
 L["options_alert_notification_format_reset"] = "Reset Alert Notification Format"
 L["options_alert_notification_format_reset_desc"] = "Reset all alert notification format settings to their default values?"
 L["options_alert_notification_format_reset_confirm"] = "Are you sure you want to reset alert notification format settings to their default values?"
 
--- Alert Font Settings
+-- Chat Notification Format Settings
+L["options_chat_notification_format"] = "Chat Notification"
+L["options_chat_notification_format_desc"] = "Choose the format for your chat notifications."
+L["options_chat_notification_format_reset"] = "Reset Chat Notification Format"
+L["options_chat_notification_format_reset_desc"] = "Reset all chat notification format settings to their default values?"
+L["options_chat_notification_format_reset_confirm"] = "Are you sure you want to reset chat notification format settings to their default values?"
+
+-- Font Settings uses the same font settings as the alert notification format
 L["options_alert_font_settings"] = "Alert"
 L["options_alert_font"] = "Font (You might have to select the font twice to see all the fonts.)"
 L["options_alert_font_desc"] = "You might have to select the font twice to see all the fonts."
