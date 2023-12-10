@@ -65,7 +65,7 @@ L["options_alert_chat_notification_format_heal_desc"] = "Enter your custom Heal 
 L["options_alert_notification_format"] = "Alert Notification"
 L["options_alert_notification_format_upper_desc"] = "Check this box to make all notifications uppercase.  default: checked"
 L["options_alert_notification_format_desc"] = "Choose the format for your alert notifications."
-L["options_alert_notification_format_reset"] = "Reset Alert Notification Format"
+L["options_alert_notification_format_reset"] = "Reset Alert Notification"
 L["options_alert_notification_format_reset_desc"] = "Reset all alert notification format settings to their default values?"
 L["options_alert_notification_format_reset_confirm"] = "Are you sure you want to reset alert notification format settings to their default values?"
 

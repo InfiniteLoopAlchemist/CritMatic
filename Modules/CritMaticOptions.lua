@@ -5,7 +5,6 @@ Critmatic = Critmatic or {}
 function Critmatic:CreateOptionsTable()
     local general_tab = Critmatic:GeneralTab_Initialize()
     local alertFont_Tab = Critmatic:AlertFontSettings_Initialize()
-    local chat_tab = Critmatic:ChatSettings_Initialize()
     local sound_tab = Critmatic:SoundSettings_Initialize()
     local social_tab = Critmatic:SocialSettings_Initialize()
     local changeLog_tab = Critmatic:ChangeLogSettings_Initialize()
@@ -18,7 +17,6 @@ function Critmatic:CreateOptionsTable()
 
             general_tab = general_tab,
             alertFont_Tab = alertFont_Tab,
-            chat_tab = chat_tab,
             sound_tab = sound_tab,
             social_tab = social_tab,
             changeLog_tab = changeLog_tab

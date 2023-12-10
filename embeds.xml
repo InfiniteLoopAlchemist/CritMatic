@@ -36,7 +36,6 @@
     <!-- Modules -->
     <Script file="Modules\optionParts\GeneralSettings.lua"/>
     <Script file="Modules\optionParts\AlertFontSettings.lua"/>
-    <Script file="Modules\optionParts\ChatSettings.lua"/>
     <Script file="Modules\optionParts\SoundSettings.lua"/>
     <Script file="Modules\optionParts\SocialSettings.lua"/>
     <Script file="Modules\optionParts\ChangeLogSettings.lua"/>
