@@ -35,8 +35,12 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
-[v0.4.2.7.1-release] - 12/10/2023
+[v0.4.2.7.4-release] - 12/16/2023
 
+
+
+
+[v0.4.2.7.1-release] - 12/10/2023
 
 
 
@@ -45,8 +49,6 @@ Critmatic.showChangeLog = function()
  Added:
 
  Added options for maxMessages, startDelay, and fadeTime settings also a way to reset them.
-
-
 
 
 
@@ -60,20 +62,15 @@ Critmatic.showChangeLog = function()
 
 
 
-
-
 [v0.4.2.1-release] - 12/4/2023
 
  Updated:
 
  Removed ignore Auto Attack from options. You can use /cmignore spell name to ignore Auto Attack instead.
 
-
  Added:
 
  You can now customize the alert notification message. Use /cm Its under Alert. Soon chat messages too.
-
-
 
 
 
@@ -216,6 +213,19 @@ Critmatic.showChangeLog = function()
 
  a bug has been fixed that was preventing new critical hits (crits) from being announced in battlegrounds, raids, and
   parties. This update ensures that crit announcements are correctly broadcasted in these group environments.
+
+
+
+[v0.3.8-release] - 11/24/2023
+
+ Updated:
+
+ Changed the spell data handling from using spell names to spell IDs. This update enhances localization support,
+  allowing CritMatic to be more compatible with different language settings and paving the way for future international
+  releases.
+
+ Due to this change, existing spell data in CritMatic had to be cleared. We apologize for any inconvenience this may
+  cause and appreciate your understanding.
 
 
 ]]

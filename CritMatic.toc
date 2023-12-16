@@ -2,7 +2,7 @@
 ## Interface-Classic: 11500
 ## Interface-Wrath: 30403
 ## Title: CritMatic
-## Version: 0.4.2.7.1
+## Version: 0.4.2.7.4
 ## X-License: GNU GPL3
 ## IconTexture: Interface\AddOns\CritMatic\Media\Textures\icon.blp
 ## Notes: Records and displays the highest critical hits and Normals for the player.
