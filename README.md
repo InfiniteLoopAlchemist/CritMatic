@@ -1,6 +1,6 @@
 # WotLK Classic: v3.4.3  and Classic / Hardcore: v1.15.0
 ** and normal hits. Display a notification message and play a sound. Display a tooltip for each spell in your spell book or action bar.
-## CritMatic: v0.4.2.7.4
+## CritMatic: v0.4.2.7.5
 ---
 
 ### **NOTICE**
