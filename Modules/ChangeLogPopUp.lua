@@ -35,12 +35,7 @@ Critmatic.showChangeLog = function()
     -- Add the change log text
     local changelog = [[
 
-[v0.4.2.7.6-release] - 12/25/2023
-
- Fixed:
-
- Various fixes.
-
+[v0.4.2.8-release] - 12/25/2023
 
 
 
@@ -49,9 +44,7 @@ Critmatic.showChangeLog = function()
 
 
 
-
 [v0.4.2.7.4-release] - 12/16/2023
-
 
 
 
