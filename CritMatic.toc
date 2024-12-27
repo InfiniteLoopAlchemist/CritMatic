@@ -7,7 +7,7 @@
 ## IconTexture: Interface\AddOns\CritMatic\Media\Textures\icon.blp
 ## Notes: Records and displays the highest critical hits and Normals for the player.
 ## DefaultState: enabled
-## SavedVariablesPerCharacter: CritMaticData CritMaticDB14 CritMatic_ignoredSpells
+## SavedVariablesPerCharacter: CritMaticData CritMaticDB14 CritMatic_ignoredSpells CritMatic_ignoredTargets
 ## OptionalDeps: ElvUI
 
 embeds.xml

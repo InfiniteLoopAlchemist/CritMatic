@@ -396,6 +396,56 @@ function Critmatic:OnInitialize()
         Critmatic:Print(CritMaticRed .. "All ignored spells have been removed." .. "|r")
         RedrawCritMaticWidget()
     end
+    local function ignoredTargetSlashCommand(input)
+        local inputTargetID = tonumber(input)
+        if not input or not inputTargetID  then
+            Critmatic:Print(CritMaticRed .. "Please provide a target id!" .. "|r")
+            return
+        end
+
+        -- Add the target id to the ignoredTargets table
+        Critmatic.ignoredTargets[inputTargetID] = true
+        Critmatic:Print(CritMaticGoldYellow .. input .. "|r" .. CritMaticWhite .. " added to " .. CritMaticRed .. "ignored" .. "|r " .. CritMaticWhite .. "targets." .. "|r")
+        RedrawCritMaticWidget()
+    end
+
+    local function ListIgnoredTargets()
+        if not Critmatic.ignoredTargets or next(Critmatic.ignoredTargets) == nil then
+            Critmatic:Print(CritMaticRed .. "No targets are currently being ignored." .. "|r")
+            return
+        end
+
+        Critmatic:Print(CritMaticRed .. "Ignored" .. "|r " .. "Targets:")
+        for targetID, _ in pairs(Critmatic.ignoredTargets) do
+            Critmatic:Print(CritMaticGoldYellow .. "- " .. tostring(targetID) .. "|r")
+        end
+    end
+    local function RemoveIgnoredTarget(input)
+        local targetID = tonumber(input)
+        if not input or not targetID then
+            Critmatic:Print(CritMaticRed .. "Please provide a target id." .. "|r")
+            return
+        end
+
+        if Critmatic.ignoredTargets and Critmatic.ignoredTargets[targetID] then
+            Critmatic.ignoredTargets[targetID] = nil
+            Critmatic:Print(CritMaticGoldYellow .. tostring(targetID) .. "|r" .. CritMaticRed .. " has been removed from ignored targets." .. "|r")
+            RedrawCritMaticWidget()
+        else
+            Critmatic:Print(CritMaticRed .. "Target not found in ignored targets." .. "|r")
+        end
+    end
+    -- Function to wipe all ignored targets
+    local function WipeIgnoredTargets()
+        if not Critmatic.ignoredTargets or next(Critmatic.ignoredTargets) == nil then
+            Critmatic:Print(CritMaticRed .. "The ignored targets list is already empty!" .. "|r")
+            return
+        end
+
+        wipe(Critmatic.ignoredTargets)  -- Clear the table
+        Critmatic:Print(CritMaticRed .. "All ignored targets have been removed." .. "|r")
+        RedrawCritMaticWidget()
+    end
 
     Critmatic:RegisterChatCommand("cmhelp", function()
         self:Print(CritMaticBrown .. "Commands:|r")
@@ -410,14 +460,21 @@ function Critmatic:OnInitialize()
         print(CritMaticGoldYellow .. "/cmignoredspells" .. "|r " .. CritMaticGray .. "- List all ignored spells." .. "|r")
         print(CritMaticGoldYellow .. "/cmremoveignoredspell spell name" .. "|r  " .. CritMaticGray .. "- Remove a spell from the ignored spells list." .. "|r")
         print(CritMaticGoldYellow .. "/cmwipeignoredspells" .. "|r  " .. CritMaticGray .. "- Remove all spells from the ignored spells list." .. "|r")
+        print(CritMaticGoldYellow .. "/cmignoretarget  target id" .. "|r " .. CritMaticGray .. "- Ignore a target." .. "|r")
+        print(CritMaticGoldYellow .. "/cmignoredtargets" .. "|r " .. CritMaticGray .. "- List all ignored targets." .. "|r")
+        print(CritMaticGoldYellow .. "/cmremoveignoredtarget target id" .. "|r  " .. CritMaticGray .. "- Remove a target from the ignored target list." .. "|r")
+        print(CritMaticGoldYellow .. "/cmwipeignoredtargets" .. "|r  " .. CritMaticGray .. "- Remove all targets from the ignored targets list." .. "|r")
 
     end)
     Critmatic:RegisterChatCommand("cmdeletespelldata", resetSingleSpellDataSlashCommand)
     Critmatic:RegisterChatCommand("cmwipeignoredspells", WipeIgnoredSpells)
     Critmatic:RegisterChatCommand("cmremoveignoredspell", RemoveIgnoredSpell)
     Critmatic:RegisterChatCommand("cmignoredspells", ListIgnoredSpells)
+    Critmatic:RegisterChatCommand("cmwipeignoredtargets", WipeIgnoredTargets)
+    Critmatic:RegisterChatCommand("cmignoredtargets", ListIgnoredTargets)
     Critmatic:RegisterChatCommand(L["slash_cmignore"], ignoredSpellSlashCommand)
     Critmatic:RegisterChatCommand(L["slash_cmreset"], "CritMaticReset")
+    Critmatic:RegisterChatCommand(L["slash_cmignoretarget"], ignoredTargetSlashCommand)
 
     self:RegisterComm("Critmatic")
     -- Trigger version broadcast when group roster updates
@@ -456,6 +513,8 @@ function Critmatic:OnEnable()
     CritMaticData = _G["CritMaticData"]
     CritMatic_ignoredSpells = CritMatic_ignoredSpells or {}
     Critmatic.ignoredSpells = CritMatic_ignoredSpells
+    CritMatic_ignoredTargets = CritMatic_ignoredTargets or {}
+    Critmatic.ignoredTargets = CritMatic_ignoredTargets
     -- Now that we know our data is available, we can safely draw the widget.
     RedrawCritMaticWidget()
 end
@@ -523,7 +582,6 @@ f:SetScript("OnEvent", function(self, event, ...)
 
         if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
 
-
             if spellID then
                 CritMaticData[spellID] = CritMaticData[spellID] or {
                     highestCrit = 0,
@@ -540,6 +598,15 @@ f:SetScript("OnEvent", function(self, event, ...)
                 if Critmatic.ignoredSpells then
                     for spellName, _ in pairs(Critmatic.ignoredSpells) do
                         if spellName:lower() == baseSpellName:lower() then
+                            return
+                        end
+                    end
+                end
+                local _, _, _, _, _, destID, _ = strsplit("-", destGUID)		
+                destID = tonumber(destID)
+                if Critmatic.ignoredTargets then
+                    for targetID, _ in pairs(Critmatic.ignoredTargets) do
+                        if targetID == destID then
                             return
                         end
                     end
