@@ -32,10 +32,14 @@ AceConfig:RegisterOptionsTable("CritMaticOptions", Critmatic:CreateOptionsTable(
 local blizzPanel = AceConfigDialog:AddToBlizOptions("CritMaticOptions", "CritMatic")
 
 -- Hook into the Blizzard options panel.
-hooksecurefunc("InterfaceOptionsList_DisplayPanel", function(frame)
-    if frame == blizzPanel then
-        --
-    end
-end)
+-- Hook into the Blizzard options panel (only on builds where this function exists).
+if type(InterfaceOptionsList_DisplayPanel) == "function" then
+    hooksecurefunc("InterfaceOptionsList_DisplayPanel", function(frame)
+        if frame == blizzPanel then
+            --
+        end
+    end)
+end
+
 
 
