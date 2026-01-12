@@ -156,8 +156,8 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
                     end
                 end
             end
-
-            self:Show()
+            -- Removed self:Show() - causes conflict with StatWeightsClassic
+            -- The tooltip is already shown by the game after hook completes
         end
     end
 end
