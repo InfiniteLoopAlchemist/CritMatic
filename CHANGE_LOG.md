@@ -1,3 +1,11 @@
+## [v0.4.3.0-release] - 01/14/2026
+
+### Updated:
+
+- **Updated the in-game changelog popup to show recent release notes.**
+
+---
+
 ## [v0.4.2.9-release] - 01/12/2026
 
 ### Fixed:
