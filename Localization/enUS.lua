@@ -17,6 +17,7 @@ L["new_version_notification_part"] = "The update is available on CurseForge, Wag
 L["slash_cmlog"] = "cmlog"
 L["slash_cmcritlog"] = "cmcritlog"
 L["slash_cmignore"] = "cmignore"
+L["slash_cmignoretarget"] = "cmignoretarget"
 L["slash_cmreset"] = "cmreset"
 L["version_string"] = "v"
 L["critmatic_loaded"] = "Loaded! - Use"

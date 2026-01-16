@@ -200,13 +200,51 @@ function Critmatic:OnInitialize()
 
     CritMaticData = _G["CritMaticData"]
 
-    local version = GetAddOnMetadata("CritMatic", "Version")
+    -- Some Classic/TBC clients may not expose GetAddOnMetadata as a global.
+    -- Newer clients provide addon metadata via C_AddOns.
+    local function _GetAddOnMetadata(addonName, field)
+        if _G.GetAddOnMetadata then
+            return _G.GetAddOnMetadata(addonName, field)
+        end
+        if _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata then
+            return _G.C_AddOns.GetAddOnMetadata(addonName, field)
+        end
+        return nil
+    end
+
+    local version = _GetAddOnMetadata("CritMatic", "Version") or "0"
+
+    -- Some Classic/TBC clients may not expose IsAddOnLoaded as a global.
+    -- Use the C_AddOns API when available, otherwise fall back to a safe default.
+    local function _IsAddOnLoaded(addonName)
+        if _G.IsAddOnLoaded then
+            return _G.IsAddOnLoaded(addonName)
+        end
+        if _G.C_AddOns and _G.C_AddOns.IsAddOnLoaded then
+            return _G.C_AddOns.IsAddOnLoaded(addonName)
+        end
+        return false
+    end
 
     function Critmatic:OnCommReceived(prefix, message, distribution, sender)
 
         if message and version then
 
-            local isNewerVersion = message > version
+			-- Be tolerant of different compareVersions implementations:
+			-- some builds return a boolean, others return a numeric comparator.
+			local isNewerVersion = false
+			if type(compareVersions) == "function" then
+				local r = compareVersions(tostring(message), tostring(version))
+				if type(r) == "number" then
+					isNewerVersion = (r > 0)
+				elseif type(r) == "boolean" then
+					isNewerVersion = r
+				else
+					isNewerVersion = (tostring(message) > tostring(version))
+				end
+			else
+				isNewerVersion = (tostring(message) > tostring(version))
+			end
 
             if isNewerVersion and not Critmatic.hasDisplayedUpdateMessage then
                 Critmatic:Print(CritMaticRed .. L["new_version_notification"] .. "|r" .. CritMaticGray .. L["new_version_notification_part"] .. "|r")
@@ -482,7 +520,7 @@ function Critmatic:OnInitialize()
     -- Function to handle incoming messages
 
     hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
-    local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
+    local GameTooltip = _IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
     hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
     function Critmatic:CritMaticLoaded()
@@ -496,7 +534,7 @@ function Critmatic:OnInitialize()
         Critmatic:CritMaticLoaded()
     end
 
-    if IsAddOnLoaded("ElvUI") then
+    if _IsAddOnLoaded("ElvUI") then
         Critmatic:ScheduleTimer("TimerCritMaticLoaded", 8)
     else
         Critmatic:ScheduleTimer("TimerCritMaticLoaded", 4)
