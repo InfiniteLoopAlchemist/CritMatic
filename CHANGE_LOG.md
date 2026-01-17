@@ -1,3 +1,10 @@
+## [v0.5.1.0-release] - 01/17/2026
+
+### Fixed
+- update interface versions to current (Classic Era 11508, Wrath 38000)
+
+---
+
 ## [v0.5.0.0-release] - 01/16/2026
 
 ### Added
@@ -55,13 +62,3 @@
 - **Added alert notification preview feature in options under Alert**
 
 - **Chat customization is coming next.**
-
-## [v0.4.2.1-release] - 12/4/2023
-
-### Updated:
-
-- **Removed ignore Auto Attack from options. You can use /cmignore spell name to ignore Auto Attack instead.**
-
-### Added:
-
-- **You can now customize the alert notification message. Use /cm Its under Alert. Soon chat messages too.**

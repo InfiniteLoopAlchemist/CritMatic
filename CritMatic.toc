@@ -2,7 +2,7 @@
 ## Interface-Classic: 11508
 ## Interface-Wrath: 38000
 ## Title: CritMatic
-## Version: 0.5.0.0
+## Version: 0.5.1.0
 ## X-Curse-Project-ID: 903801
 ## X-License: GNU GPL3
 ## IconTexture: Interface\AddOns\CritMatic\Media\Textures\icon.blp
