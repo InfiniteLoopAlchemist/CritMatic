@@ -1,6 +1,6 @@
 ## Interface: 110207
-## Interface-Classic: 50503
-## Interface-Wrath: 30403
+## Interface-Classic: 11508
+## Interface-Wrath: 38000
 ## Title: CritMatic
 ## Version: 0.5.0.0
 ## X-Curse-Project-ID: 903801
