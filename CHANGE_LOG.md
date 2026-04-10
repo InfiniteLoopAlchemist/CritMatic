@@ -1,3 +1,11 @@
+## [v0.5.2.0-release] - 04/09/2026
+
+### Added
+
+- X/Y percentage sliders for alert text position (configurable in Alert settings, with Reset and Test buttons)
+
+---
+
 ## [v0.5.1.0-release] - 01/17/2026
 
 ### Fixed
