@@ -398,9 +398,9 @@ function toggleCritMaticCritLog()
                 local spellFrameHeight = 60
 
                 -- Hide or delete all previously created frames
-                for _, frame in ipairs(createdSpellFrames) do
-                    frame:Hide()
-                    frame:SetParent(nil)
+                for _, spellFrame in ipairs(createdSpellFrames) do
+                    spellFrame:Hide()
+                    spellFrame:SetParent(nil)
                 end
                 wipe(createdSpellFrames)
 
@@ -527,11 +527,11 @@ function toggleCritMaticCritLog()
                             yOffset = yOffset + spellFrameHeight
 
                         end
-                        if scrollContainer and scrollContainer.SetVerticalScroll then
-                            scrollContainer:SetVerticalScroll(0)
-
-                        end
                     end
+                end
+
+                if scrollContainer and scrollContainer.SetVerticalScroll then
+                    scrollContainer:SetVerticalScroll(0)
                 end
             end
 

@@ -33,18 +33,6 @@ local function GetGCD()
     return gcdDuration
 end
 
-local function IsSpellInSpellbook(spellName)
-    for i = 1, GetNumSpellTabs() do
-        local _, _, offset, numSpells = GetSpellTabInfo(i)
-        for j = offset + 1, offset + numSpells do
-            if GetSpellBookItemName(j, BOOKTYPE_SPELL) == spellName then
-                return true
-            end
-        end
-    end
-    return false
-end
-
 local function AddHighestHitsToTooltip(self, slot, isSpellBook)
     if (not slot) then
         return
