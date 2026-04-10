@@ -10,7 +10,7 @@ Critmatic = LibStub("AceAddon-3.0"):NewAddon(CritMaticGold .. "CritMatic|r", "Ac
         "AceComm-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
-local MAX_HIT = 40000
+local MAX_HIT = 1e9
 
 local function GetGCD()
     local _, gcdDuration = GetSpellCooldown(78) -- 78 is the spell ID for Warrior's Heroic Strike
@@ -577,8 +577,6 @@ end
 local f = CreateFrame("FRAME")
 f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 f:RegisterEvent("PLAYER_REGEN_ENABLED")
-f:RegisterEvent("PLAYER_LOGIN")
-f:RegisterEvent("GROUP_JOINED")
 
 -- Variables to hold the highest values during combat
 local highestCritDuringCombat = 0
@@ -600,13 +598,16 @@ f:SetScript("OnEvent", function(self, event, ...)
         elseif eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" then
             spellID, spellName, spellSchool = unpack(eventInfo, 12, 14)
             amount, overhealing, absorbed, critical = unpack(eventInfo, 15, 18)
-        elseif eventType == "SPELL_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
+        elseif eventType == "SPELL_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" or eventType == "RANGE_DAMAGE" then
             spellID, spellName, spellSchool = unpack(eventInfo, 12, 14)
             amount, overhealing, _, _, _, absorbed, critical = unpack(eventInfo, 15, 21)
         end
 
         local localizedSpellName = GetSpellInfo(spellID)
         local baseSpellName = localizedSpellName
+        if spellID == 6603 and not baseSpellName then
+            baseSpellName = "Auto Attack"
+        end
 
         local LSM = LibStub("LibSharedMedia-3.0")
         local soundCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.damageCrit)
@@ -614,7 +615,10 @@ f:SetScript("OnEvent", function(self, event, ...)
         local soundHealCrit = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healCrit)
         local soundHealNormal = LSM:Fetch("sound", Critmatic.db.profile.soundSettings.healNormal)
 
-        if sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet") and destGUID ~= UnitGUID("player") and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE") and amount > 0 then
+        if (sourceGUID == UnitGUID("player") or sourceGUID == UnitGUID("pet"))
+                and destGUID ~= UnitGUID("player")
+                and (eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" or eventType == "SPELL_PERIODIC_DAMAGE")
+                and amount and amount > 0 then
 
             if spellID then
                 CritMaticData[spellID] = CritMaticData[spellID] or {
@@ -629,20 +633,14 @@ f:SetScript("OnEvent", function(self, event, ...)
 
                 }
 
-                if Critmatic.ignoredSpells then
-                    for spellName, _ in pairs(Critmatic.ignoredSpells) do
-                        if spellName:lower() == baseSpellName:lower() then
-                            return
-                        end
-                    end
+                if baseSpellName and Critmatic.ignoredSpells and Critmatic.ignoredSpells[baseSpellName:lower()] then
+                    return
                 end
-                local _, _, _, _, _, destID, _ = strsplit("-", destGUID)		
-                destID = tonumber(destID)
-                if Critmatic.ignoredTargets then
-                    for targetID, _ in pairs(Critmatic.ignoredTargets) do
-                        if targetID == destID then
-                            return
-                        end
+                if destGUID and Critmatic.ignoredTargets then
+                    local _, _, _, _, _, destID = strsplit("-", destGUID)
+                    destID = tonumber(destID)
+                    if destID and Critmatic.ignoredTargets[destID] then
+                        return
                     end
                 end
                 --print(CombatLogGetCurrentEventInfo())
@@ -698,7 +696,7 @@ f:SetScript("OnEvent", function(self, event, ...)
                             RedrawCritMaticWidget()
                         end
                     end
-                elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" then
+                elseif eventType == "SPELL_DAMAGE" or eventType == "SWING_DAMAGE" or eventType == "SPELL_PERIODIC_DAMAGE" or eventType == "RANGE_DAMAGE" then
                     if critical then
                         -- When the event is damage and it's a critical hit.
                         if amount > CritMaticData[spellID].highestCrit and amount <= MAX_HIT then
