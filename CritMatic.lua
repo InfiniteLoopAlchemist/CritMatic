@@ -33,8 +33,6 @@ local function IsSpellInSpellbook(spellName)
     return false
 end
 
-local spellDataAggregate = {}
-
 local function AddHighestHitsToTooltip(self, slot, isSpellBook)
     if (not slot) then
         return
@@ -42,123 +40,110 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
     local actionType, id, spellID
 
     if isSpellBook then
-        -- Handle spellbook item
         spellID = select(3, GetSpellBookItemName(slot, BOOKTYPE_SPELL))
         actionType = "spell"
     else
-        -- Handle action bar item
         actionType, id = GetActionInfo(slot)
         if actionType == "spell" then
             spellID = id
         end
     end
+
+    if actionType ~= "spell" or not spellID then
+        return
+    end
+
     local localizedSpellName = GetSpellInfo(spellID)
-    -- Initialize an empty table for aggregating data by spell name
+    if not localizedSpellName then
+        return
+    end
 
-    -- Loop over all spells in CritMaticData to aggregate data by spell name
+    -- Roll up max values across all tracked spell IDs that share this localized name
+    -- (covers multiple ranks of the same spell).
+    local highestCrit, highestNormal, highestHealCrit, highestHeal = 0, 0, 0, 0
     for sID, data in pairs(CritMaticData) do
-        local sName = GetSpellInfo(sID)
-
-        if sName then
-            -- Initialize the sub-table for each spell name if it doesn't exist
-            if not spellDataAggregate[sName] then
-                spellDataAggregate[sName] = {
-                    highestCrit = 0,
-                    highestNormal = 0,
-                    highestHealCrit = 0,
-                    highestHeal = 0,
-                }
-            end
-
-            -- Now aggregate the data
-            spellDataAggregate[sName].highestCrit = math.max(spellDataAggregate[sName].highestCrit, data.highestCrit or 0)
-            spellDataAggregate[sName].highestNormal = math.max(spellDataAggregate[sName].highestNormal, data.highestNormal or 0)
-            spellDataAggregate[sName].highestHealCrit = math.max(spellDataAggregate[sName].highestHealCrit, data.highestHealCrit or 0)
-            spellDataAggregate[sName].highestHeal = math.max(spellDataAggregate[sName].highestHeal, data.highestHeal or 0)
+        if GetSpellInfo(sID) == localizedSpellName then
+            highestCrit = math.max(highestCrit, data.highestCrit or 0)
+            highestNormal = math.max(highestNormal, data.highestNormal or 0)
+            highestHealCrit = math.max(highestHealCrit, data.highestHealCrit or 0)
+            highestHeal = math.max(highestHeal, data.highestHeal or 0)
         end
+    end
 
-        if actionType == "spell" and spellID then
-            if spellDataAggregate[localizedSpellName] then
+    if highestCrit == 0 and highestNormal == 0 and highestHealCrit == 0 and highestHeal == 0 then
+        return
+    end
 
-                local cooldown = (GetSpellBaseCooldown(spellID) or 0) / 1000
-                local _, _, _, castTime = GetSpellInfo(spellID)
-                local effectiveCastTime = castTime > 0 and (castTime / 1000) or GetGCD()
-                local effectiveTime = max(effectiveCastTime, cooldown)
+    local cooldown = (GetSpellBaseCooldown(spellID) or 0) / 1000
+    local _, _, _, castTime = GetSpellInfo(spellID)
+    local effectiveCastTime = castTime > 0 and (castTime / 1000) or GetGCD()
+    local effectiveTime = max(effectiveCastTime, cooldown)
 
-                local critDPS = spellDataAggregate[localizedSpellName].highestCrit / effectiveTime
-                local normalDPS = spellDataAggregate[localizedSpellName].highestNormal / effectiveTime
-                local critHPS = spellDataAggregate[localizedSpellName].highestHealCrit / effectiveTime
-                local normalHPS = spellDataAggregate[localizedSpellName].highestHeal / effectiveTime
+    local critDPS = highestCrit / effectiveTime
+    local normalDPS = highestNormal / effectiveTime
+    local critHPS = highestHealCrit / effectiveTime
+    local normalHPS = highestHeal / effectiveTime
 
-                local CritMaticLeft = L["action_bar_crit"] .. ": "
-                local DPS = L["action_bar_dps"] .. ") "
-                local CritMaticRight = tostring(spellDataAggregate[localizedSpellName].highestCrit) .. " (" .. format("%.1f",
-                        critDPS) .. DPS
-                local normalMaticLeft = L["action_bar_hit"] .. ": "
-                local normalMaticRight = tostring(spellDataAggregate[localizedSpellName].highestNormal) .. " (" .. format("%.1f", normalDPS) .. DPS
+    local CritMaticLeft = L["action_bar_crit"] .. ": "
+    local DPS = L["action_bar_dps"] .. ") "
+    local CritMaticRight = tostring(highestCrit) .. " (" .. format("%.1f", critDPS) .. DPS
+    local normalMaticLeft = L["action_bar_hit"] .. ": "
+    local normalMaticRight = tostring(highestNormal) .. " (" .. format("%.1f", normalDPS) .. DPS
 
-                local CritMaticHealLeft = L["action_bar_crit_heal"] .. ": "
-                local HPS = L["action_bar_hps"] .. ") "
-                local CritMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHealCrit) .. " (" .. format("%.1f", critHPS) .. HPS
-                local normalMaticHealLeft = L["action_bar_heal"] .. ": "
-                local normalMaticHealRight = tostring(spellDataAggregate[localizedSpellName].highestHeal) .. " (" .. format("%.1f", normalHPS) .. HPS
+    local CritMaticHealLeft = L["action_bar_crit_heal"] .. ": "
+    local HPS = L["action_bar_hps"] .. ") "
+    local CritMaticHealRight = tostring(highestHealCrit) .. " (" .. format("%.1f", critHPS) .. HPS
+    local normalMaticHealLeft = L["action_bar_heal"] .. ": "
+    local normalMaticHealRight = tostring(highestHeal) .. " (" .. format("%.1f", normalHPS) .. HPS
 
-                -- Check if lines are already present in the tooltip.
-                local critMaticHealExists = false
-                local normalMaticHealExists = false
-                local critMaticExists = false
-                local normalMaticExists = false
+    -- Dedup: SetAction/SetSpellBookItem can fire multiple times on the same tooltip render.
+    local critMaticHealExists = false
+    local normalMaticHealExists = false
+    local critMaticExists = false
+    local normalMaticExists = false
 
-                for i = 1, self:NumLines() do
-                    local gtl = _G["GameTooltipTextLeft" .. i]
-                    local gtr = _G["GameTooltipTextRight" .. i]
+    for i = 1, self:NumLines() do
+        local gtl = _G["GameTooltipTextLeft" .. i]
+        local gtr = _G["GameTooltipTextRight" .. i]
 
-                    if gtl and gtr then
-                        -- Healing related
-                        if gtl:GetText() == CritMaticHealLeft and gtr:GetText() == CritMaticHealRight then
-                            critMaticHealExists = true
-                        elseif gtl:GetText() == normalMaticHealLeft and gtr:GetText() == normalMaticHealRight then
-                            normalMaticHealExists = true
-                        end
-                        -- Damage related
-                        if gtl:GetText() == CritMaticLeft and gtr:GetText() == CritMaticRight then
-                            critMaticExists = true
-                        elseif gtl:GetText() == normalMaticLeft and gtr:GetText() == normalMaticRight then
-                            normalMaticExists = true
-                        end
-                    end
-                end
-
-                -- This is a damaging spell
-                if spellDataAggregate[localizedSpellName].highestCrit > 0 then
-                    if not critMaticExists then
-                        self:AddDoubleLine(CritMaticLeft, CritMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white) right side color (gold)
-                    end
-                end
-
-                if spellDataAggregate[localizedSpellName].highestNormal > 0 then
-
-                    if not normalMaticExists then
-                        self:AddDoubleLine(normalMaticLeft, normalMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)-- left side color (white) right side color (gold)
-                    end
-                end
-
-                if spellDataAggregate[localizedSpellName].highestHealCrit > 0 then
-                    if not critMaticHealExists then
-                        self:AddDoubleLine(CritMaticHealLeft, CritMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white)  right side color (gold)
-                    end
-                end
-
-                if spellDataAggregate[localizedSpellName].highestHeal > 0 then
-
-                    if not normalMaticHealExists then
-                        self:AddDoubleLine(normalMaticHealLeft, normalMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0) -- left side color (white) right side color (gold)
-                    end
-                end
+        if gtl and gtr then
+            if gtl:GetText() == CritMaticHealLeft and gtr:GetText() == CritMaticHealRight then
+                critMaticHealExists = true
+            elseif gtl:GetText() == normalMaticHealLeft and gtr:GetText() == normalMaticHealRight then
+                normalMaticHealExists = true
             end
-            -- Removed self:Show() - causes conflict with StatWeightsClassic
-            -- The tooltip is already shown by the game after hook completes
+            if gtl:GetText() == CritMaticLeft and gtr:GetText() == CritMaticRight then
+                critMaticExists = true
+            elseif gtl:GetText() == normalMaticLeft and gtr:GetText() == normalMaticRight then
+                normalMaticExists = true
+            end
         end
+    end
+
+    local addedLine = false
+
+    if highestCrit > 0 and not critMaticExists then
+        self:AddDoubleLine(CritMaticLeft, CritMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)
+        addedLine = true
+    end
+
+    if highestNormal > 0 and not normalMaticExists then
+        self:AddDoubleLine(normalMaticLeft, normalMaticRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)
+        addedLine = true
+    end
+
+    if highestHealCrit > 0 and not critMaticHealExists then
+        self:AddDoubleLine(CritMaticHealLeft, CritMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)
+        addedLine = true
+    end
+
+    if highestHeal > 0 and not normalMaticHealExists then
+        self:AddDoubleLine(normalMaticHealLeft, normalMaticHealRight, 0.9, 0.9, 0.9, 0.9, 0.82, 0)
+        addedLine = true
+    end
+
+    if addedLine then
+        self:Show()
     end
 end
 -- Function to create a new frame based on the template
