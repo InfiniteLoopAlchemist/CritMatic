@@ -4,10 +4,29 @@ local MESSAGE_SPACING = 3
 local activeMessages = {}
 --/run CritMatic.ShowNewCritMessage("Killing Spree", 300)CritMatic.ShowNewNormalMessage("Killing Spree",435)
 
+-- Utility function to convert percentage to pixel offset
+local function ConvertPercentageToOffset(xPercent, yPercent)
+    local screenWidth = UIParent:GetWidth()
+    local screenHeight = UIParent:GetHeight()
+    
+    -- Convert percentages to pixel offsets from center
+    local xOffset = (xPercent - 50) * screenWidth / 100
+    local yOffset = (yPercent - 50) * screenHeight / 100
+    
+    return xOffset, yOffset
+end
+
 -- Utility function to adjust message positions
 local function AdjustMessagePositions()
-    -- Position the first message at the top
-    activeMessages[1]:SetPoint("CENTER", UIParent, "CENTER", 0, 350)
+    -- Get position settings from database
+    local xPos = Critmatic.db.profile.alertNotificationFormat.position.xPos
+    local yPos = Critmatic.db.profile.alertNotificationFormat.position.yPos
+    
+    -- Convert percentages to pixel offsets
+    local xOffset, yOffset = ConvertPercentageToOffset(xPos, yPos)
+    
+    -- Position the first message using configurable values
+    activeMessages[1]:SetPoint("CENTER", UIParent, "CENTER", xOffset, yOffset)
 
     -- Position subsequent messages relative to the previous one
     for i = 2, #activeMessages do

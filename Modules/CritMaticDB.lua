@@ -14,6 +14,10 @@ defaults = {
                 startDelay = 7.5,
                 fadeTime = 0.5,
             },
+            position = {
+                xPos = 50, -- 50% = center horizontally
+                yPos = 70, -- 70% = upper portion of screen
+            },
             strings = {
                 critAlertNotificationFormat = "New %s Crit: %d!",
                 hitAlertNotificationFormat = "New %s Hit: %d!",

@@ -165,7 +165,18 @@ end
 Critmatic.CreateNewMessageFrame = function()
     local f = CreateFrame("Frame", nil, UIParent)
     f:SetSize(1000, 30)
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, 350)
+    
+    -- Get position settings from database
+    local xPos = Critmatic.db.profile.alertNotificationFormat.position.xPos
+    local yPos = Critmatic.db.profile.alertNotificationFormat.position.yPos
+    
+    -- Convert percentages to pixel offsets
+    local screenWidth = UIParent:GetWidth()
+    local screenHeight = UIParent:GetHeight()
+    local xOffset = (xPos - 50) * screenWidth / 100
+    local yOffset = (yPos - 50) * screenHeight / 100
+    
+    f:SetPoint("CENTER", UIParent, "CENTER", xOffset, yOffset)
 
     f.text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
     f.text:SetAllPoints()
