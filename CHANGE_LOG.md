@@ -1,3 +1,27 @@
+## [v0.5.3.0-release] - 04/10/2026
+
+### Fixed
+
+- **Tooltip overflow with StatWeightsClassic (issue #17):** CritMatic's crit/hit lines no longer render outside the spell tooltip frame when used alongside other tooltip addons. `Show()` is now called exactly once per render, and only when CritMatic actually added lines.
+- **Silent data loss for large crits:** raised `MAX_HIT` ceiling from 40000 to 1e9 so Wrath/Retail endgame crits are recorded instead of silently dropped.
+- **Operator-precedence bug in combat log handler:** player-sourced events were bypassing the `destGUID`, `eventType`, and `amount > 0` filters due to missing parentheses around the `or` clause.
+- **Nil crashes in combat log handler:** added guards for `baseSpellName`, `destGUID`, and `amount` to prevent errors on unusual event shapes.
+- **`RANGE_DAMAGE` events** are now properly tracked (were in the outer filter but had no extraction branch).
+- **Reset buttons in options panels** no longer pollute the shared defaults table by reference. All `Reset*ToDefault` functions now use `CopyTable` against `Critmatic.db.defaults`.
+
+### Changed
+
+- Optimized ignored-spells/targets filtering from O(N) per combat event to O(1) hash lookups.
+- Added compatibility shims for `C_Spell.GetSpellCooldown` and `GetSpellBookItemInfo` (Retail 11.x).
+- Unregistered `PLAYER_LOGIN` and `GROUP_JOINED` events (registered but never handled).
+
+### Removed
+
+- Dead function `IsSpellInSpellbook` (zero callers).
+- Dead DB field `dataCleared`.
+
+---
+
 ## [v0.5.2.1-release] - 04/09/2026
 
 ### Fixed
