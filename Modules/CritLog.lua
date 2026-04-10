@@ -589,7 +589,7 @@ function toggleCritMaticCritLog()
 
         local function CritLogDefaultPosFrame()
             local frame = Critmatic.crit_log_frame
-            local defaultPos = defaults.profile.critLogWidgetPos -- Adjust path if needed
+            local defaultPos = Critmatic.db.defaults.profile.critLogWidgetPos
             frame:Show()
             frame:ClearAllPoints()
             frame:SetPoint("RIGHT", UIParent, "RIGHT", defaultPos.pos_x, defaultPos.pos_y)

@@ -3,11 +3,11 @@ local notification_constructor = Critmatic:NewModule("notification_constructor")
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
 function ResetAlertSettingsToDefault()
-    Critmatic.db.profile.alertNotificationFormat.strings = defaults.profile.alertNotificationFormat.strings
-    Critmatic.db.profile.alertNotificationFormat.position = defaults.profile.alertNotificationFormat.position
+    Critmatic.db.profile.alertNotificationFormat.strings = CopyTable(Critmatic.db.defaults.profile.alertNotificationFormat.strings)
+    Critmatic.db.profile.alertNotificationFormat.position = CopyTable(Critmatic.db.defaults.profile.alertNotificationFormat.position)
 end
 function ResetFontSettingsToDefault()
-    Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
+    Critmatic.db.profile.fontSettings = CopyTable(Critmatic.db.defaults.profile.fontSettings)
 end
 function notification_constructor:OnInitialize()
 
@@ -235,8 +235,8 @@ function Critmatic:AlertFontSettings_Initialize()
                         order = 11,
                         width = generalWidth,
                         func = function()
-                            Critmatic.db.profile.alertNotificationFormat.position.xPos = defaults.profile.alertNotificationFormat.position.xPos
-                            Critmatic.db.profile.alertNotificationFormat.position.yPos = defaults.profile.alertNotificationFormat.position.yPos
+                            Critmatic.db.profile.alertNotificationFormat.position.xPos = Critmatic.db.defaults.profile.alertNotificationFormat.position.xPos
+                            Critmatic.db.profile.alertNotificationFormat.position.yPos = Critmatic.db.defaults.profile.alertNotificationFormat.position.yPos
                         end,
                     },
                     testPosition = {

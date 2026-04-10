@@ -2,10 +2,10 @@ local LSM = LibStub("LibSharedMedia-3.0")
 Critmatic = Critmatic or {}
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 function ResetChangeLogFontSettingsToDefault()
-    Critmatic.db.profile.changeLogPopUp.fontSettings = defaults.profile.changeLogPopUp.fontSettings
+    Critmatic.db.profile.changeLogPopUp.fontSettings = CopyTable(Critmatic.db.defaults.profile.changeLogPopUp.fontSettings)
 end
 function ResetChangeLogBorderAndBackgroundSettingsToDefault()
-    Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings = defaults.profile.changeLogPopUp.borderAndBackgroundSettings
+    Critmatic.db.profile.changeLogPopUp.borderAndBackgroundSettings = CopyTable(Critmatic.db.defaults.profile.changeLogPopUp.borderAndBackgroundSettings)
 end
 
 local allowedBorderTextures = {

@@ -2,7 +2,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 Critmatic = Critmatic or {}
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 function ResetSoundsToDefault()
-    Critmatic.db.profile.soundSettings = defaults.profile.soundSettings
+    Critmatic.db.profile.soundSettings = CopyTable(Critmatic.db.defaults.profile.soundSettings)
 end
 
 function Critmatic:SoundSettings_Initialize()

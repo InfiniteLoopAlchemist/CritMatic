@@ -84,7 +84,6 @@ defaults = {
             lock = false
         },
         oldVersion = "0.0.0",
-        dataCleared = false,
     },
 
 }
