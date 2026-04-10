@@ -165,7 +165,18 @@ end
 Critmatic.CreateNewMessageFrame = function()
     local f = CreateFrame("Frame", nil, UIParent)
     f:SetSize(1000, 30)
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, 350)
+    
+    -- Get position settings from database
+    local xPos = Critmatic.db.profile.alertNotificationFormat.position.xPos
+    local yPos = Critmatic.db.profile.alertNotificationFormat.position.yPos
+    
+    -- Convert percentages to pixel offsets
+    local screenWidth = UIParent:GetWidth()
+    local screenHeight = UIParent:GetHeight()
+    local xOffset = (xPos - 50) * screenWidth / 100
+    local yOffset = (yPos - 50) * screenHeight / 100
+    
+    f:SetPoint("CENTER", UIParent, "CENTER", xOffset, yOffset)
 
     f.text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
     f.text:SetAllPoints()
@@ -200,51 +211,13 @@ function Critmatic:OnInitialize()
 
     CritMaticData = _G["CritMaticData"]
 
-    -- Some Classic/TBC clients may not expose GetAddOnMetadata as a global.
-    -- Newer clients provide addon metadata via C_AddOns.
-    local function _GetAddOnMetadata(addonName, field)
-        if _G.GetAddOnMetadata then
-            return _G.GetAddOnMetadata(addonName, field)
-        end
-        if _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata then
-            return _G.C_AddOns.GetAddOnMetadata(addonName, field)
-        end
-        return nil
-    end
-
-    local version = _GetAddOnMetadata("CritMatic", "Version") or "0"
-
-    -- Some Classic/TBC clients may not expose IsAddOnLoaded as a global.
-    -- Use the C_AddOns API when available, otherwise fall back to a safe default.
-    local function _IsAddOnLoaded(addonName)
-        if _G.IsAddOnLoaded then
-            return _G.IsAddOnLoaded(addonName)
-        end
-        if _G.C_AddOns and _G.C_AddOns.IsAddOnLoaded then
-            return _G.C_AddOns.IsAddOnLoaded(addonName)
-        end
-        return false
-    end
+    local version = GetAddOnMetadata("CritMatic", "Version")
 
     function Critmatic:OnCommReceived(prefix, message, distribution, sender)
 
         if message and version then
 
-			-- Be tolerant of different compareVersions implementations:
-			-- some builds return a boolean, others return a numeric comparator.
-			local isNewerVersion = false
-			if type(compareVersions) == "function" then
-				local r = compareVersions(tostring(message), tostring(version))
-				if type(r) == "number" then
-					isNewerVersion = (r > 0)
-				elseif type(r) == "boolean" then
-					isNewerVersion = r
-				else
-					isNewerVersion = (tostring(message) > tostring(version))
-				end
-			else
-				isNewerVersion = (tostring(message) > tostring(version))
-			end
+            local isNewerVersion = message > version
 
             if isNewerVersion and not Critmatic.hasDisplayedUpdateMessage then
                 Critmatic:Print(CritMaticRed .. L["new_version_notification"] .. "|r" .. CritMaticGray .. L["new_version_notification_part"] .. "|r")
@@ -520,7 +493,7 @@ function Critmatic:OnInitialize()
     -- Function to handle incoming messages
 
     hooksecurefunc(GameTooltip, "SetAction", AddHighestHitsToTooltip)
-    local GameTooltip = _IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
+    local GameTooltip = IsAddOnLoaded("ElvUI") and _G.ElvUISpellBookTooltip or _G.GameTooltip
     hooksecurefunc(GameTooltip, "SetSpellBookItem", AddHighestHitsToTooltip)
 
     function Critmatic:CritMaticLoaded()
@@ -534,7 +507,7 @@ function Critmatic:OnInitialize()
         Critmatic:CritMaticLoaded()
     end
 
-    if _IsAddOnLoaded("ElvUI") then
+    if IsAddOnLoaded("ElvUI") then
         Critmatic:ScheduleTimer("TimerCritMaticLoaded", 8)
     else
         Critmatic:ScheduleTimer("TimerCritMaticLoaded", 4)

@@ -3,7 +3,8 @@ local notification_constructor = Critmatic:NewModule("notification_constructor")
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
 function ResetAlertSettingsToDefault()
-    Critmatic.db.profile.alertNotificationFormat = defaults.profile.alertNotificationFormat.strings
+    Critmatic.db.profile.alertNotificationFormat.strings = defaults.profile.alertNotificationFormat.strings
+    Critmatic.db.profile.alertNotificationFormat.position = defaults.profile.alertNotificationFormat.position
 end
 function ResetFontSettingsToDefault()
     Critmatic.db.profile.fontSettings = defaults.profile.fontSettings
@@ -182,6 +183,73 @@ function Critmatic:AlertFontSettings_Initialize()
                         width = generalWidth,
                         func = function()
                             Critmatic.db.profile.alertNotificationFormat.global.fadeTime = 0.5  -- replace with default value
+                        end,
+                    },
+                    spacer1 = {
+                        name = "",
+                        type = "description",
+                        order = 7,
+                        width = "full",
+                    },
+                    positionHeader = {
+                        name = "Alert Position Settings",
+                        type = "header",
+                        order = 8,
+                        width = "full",
+                    },
+                    xPos = {
+                        name = "Horizontal Position (%)",
+                        desc = "Set the horizontal position of alerts (0% = left edge, 100% = right edge)",
+                        type = "range",
+                        min = 0,
+                        max = 100,
+                        step = 1,
+                        order = 9,
+                        width = generalWidth,
+                        get = function()
+                            return Critmatic.db.profile.alertNotificationFormat.position.xPos
+                        end,
+                        set = function(_, newVal)
+                            Critmatic.db.profile.alertNotificationFormat.position.xPos = newVal
+                        end,
+                    },
+                    yPos = {
+                        name = "Vertical Position (%)",
+                        desc = "Set the vertical position of alerts (0% = bottom edge, 100% = top edge)",
+                        type = "range",
+                        min = 0,
+                        max = 100,
+                        step = 1,
+                        order = 10,
+                        width = generalWidth,
+                        get = function()
+                            return Critmatic.db.profile.alertNotificationFormat.position.yPos
+                        end,
+                        set = function(_, newVal)
+                            Critmatic.db.profile.alertNotificationFormat.position.yPos = newVal
+                        end,
+                    },
+                    resetPosition = {
+                        name = "Reset Position",
+                        type = "execute",
+                        order = 11,
+                        width = generalWidth,
+                        func = function()
+                            Critmatic.db.profile.alertNotificationFormat.position.xPos = 50
+                            Critmatic.db.profile.alertNotificationFormat.position.yPos = 85
+                        end,
+                    },
+                    testPosition = {
+                        name = "Test Position",
+                        desc = "Show a test alert at the current position settings",
+                        type = "execute",
+                        order = 12,
+                        width = generalWidth,
+                        func = function()
+                            -- Create a test message using the current position settings
+                            local testMessage = "Test Alert Position"
+                            local r, g, b = 1, 1, 1 -- White color for test
+                            Critmatic.MessageFrame:CreateMessage(testMessage, r, g, b)
                         end,
                     },
                 },
