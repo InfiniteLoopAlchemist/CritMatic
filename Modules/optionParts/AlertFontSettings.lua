@@ -235,8 +235,8 @@ function Critmatic:AlertFontSettings_Initialize()
                         order = 11,
                         width = generalWidth,
                         func = function()
-                            Critmatic.db.profile.alertNotificationFormat.position.xPos = 50
-                            Critmatic.db.profile.alertNotificationFormat.position.yPos = 85
+                            Critmatic.db.profile.alertNotificationFormat.position.xPos = defaults.profile.alertNotificationFormat.position.xPos
+                            Critmatic.db.profile.alertNotificationFormat.position.yPos = defaults.profile.alertNotificationFormat.position.yPos
                         end,
                     },
                     testPosition = {
