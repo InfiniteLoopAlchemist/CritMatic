@@ -12,13 +12,25 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
 local MAX_HIT = 1e9
 
-local function GetGCD()
-    local _, gcdDuration = GetSpellCooldown(78) -- 78 is the spell ID for Warrior's Heroic Strike
-    if gcdDuration == 0 then
-        return 1.5 -- Default GCD duration if not available (you may adjust this value if needed)
-    else
-        return gcdDuration
+local function _GetSpellCooldown(spellID)
+    if C_Spell and C_Spell.GetSpellCooldown then
+        local info = C_Spell.GetSpellCooldown(spellID)
+        if info then
+            return info.startTime, info.duration, info.isEnabled
+        end
     end
+    if _G.GetSpellCooldown then
+        return _G.GetSpellCooldown(spellID)
+    end
+    return 0, 0, false
+end
+
+local function GetGCD()
+    local _, gcdDuration = _GetSpellCooldown(78) -- 78 is the spell ID for Warrior's Heroic Strike
+    if not gcdDuration or gcdDuration == 0 then
+        return 1.5 -- Default GCD duration if not available
+    end
+    return gcdDuration
 end
 
 local function IsSpellInSpellbook(spellName)
@@ -40,7 +52,20 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
     local actionType, id, spellID
 
     if isSpellBook then
-        spellID = select(3, GetSpellBookItemName(slot, BOOKTYPE_SPELL))
+        if _G.GetSpellBookItemInfo then
+            local itemType, itemID = _G.GetSpellBookItemInfo(slot, BOOKTYPE_SPELL)
+            if itemType == "SPELL" or itemType == "FUTURESPELL" then
+                spellID = itemID
+            end
+        elseif C_SpellBook and C_SpellBook.GetSpellBookItemInfo then
+            local bank = Enum and Enum.SpellBookSpellBank and Enum.SpellBookSpellBank.Player
+            local info = C_SpellBook.GetSpellBookItemInfo(slot, bank)
+            if info and info.spellID then
+                spellID = info.spellID
+            end
+        else
+            spellID = select(3, GetSpellBookItemName(slot, BOOKTYPE_SPELL))
+        end
         actionType = "spell"
     else
         actionType, id = GetActionInfo(slot)
