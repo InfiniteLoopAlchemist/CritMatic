@@ -1,3 +1,11 @@
+## [v0.5.2.1-release] - 04/09/2026
+
+### Fixed
+
+- Split Wrath Classic (30403) and Titan Reforged (38000) into separate TOC interface directives so the BigWigs packager can build both flavors
+
+---
+
 ## [v0.5.2.0-release] - 04/09/2026
 
 ### Added
