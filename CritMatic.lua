@@ -59,10 +59,16 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
         actionType, id = GetActionInfo(slot)
         if actionType == "spell" then
             spellID = id
+        elseif actionType == "macro" and id then
+            -- Resolve a macro to whatever spell it would currently cast, so the
+            -- tooltip lines still appear when a tracked spell is wrapped in a macro.
+            if _G.GetMacroSpell then
+                spellID = _G.GetMacroSpell(id)
+            end
         end
     end
 
-    if actionType ~= "spell" or not spellID then
+    if not spellID then
         return
     end
 

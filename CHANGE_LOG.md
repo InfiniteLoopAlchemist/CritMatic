@@ -1,3 +1,11 @@
+## [v0.5.3.2-release] - 04/11/2026
+
+### Fixed
+
+- **Macro tooltips (issue #19):** CritMatic's crit/hit lines now appear on action-bar macros that cast a tracked spell. The tooltip hook previously bailed out whenever `GetActionInfo` returned `"macro"` instead of `"spell"`; it now resolves the macro to its current spell via `GetMacroSpell(slot)` and proceeds normally. Cast-sequence and conditional macros (`/cast [mod:shift] X; Y`) reflect whichever spell would fire next. Thanks @Alessandro-Barbieri.
+
+---
+
 ## [v0.5.3.1-release] - 04/10/2026
 
 ### Fixed
