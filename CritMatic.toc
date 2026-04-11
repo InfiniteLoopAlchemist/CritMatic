@@ -1,9 +1,9 @@
-## Interface: 110207 38000 20505 11508
+## Interface: 110207, 38000, 20505, 11508
 ## Interface-Classic: 11508
 ## Interface-Wrath: 30403
 ## Interface-Titan: 38000
 ## Title: CritMatic
-## Version: 0.5.3.0
+## Version: 0.5.3.1
 ## X-Curse-Project-ID: 903801
 ## X-License: GNU GPL3
 ## IconTexture: Interface\AddOns\CritMatic\Media\Textures\icon.blp

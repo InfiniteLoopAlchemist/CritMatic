@@ -1,3 +1,11 @@
+## [v0.5.3.1-release] - 04/10/2026
+
+### Fixed
+
+- Interface directive now uses comma-separated multi-version format (`110207, 38000, 20505, 11508`) so the BigWigs packager correctly tags the CurseForge release with all four game flavors (Retail, Titan Reforged, TBC, Classic Era). The v0.5.3.0 upload was only tagged as 11.2.7 because the space-separated form tripped the packager's parser.
+
+---
+
 ## [v0.5.3.0-release] - 04/10/2026
 
 ### Fixed
