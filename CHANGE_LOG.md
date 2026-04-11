@@ -14,6 +14,7 @@
 - Optimized ignored-spells/targets filtering from O(N) per combat event to O(1) hash lookups.
 - Added compatibility shims for `C_Spell.GetSpellCooldown` and `GetSpellBookItemInfo` (Retail 11.x).
 - Unregistered `PLAYER_LOGIN` and `GROUP_JOINED` events (registered but never handled).
+- Raw-source installs now load cleanly on Classic Era, TBC, and Wrath/Titan clients without the "out of date" warning (main `## Interface:` directive now lists 110207 38000 20505 11508). Thanks @Alessandro-Barbieri (#18).
 
 ### Removed
 
