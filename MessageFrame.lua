@@ -50,18 +50,57 @@ end
 
 Critmatic.MessageFrame = {}
 
-function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
+local ICON_SIZE = 24
+local ICON_SPACING = 6
+
+function Critmatic.MessageFrame:CreateMessage(text, r, g, b, spellIcon)
     local MAX_MESSAGES = Critmatic.db.profile.alertNotificationFormat.global.maxMessages
     local delayInSeconds = 0.45
     local function delayedExecution()
-        -- Replace frame creation with a call to CreateNewMessageFrame()
         local f = Critmatic.CreateNewMessageFrame()
 
-        -- Set the text and color
         f.text:SetText(text)
         f.text:SetTextColor(r, g, b)
 
-        -- Create or update the fade-out animation (if it's not already in CreateNewMessageFrame)
+        if spellIcon then
+            if not f.icon then
+                f.icon = f:CreateTexture(nil, "ARTWORK")
+                f.icon:SetSize(ICON_SIZE, ICON_SIZE)
+            end
+            f.icon:SetTexture(spellIcon)
+            f.icon:Show()
+
+            local textWidth = f.text:GetStringWidth() or 200
+            local totalWidth = textWidth + ICON_SIZE + ICON_SPACING
+            local iconOffsetX = -(totalWidth / 2) + (ICON_SIZE / 2)
+
+            f.icon:ClearAllPoints()
+            f.icon:SetPoint("CENTER", f, "CENTER", iconOffsetX, 0)
+
+            f.text:ClearAllPoints()
+            f.text:SetPoint("CENTER", f, "CENTER", (ICON_SIZE + ICON_SPACING) / 2, 0)
+
+            if not f.iconBounce then
+                f.iconBounce = f.icon:CreateAnimationGroup()
+                local scaleUp = f.iconBounce:CreateAnimation("Scale")
+                scaleUp:SetScale(1.5, 1.5)
+                scaleUp:SetDuration(0.15)
+                scaleUp:SetOrder(1)
+                local pause = f.iconBounce:CreateAnimation("Pause")
+                pause:SetDuration(0.12)
+                pause:SetOrder(2)
+                local scaleDown = f.iconBounce:CreateAnimation("Scale")
+                scaleDown:SetScale(1 / 1.5, 1 / 1.5)
+                scaleDown:SetDuration(0.15)
+                scaleDown:SetOrder(3)
+            end
+            f.iconBounce:Play()
+        elseif f.icon then
+            f.icon:Hide()
+            f.text:ClearAllPoints()
+            f.text:SetAllPoints()
+        end
+
         f.fadeOut = f:CreateAnimationGroup()
         local fade = f.fadeOut:CreateAnimation("Alpha")
         fade:SetFromAlpha(1)
@@ -72,17 +111,12 @@ function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
             f:Hide()
         end)
 
-        -- Play the animations
         f.bounce:Play()
         f.fadeOut:Play()
 
-        -- Insert the new message at the beginning
         table.insert(activeMessages, 1, f)
-
-        -- Adjust positions of all messages
         AdjustMessagePositions()
 
-        -- Remove the oldest message if there are too many
         if #activeMessages > MAX_MESSAGES then
             RemoveOldestMessage()
         end
@@ -90,54 +124,47 @@ function Critmatic.MessageFrame:CreateMessage(text, r, g, b)
         return f
     end
 
-    -- Delay the execution using C_Timer
     C_Timer.After(delayInSeconds, delayedExecution)
 end
 local message = ""
-function Critmatic.ShowNewCritMessage(spellName, amount)
+function Critmatic.ShowNewCritMessage(spellName, amount, spellIcon)
     if Critmatic.db.profile.alertNotificationFormat.global.isUpper then
-        -- If spellName does not end with 'Heal', use the format string as is
         message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.strings
                                                       .critAlertNotificationFormat, spellName, amount))
     else
         message = string.format(Critmatic.db.profile.alertNotificationFormat.strings.critAlertNotificationFormat,
                 spellName, amount)
-
     end
 
     local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
-    Critmatic.MessageFrame:CreateMessage(message, r, g, b)
+    Critmatic.MessageFrame:CreateMessage(message, r, g, b, spellIcon)
 end
 
-function Critmatic.ShowNewNormalMessage(spellName, amount)
+function Critmatic.ShowNewNormalMessage(spellName, amount, spellIcon)
     if Critmatic.db.profile.alertNotificationFormat.global.isUpper then
-
         message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.strings
                                                       .hitAlertNotificationFormat, spellName, amount))
     else
         message = string.format(Critmatic.db.profile.alertNotificationFormat.strings.hitAlertNotificationFormat,
                 spellName, amount)
-
     end
     local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
-    Critmatic.MessageFrame:CreateMessage(message, r, g, b)
-
+    Critmatic.MessageFrame:CreateMessage(message, r, g, b, spellIcon)
 end
-function Critmatic.ShowNewHealCritMessage(spellName, amount)
+
+function Critmatic.ShowNewHealCritMessage(spellName, amount, spellIcon)
     if Critmatic.db.profile.alertNotificationFormat.global.isUpper then
-        -- If spellName does not end with 'Heal', use the format string as is
         message = string.upper(string.format(Critmatic.db.profile.alertNotificationFormat.strings
                                                       .critHealAlertNotificationFormat, spellName, amount))
     else
         message = string.format(Critmatic.db.profile.alertNotificationFormat.strings.critHealAlertNotificationFormat,
                 spellName, amount)
-
     end
     local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColorCrit)
-    Critmatic.MessageFrame:CreateMessage(message, r, g, b)  -- Gold color
+    Critmatic.MessageFrame:CreateMessage(message, r, g, b, spellIcon)
 end
 
-function Critmatic.ShowNewHealMessage(spellName, amount)
+function Critmatic.ShowNewHealMessage(spellName, amount, spellIcon)
     -- Check if the spellName ends with 'Heal', 'heal', or 'HEAL'
 
     if string.sub(spellName, -4):lower() == "heal" then
@@ -165,7 +192,7 @@ function Critmatic.ShowNewHealMessage(spellName, amount)
     end
 
     local r, g, b = unpack(Critmatic.db.profile.fontSettings.fontColor)
-    Critmatic.MessageFrame:CreateMessage(message, r, g, b)
+    Critmatic.MessageFrame:CreateMessage(message, r, g, b, spellIcon)
 end
 
 

@@ -1,3 +1,20 @@
+## [v5.5.0-release] - 04/12/2026
+
+### Added
+
+- **Spell icons in alert notifications:** the "New Crit!" popup now shows the spell icon with a matching bounce animation.
+- **Resizable Crit Log:** drag the corner/edge to resize the Crit Log widget.
+- **Right-click context menus:** right-click any spell in the Crit Log to Ignore it or Delete its data. Right-click the CritMatic icon for quick access to Settings, Lock/Unlock, Reset Position, and Hide.
+- **Ignored Spells settings panel:** manage ignored spells from `/cm` options instead of slash commands — select from a dropdown, remove individual spells, or clear all.
+- **Hover highlights:** spell entries in the Crit Log highlight on mouseover.
+
+### Improved
+
+- **Tooltip performance:** per-spell max values are now cached instead of rescanning all data on every tooltip hover.
+- **Spell icon accuracy:** icons are stored at record time, fixing wrong-icon display for spells with shared names across ranks.
+
+---
+
 ## [v5.4.1-release] - 04/12/2026
 
 ### Added

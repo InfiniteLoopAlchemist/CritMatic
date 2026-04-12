@@ -153,3 +153,11 @@ L["options_change_log_border_and_background_texture_desc"] = "Choose a backgroun
 L["options_change_log_border_and_background_reset"] = "Reset Change Log Border and Background Settings"
 L["options_change_log_border_and_background_reset_desc"] = "Reset all Change Log Border and Background settings to their default values?"
 L["options_change_log_border_and_background_reset_confirm"] = "Are you sure you want to reset change log border and background settings to their default values?"
+
+-- Ignored Spells Settings
+L["options_ignored_spells"] = "Ignored Spells"
+L["options_ignored_spells_desc"] = "Manage spells that CritMatic ignores. You can also ignore spells by right-clicking them in the Crit Log or using /cmignore spell name."
+L["options_ignored_spells_select"] = "Select Spell"
+L["options_ignored_spells_remove"] = "Remove Selected"
+L["options_ignored_spells_clear_all"] = "Clear All Ignored Spells"
+L["options_ignored_spells_clear_all_confirm"] = "Are you sure you want to remove all ignored spells?"

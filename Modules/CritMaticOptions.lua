@@ -8,6 +8,7 @@ function Critmatic:CreateOptionsTable()
     local sound_tab = Critmatic:SoundSettings_Initialize()
     local social_tab = Critmatic:SocialSettings_Initialize()
     local changeLog_tab = Critmatic:ChangeLogSettings_Initialize()
+    local ignoredSpells_tab = Critmatic:IgnoredSpellsTab_Initialize()
 
     return {
         name = "CritMatic Options",
@@ -19,6 +20,7 @@ function Critmatic:CreateOptionsTable()
             alertFont_Tab = alertFont_Tab,
             sound_tab = sound_tab,
             social_tab = social_tab,
+            ignoredSpells_tab = ignoredSpells_tab,
             changeLog_tab = changeLog_tab
 
         },

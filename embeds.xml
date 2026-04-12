@@ -39,6 +39,7 @@
     <Script file="Modules\optionParts\SoundSettings.lua"/>
     <Script file="Modules\optionParts\SocialSettings.lua"/>
     <Script file="Modules\optionParts\ChangeLogSettings.lua"/>
+    <Script file="Modules\optionParts\IgnoredSpellsSettings.lua"/>
     <Script file="Modules\CritMaticOptions.lua"/>
 
     <Script file="MessageFrame.lua"/>

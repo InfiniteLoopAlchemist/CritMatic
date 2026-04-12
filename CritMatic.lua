@@ -12,6 +12,40 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 
 local MAX_HIT = 1e9
 
+local spellAggregateCache = {}
+local aggregateDirty = true
+
+local function InvalidateAggregateCache()
+    aggregateDirty = true
+end
+
+local function GetSpellAggregate(localizedSpellName)
+    if aggregateDirty then
+        wipe(spellAggregateCache)
+        for sID, data in pairs(CritMaticData) do
+            local name = GetSpellInfo(sID)
+            if name then
+                if not spellAggregateCache[name] then
+                    spellAggregateCache[name] = {
+                        highestCrit = data.highestCrit or 0,
+                        highestNormal = data.highestNormal or 0,
+                        highestHealCrit = data.highestHealCrit or 0,
+                        highestHeal = data.highestHeal or 0,
+                    }
+                else
+                    local c = spellAggregateCache[name]
+                    c.highestCrit = math.max(c.highestCrit, data.highestCrit or 0)
+                    c.highestNormal = math.max(c.highestNormal, data.highestNormal or 0)
+                    c.highestHealCrit = math.max(c.highestHealCrit, data.highestHealCrit or 0)
+                    c.highestHeal = math.max(c.highestHeal, data.highestHeal or 0)
+                end
+            end
+        end
+        aggregateDirty = false
+    end
+    return spellAggregateCache[localizedSpellName]
+end
+
 local function _GetSpellCooldown(spellID)
     if C_Spell and C_Spell.GetSpellCooldown then
         local info = C_Spell.GetSpellCooldown(spellID)
@@ -77,17 +111,14 @@ local function AddHighestHitsToTooltip(self, slot, isSpellBook)
         return
     end
 
-    -- Roll up max values across all tracked spell IDs that share this localized name
-    -- (covers multiple ranks of the same spell).
-    local highestCrit, highestNormal, highestHealCrit, highestHeal = 0, 0, 0, 0
-    for sID, data in pairs(CritMaticData) do
-        if GetSpellInfo(sID) == localizedSpellName then
-            highestCrit = math.max(highestCrit, data.highestCrit or 0)
-            highestNormal = math.max(highestNormal, data.highestNormal or 0)
-            highestHealCrit = math.max(highestHealCrit, data.highestHealCrit or 0)
-            highestHeal = math.max(highestHeal, data.highestHeal or 0)
-        end
+    local agg = GetSpellAggregate(localizedSpellName)
+    if not agg then
+        return
     end
+    local highestCrit = agg.highestCrit
+    local highestNormal = agg.highestNormal
+    local highestHealCrit = agg.highestHealCrit
+    local highestHeal = agg.highestHeal
 
     if highestCrit == 0 and highestNormal == 0 and highestHealCrit == 0 and highestHeal == 0 then
         return
@@ -649,8 +680,11 @@ f:SetScript("OnEvent", function(self, event, ...)
                     highestHealCritOld = 0,
                     highestHeal = 0,
                     highestHealOld = 0,
-
+                    spellIcon = select(3, GetSpellInfo(spellID)),
                 }
+                if not CritMaticData[spellID].spellIcon then
+                    CritMaticData[spellID].spellIcon = select(3, GetSpellInfo(spellID))
+                end
 
                 if baseSpellName and Critmatic.ignoredSpells and Critmatic.ignoredSpells[baseSpellName:lower()] then
                     return
@@ -683,13 +717,14 @@ f:SetScript("OnEvent", function(self, event, ...)
                             --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
 
                             if Critmatic.db.profile.generalSettings.alertNotificationsEnabled then
-                                Critmatic.ShowNewHealCritMessage(baseSpellName, amount)
+                                Critmatic.ShowNewHealCritMessage(baseSpellName, amount, CritMaticData[spellID].spellIcon)
                             end
 
                             if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                                 Critmatic:Print(CritMaticGoldYellow .. L["chat_crit_heal"] .. baseSpellName .. ": |r" ..
                                         CritMaticData[spellID].highestHealCrit)
                             end
+                            InvalidateAggregateCache()
                             RecordEvent(spellID)
                             RedrawCritMaticWidget()
                         end
@@ -705,12 +740,13 @@ f:SetScript("OnEvent", function(self, event, ...)
                             --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heaven.ogg", "SFX")
 
                             if Critmatic.db.profile.generalSettings.alertNotificationsEnabled then
-                                Critmatic.ShowNewHealMessage(baseSpellName, amount)
+                                Critmatic.ShowNewHealMessage(baseSpellName, amount, CritMaticData[spellID].spellIcon)
                             end
 
                             if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                                 Critmatic:Print(" " .. CritMaticWhite .. L["chat_heal"] .. baseSpellName .. ": " .. CritMaticData[spellID].highestHeal .. "|r")
                             end
+                            InvalidateAggregateCache()
                             RecordEvent(spellID)
                             RedrawCritMaticWidget()
                         end
@@ -730,13 +766,14 @@ f:SetScript("OnEvent", function(self, event, ...)
 
                             --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\LevelUp.ogg", "SFX")
                             if Critmatic.db.profile.generalSettings.alertNotificationsEnabled then
-                                Critmatic.ShowNewCritMessage(baseSpellName, amount)
+                                Critmatic.ShowNewCritMessage(baseSpellName, amount, CritMaticData[spellID].spellIcon)
                             end
 
                             if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                                 Critmatic:Print(CritMaticGoldYellow .. L["chat_crit"] .. baseSpellName .. ": |r" ..
                                         CritMaticData[spellID].highestCrit)
                             end
+                            InvalidateAggregateCache()
                             RecordEvent(spellID)
                             RedrawCritMaticWidget()
                         end
@@ -751,13 +788,14 @@ f:SetScript("OnEvent", function(self, event, ...)
 
                             --PlaySoundFile("Interface\\AddOns\\CritMatic\\Media\\Sounds\\Heroism_Cast.ogg", "SFX")
                             if Critmatic.db.profile.generalSettings.alertNotificationsEnabled then
-                                Critmatic.ShowNewNormalMessage(baseSpellName, amount)
+                                Critmatic.ShowNewNormalMessage(baseSpellName, amount, CritMaticData[spellID].spellIcon)
                             end
 
                             if Critmatic.db.profile.generalSettings.chatNotificationsEnabled then
                                 Critmatic:Print(CritMaticWhite .. L["chat_hit"] .. baseSpellName .. ": " ..
                                         CritMaticData[spellID].highestNormal .. "|r")
                             end
+                            InvalidateAggregateCache()
                             RecordEvent(spellID)
                             RedrawCritMaticWidget()
                         end

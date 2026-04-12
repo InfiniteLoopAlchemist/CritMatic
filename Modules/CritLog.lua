@@ -104,7 +104,7 @@ function toggleCritMaticCritLog()
                 self:SetStatusText()
                 self:ApplyStatus()
                 self:Show()
-                self:EnableResize(false)
+                self:EnableResize(true)
             end,
 
             ["OnRelease"] = function(self)
@@ -477,14 +477,59 @@ function toggleCritMaticCritLog()
                     if not Critmatic.ignoredSpells or not Critmatic.ignoredSpells[spellName:lower()] then
 
 
-                        local spellIDs = entry.ids  -- Now you have access to all IDs for this spell name
+                        local spellIDs = entry.ids
                         local spellIDToUse = #spellIDs > 1 and spellIDs[2] or spellIDs[1]
-                        local _, _, spellIconPath = GetSpellInfo(spellIDToUse)
+                        local storedIcon = spellData.spellIcon or CritMaticData[spellIDToUse] and CritMaticData[spellIDToUse].spellIcon
+                        local spellIconPath = storedIcon or select(3, GetSpellInfo(spellIDToUse))
 
                         if spellIconPath then
                             local spellFrame = CreateFrame("Frame", nil, scrollChild)
                             spellFrame:SetSize(198, spellFrameHeight)
                             spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
+
+                            spellFrame:SetScript("OnEnter", function(self)
+                                self:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8"})
+                                self:SetBackdropColor(1, 1, 1, 0.1)
+                            end)
+                            spellFrame:SetScript("OnLeave", function(self)
+                                self:SetBackdrop(nil)
+                            end)
+
+                            spellFrame.spellName = spellName
+                            spellFrame.spellIDs = spellIDs
+                            spellFrame:EnableMouse(true)
+                            spellFrame:RegisterForClicks("RightButtonUp")
+                            spellFrame:SetScript("OnMouseUp", function(self, button)
+                                if button == "RightButton" then
+                                    local menu = {
+                                        {text = "|cffffd700" .. spellName .. "|r", isTitle = true, notCheckable = true},
+                                        {text = "Ignore Spell", notCheckable = true, func = function()
+                                            if Critmatic.ignoredSpells then
+                                                Critmatic.ignoredSpells[spellName:lower()] = true
+                                                RedrawCritMaticWidget()
+                                            end
+                                        end},
+                                        {text = "Delete Spell Data", notCheckable = true, func = function()
+                                            StaticPopupDialogs["CRITMATIC_DELETE_SPELL"] = {
+                                                text = "Delete all data for " .. spellName .. "?",
+                                                button1 = "Yes",
+                                                button2 = "No",
+                                                OnAccept = function()
+                                                    for _, id in ipairs(self.spellIDs) do
+                                                        CritMaticData[id] = nil
+                                                    end
+                                                    RedrawCritMaticWidget()
+                                                end,
+                                                timeout = 0,
+                                                whileDead = true,
+                                                hideOnEscape = true,
+                                            }
+                                            StaticPopup_Show("CRITMATIC_DELETE_SPELL")
+                                        end},
+                                    }
+                                    EasyMenu(menu, CreateFrame("Frame", "CritMaticSpellMenu", UIParent, "UIDropDownMenuTemplate"), "cursor", 0, 0, "MENU")
+                                end
+                            end)
 
                             local spellIcon = spellFrame:CreateTexture(nil, "ARTWORK")
                             spellIcon:SetSize(30, 30)
@@ -499,7 +544,6 @@ function toggleCritMaticCritLog()
                             local gray = "|cffd4d4d4"
                             local spellInfoText = gold .. "%s|r\n"
 
-                            -- Construct the spell info text based on available data
                             spellInfoText = string.format(spellInfoText, GetSpellInfo(spellIDs[1]))
 
                             if spellData.highestCrit and spellData.highestCrit > 0 then
@@ -520,12 +564,8 @@ function toggleCritMaticCritLog()
 
                             spellText:SetText(spellInfoText)
 
-
-                            -- Add the new frame to the table
                             table.insert(createdSpellFrames, spellFrame)
-
                             yOffset = yOffset + spellFrameHeight
-
                         end
                     end
                 end
@@ -629,6 +669,47 @@ function toggleCritMaticCritLog()
         texture_gold_ring:SetHeight(50)
         texture_gold_ring:SetWidth(50)
         texture_gold_ring:SetTexture("Interface\\COMMON\\BlueMenuRing")
+
+        critmatic_icon_frame:RegisterForClicks("RightButtonUp")
+        critmatic_icon_frame:SetScript("OnMouseUp", function(self, button)
+            if button == "RightButton" then
+                local menu = {
+                    {text = "|cffffd700CritMatic|r", isTitle = true, notCheckable = true},
+                    {text = "Open Settings", notCheckable = true, func = function()
+                        InterfaceOptionsFrame_OpenToCategory("CritMatic")
+                        InterfaceOptionsFrame_OpenToCategory("CritMatic")
+                    end},
+                    {text = "Open Changelog", notCheckable = true, func = function()
+                        Critmatic:ShowChangeLog()
+                    end},
+                    {text = db.critLogWidgetPos.lock and "Unlock Position" or "Lock Position", notCheckable = true, func = function()
+                        db.critLogWidgetPos.lock = not db.critLogWidgetPos.lock
+                    end},
+                    {text = "Reset Position", notCheckable = true, func = function()
+                        local defaultPos = Critmatic.db.defaults.profile.critLogWidgetPos
+                        Critmatic.crit_log_frame.frame:ClearAllPoints()
+                        Critmatic.crit_log_frame.frame:SetPoint("RIGHT", UIParent, "RIGHT", defaultPos.pos_x, defaultPos.pos_y)
+                        sizePos.pos_x = defaultPos.pos_x
+                        sizePos.pos_y = defaultPos.pos_y
+                    end},
+                    {text = "Hide Crit Log", notCheckable = true, func = function()
+                        toggleCritMaticCritLog()
+                    end},
+                }
+                EasyMenu(menu, CreateFrame("Frame", "CritMaticIconMenu", UIParent, "UIDropDownMenuTemplate"), "cursor", 0, 0, "MENU")
+            end
+        end)
+
+        critmatic_icon_frame:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip:SetText("|cffffd700CritMatic|r")
+            GameTooltip:AddLine("Right-click for options", 0.8, 0.8, 0.8)
+            GameTooltip:Show()
+        end)
+        critmatic_icon_frame:SetScript("OnLeave", function()
+            GameTooltip:Hide()
+        end)
+
         -- Load the saved state and apply it
         if Critmatic.db.profile.isCritLogFrameShown then
 
