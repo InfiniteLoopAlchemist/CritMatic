@@ -5,7 +5,7 @@
 ## Title: CritMatic
 ## Version: 0.5.3.2
 ## X-Curse-Project-ID: 903801
-## X-License: GNU GPL3
+## X-License: All Rights Reserved
 ## IconTexture: Interface\AddOns\CritMatic\Media\Textures\icon.blp
 ## Notes: Records and displays the highest critical hits and Normals for the player.
 ## DefaultState: enabled
