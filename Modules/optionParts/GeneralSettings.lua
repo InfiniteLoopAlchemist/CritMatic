@@ -8,6 +8,20 @@ function Critmatic:GeneralTab_Initialize()
         order = 1,
         args = {
 
+            critLogEnabled = {
+                name = L["options_show_crit_log"],
+                desc = L["options_show_crit_log_desc"],
+                type = "toggle",
+                order = 1,
+                set = function(_, newVal)
+                    if newVal ~= Critmatic.db.profile.isCritLogFrameShown then
+                        toggleCritMaticCritLog()
+                    end
+                end,
+                get = function()
+                    return Critmatic.db.profile.isCritLogFrameShown
+                end,
+            },
             alertNotificationsEnabled = {
                 name = L["options_show_alert_notifications"],
                 desc = L["options_show_alert_notifications_desc"],

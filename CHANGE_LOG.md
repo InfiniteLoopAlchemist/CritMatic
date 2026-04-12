@@ -1,3 +1,11 @@
+## [v5.4.1-release] - 04/12/2026
+
+### Added
+
+- **Crit Log toggle in options panel:** You can now show/hide the live Crit Log widget from `/cm` General Settings instead of needing the `/cmcritlog` slash command.
+
+---
+
 ## [v5.4.0-release] - 04/12/2026
 
 ### Changed
