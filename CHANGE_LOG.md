@@ -1,3 +1,12 @@
+## [v0.5.4.0-release] - 04/12/2026
+
+### Changed
+
+- **License changed to All Rights Reserved.** CritMatic is now proprietary software. No part of this addon may be copied, modified, or redistributed without express written permission from the copyright holder.
+- Updated README with current feature list, macro tooltip support, and license notice.
+
+---
+
 ## [v0.5.3.2-release] - 04/11/2026
 
 ### Fixed
