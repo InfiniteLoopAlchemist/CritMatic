@@ -1,3 +1,11 @@
+## [v5.5.1-release] - 04/13/2026
+
+### Fixed
+
+- **Login crash on Crit Log creation (#20):** removed stray `RegisterForClicks` calls on non-Button frames introduced in v5.5.0. Right-click context menus on spell rows and the CritMatic icon continue to work via `OnMouseUp` as before.
+
+---
+
 ## [v5.5.0-release] - 04/12/2026
 
 ### Added

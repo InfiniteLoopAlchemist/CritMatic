@@ -498,7 +498,6 @@ function toggleCritMaticCritLog()
                             spellFrame.spellName = spellName
                             spellFrame.spellIDs = spellIDs
                             spellFrame:EnableMouse(true)
-                            spellFrame:RegisterForClicks("RightButtonUp")
                             spellFrame:SetScript("OnMouseUp", function(self, button)
                                 if button == "RightButton" then
                                     local menu = {
@@ -670,7 +669,6 @@ function toggleCritMaticCritLog()
         texture_gold_ring:SetWidth(50)
         texture_gold_ring:SetTexture("Interface\\COMMON\\BlueMenuRing")
 
-        critmatic_icon_frame:RegisterForClicks("RightButtonUp")
         critmatic_icon_frame:SetScript("OnMouseUp", function(self, button)
             if button == "RightButton" then
                 local menu = {
