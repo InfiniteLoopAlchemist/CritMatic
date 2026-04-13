@@ -138,7 +138,7 @@ L["options_change_log_font_outline_mono"] = "Contour Monochrome"
 L["options_change_log_font_outline_thick"] = "Contour Épais"
 L["options_change_log_font_outline_thick_mono"] = "Contour Épais Monochrome"
 L["options_change_log_reset"] = "Réinitialiser les Paramètres de Police des notes de MàJ"
-L["options_change_log_reset_desc"] = "Réinitialiser les Paramètres de Police des notes de MàJ à leurs valeures par défaut?"
+L["options_change_log_reset_desc"] = "Réinitialiser les Paramètres de Police des notes de MàJ à leurs valeurs par défaut?"
 L["options_change_log_reset_confirm"] = "Êtes-vous sûr de vouloir réinitialiser les paramètres de police des notes de MàJ à leurs valeurs par défaut?"
 
 L["options_change_log_border_and_background"] = "Bordure et Fond"

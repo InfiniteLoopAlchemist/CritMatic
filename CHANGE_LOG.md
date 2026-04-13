@@ -1,3 +1,11 @@
+## [v5.5.3-release] - 04/13/2026
+
+### Fixed
+
+- **frFR typo:** corrected `valeures` → `valeurs` in the Change Log font reset description (confirmed by @Surfingnet on #21).
+
+---
+
 ## [v5.5.2-release] - 04/13/2026
 
 ### Added
