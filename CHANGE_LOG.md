@@ -1,3 +1,11 @@
+## [v5.5.2-release] - 04/13/2026
+
+### Added
+
+- **French (frFR) localization** contributed by @Surfingnet (#21) — full translation of all 134 strings, including the v5.5.0 additions (ignored spells panel, right-click context menus).
+
+---
+
 ## [v5.5.1-release] - 04/13/2026
 
 ### Fixed
