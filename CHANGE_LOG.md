@@ -1,3 +1,12 @@
+## [v5.5.4-release] - 04/17/2026
+
+### Fixed
+
+- **Retail 11.0 context menus and hover (#22):** right-click context menus on spell rows and the CritMatic icon no longer error with `EasyMenu (a nil value)`; they now use `MenuUtil.CreateContextMenu` on retail with an `EasyMenu` fallback for Classic/TBC/Wrath. Spell-row hover highlight no longer errors with `SetBackdrop (a nil value)` — the row frame now uses `BackdropTemplate`.
+- **Open Settings menu item:** switched to `Settings.OpenToCategory` with an `InterfaceOptionsFrame_OpenToCategory` fallback so the menu entry works on retail 11.0+.
+
+---
+
 ## [v5.5.3-release] - 04/13/2026
 
 ### Fixed

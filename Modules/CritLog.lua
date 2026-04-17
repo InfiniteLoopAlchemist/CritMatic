@@ -1,6 +1,42 @@
 local L = LibStub("AceLocale-3.0"):GetLocale("CritMatic")
 local AceConsole = LibStub("AceConsole-3.0")
 
+-- Retail 11.0 removed EasyMenu / UIDropDownMenuTemplate. Classic/TBC/Wrath still have them.
+local function ShowContextMenu(menuData, anchorFrame)
+    if MenuUtil and MenuUtil.CreateContextMenu then
+        MenuUtil.CreateContextMenu(anchorFrame, function(_, rootDescription)
+            for _, item in ipairs(menuData) do
+                if item.isTitle then
+                    rootDescription:CreateTitle(item.text)
+                elseif item.func then
+                    rootDescription:CreateButton(item.text, item.func)
+                end
+            end
+        end)
+    elseif EasyMenu then
+        -- Reuse a single named holder across invocations; naming is required for
+        -- UIDropDownMenuTemplate's $parent XML substitutions, and re-CreateFrame
+        -- on an existing name errors on Classic.
+        local holder = _G["CritMaticContextMenu"]
+            or CreateFrame("Frame", "CritMaticContextMenu", UIParent, "UIDropDownMenuTemplate")
+        EasyMenu(menuData, holder, "cursor", 0, 0, "MENU")
+    end
+end
+
+local function OpenCritMaticSettings()
+    if Settings and Settings.OpenToCategory then
+        local category = Settings.GetCategory and Settings.GetCategory("CritMatic")
+        if category and category.GetID then
+            Settings.OpenToCategory(category:GetID())
+        else
+            Settings.OpenToCategory("CritMatic")
+        end
+    elseif InterfaceOptionsFrame_OpenToCategory then
+        InterfaceOptionsFrame_OpenToCategory("CritMatic")
+        InterfaceOptionsFrame_OpenToCategory("CritMatic")
+    end
+end
+
 function toggleCritMaticCritLog()
     local db = Critmatic.db.profile
     local sizePos = Critmatic.db.profile.critLogWidgetPos
@@ -483,7 +519,7 @@ function toggleCritMaticCritLog()
                         local spellIconPath = storedIcon or select(3, GetSpellInfo(spellIDToUse))
 
                         if spellIconPath then
-                            local spellFrame = CreateFrame("Frame", nil, scrollChild)
+                            local spellFrame = CreateFrame("Frame", nil, scrollChild, BackdropTemplateMixin and "BackdropTemplate" or nil)
                             spellFrame:SetSize(198, spellFrameHeight)
                             spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
 
@@ -526,7 +562,7 @@ function toggleCritMaticCritLog()
                                             StaticPopup_Show("CRITMATIC_DELETE_SPELL")
                                         end},
                                     }
-                                    EasyMenu(menu, CreateFrame("Frame", "CritMaticSpellMenu", UIParent, "UIDropDownMenuTemplate"), "cursor", 0, 0, "MENU")
+                                    ShowContextMenu(menu, self)
                                 end
                             end)
 
@@ -673,10 +709,7 @@ function toggleCritMaticCritLog()
             if button == "RightButton" then
                 local menu = {
                     {text = "|cffffd700CritMatic|r", isTitle = true, notCheckable = true},
-                    {text = "Open Settings", notCheckable = true, func = function()
-                        InterfaceOptionsFrame_OpenToCategory("CritMatic")
-                        InterfaceOptionsFrame_OpenToCategory("CritMatic")
-                    end},
+                    {text = "Open Settings", notCheckable = true, func = OpenCritMaticSettings},
                     {text = "Open Changelog", notCheckable = true, func = function()
                         Critmatic:ShowChangeLog()
                     end},
@@ -694,7 +727,7 @@ function toggleCritMaticCritLog()
                         toggleCritMaticCritLog()
                     end},
                 }
-                EasyMenu(menu, CreateFrame("Frame", "CritMaticIconMenu", UIParent, "UIDropDownMenuTemplate"), "cursor", 0, 0, "MENU")
+                ShowContextMenu(menu, self)
             end
         end)
 
