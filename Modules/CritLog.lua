@@ -133,7 +133,7 @@ function toggleCritMaticCritLog()
         local methods = {
             ["OnAcquire"] = function(self)
                 self.frame:SetParent(UIParent)
-                self.frame:SetFrameStrata("FULLSCREEN_DIALOG")
+                self.frame:SetFrameStrata("MEDIUM")
                 self.frame:SetFrameLevel(100) -- Lots of room to draw under it
                 self:SetTitle()
                 self:SetSubTitle()
@@ -286,7 +286,7 @@ function toggleCritMaticCritLog()
             frame:EnableMouse(true)
             frame:SetMovable(true)
             frame:SetResizable(true)
-            frame:SetFrameStrata("FULLSCREEN_DIALOG")
+            frame:SetFrameStrata("MEDIUM")
             frame:SetFrameLevel(100) -- Lots of room to draw under it
             frame:SetBackdrop(PaneBackdrop)
             frame:SetBackdropColor(0, 0, 0, 0.6)
@@ -419,12 +419,16 @@ function toggleCritMaticCritLog()
             content:SetPoint("BOTTOMRIGHT", 15, 6)
 
             local scrollContainer = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
-            scrollContainer:SetSize(250, 120)
-            scrollContainer:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -20)
+            scrollContainer:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -30)
+            scrollContainer:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -28, 30)
 
             local scrollChild = CreateFrame("Frame", nil, scrollContainer)
             scrollContainer:SetScrollChild(scrollChild)
-            scrollChild:SetSize(180, 200)  -- Initial height, adjust as needed
+            scrollChild:SetSize(scrollContainer:GetWidth(), 200)
+
+            scrollContainer:SetScript("OnSizeChanged", function(self, width, height)
+                scrollChild:SetWidth(width)
+            end)
 
             -- Table to keep track of created frames
             local createdSpellFrames = {}
@@ -520,8 +524,9 @@ function toggleCritMaticCritLog()
 
                         if spellIconPath then
                             local spellFrame = CreateFrame("Frame", nil, scrollChild, BackdropTemplateMixin and "BackdropTemplate" or nil)
-                            spellFrame:SetSize(198, spellFrameHeight)
+                            spellFrame:SetHeight(spellFrameHeight)
                             spellFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
+                            spellFrame:SetPoint("TOPRIGHT", scrollChild, "TOPRIGHT", 0, -yOffset)
 
                             spellFrame:SetScript("OnEnter", function(self)
                                 self:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8"})

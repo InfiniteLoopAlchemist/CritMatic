@@ -1,3 +1,12 @@
+## [v5.5.6-release] - 04/22/2026
+
+### Fixed
+
+- **Right-click menu rendered behind the Crit Log window (retail 11.0):** v5.5.5 left the widget at `FULLSCREEN_DIALOG` strata (set by the AceGUI constructor), but `MenuUtil.CreateContextMenu` creates menus at `DIALOG`, so the menu was stacking underneath the window. Lowered the widget to `MEDIUM` strata (standard addon default) so context menus, tooltips, and popups render above it.
+- **Inner scroll area not following the outer frame on resize:** the ScrollFrame was hardcoded to `SetSize(250, 120)` and anchored only TOPLEFT, so resizing the window left the spell list stuck at a fixed size. The scroll container is now anchored to both TOPLEFT and BOTTOMRIGHT (with room for the sizer and scrollbar), and the scroll child width tracks the container via `OnSizeChanged`. Spell rows now anchor TOPLEFT + TOPRIGHT, so they span the full available width at any frame size.
+
+---
+
 ## [v5.5.5-release] - 04/22/2026
 
 ### Fixed
