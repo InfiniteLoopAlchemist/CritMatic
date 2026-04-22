@@ -803,8 +803,6 @@ function toggleCritMaticCritLog()
             sizePos.size_x = Critmatic.crit_log_frame.frame:GetWidth()
             sizePos.size_y = Critmatic.crit_log_frame.frame:GetHeight()
         end)
-        Critmatic.crit_log_frame.frame:SetFrameStrata("BACKGROUND")
-        Critmatic.crit_log_frame.frame:Lower()
 
 
     else

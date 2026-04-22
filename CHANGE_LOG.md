@@ -1,3 +1,11 @@
+## [v5.5.5-release] - 04/22/2026
+
+### Fixed
+
+- **Crit Log window not movable/resizable on retail 11.0 (#22 follow-up):** the frame was forced to the `BACKGROUND` strata and then `:Lower()`-ed at the end of setup, which put it behind Blizzard's default UI. Overlapping default frames intercepted mouse input, so `RegisterForDrag` and the corner/edge sizers never received clicks. Removed the override; the widget now stays at the strata the Constructor set and drag + resize work again.
+
+---
+
 ## [v5.5.4-release] - 04/17/2026
 
 ### Fixed
