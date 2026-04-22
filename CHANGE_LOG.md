@@ -1,3 +1,11 @@
+## [v5.5.7-release] - 04/22/2026
+
+### Fixed
+
+- **CritMatic icon rendering behind the Crit Log window:** the three icon textures (black circle, CritMatic icon, gold ring) had `SetParent(UIParent)` calls — a workaround from the old `BACKGROUND`-strata days that lifted the textures above the window. With the window now at `MEDIUM` strata, those reparented textures ended up at UIParent's lower frame level and got covered by the window. Removed the reparenting so the textures inherit `critmatic_icon_frame`'s strata/level (child of the main frame) and render above it normally.
+
+---
+
 ## [v5.5.6-release] - 04/22/2026
 
 ### Fixed
